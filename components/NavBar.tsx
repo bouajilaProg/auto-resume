@@ -10,8 +10,8 @@ export default function Navbar() {
             <Link href="/" className="text-2xl font-bold text-black cursor-pointer">
               AutoResume
             </Link>
-            <Link href="/modules" className="text-black hover:text-gray-700 font-medium transition-colors active:scale-95 cursor-pointer">
-              Modules
+            <Link href="/sections" className="text-black hover:text-gray-700 font-medium transition-colors active:scale-95 cursor-pointer">
+              sections
             </Link>
           </div>
 
