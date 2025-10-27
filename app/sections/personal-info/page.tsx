@@ -16,7 +16,7 @@ interface ContactType {
   placeholder: string;
 }
 
-export default function PersonalInfoForm() {
+export default function PersonalInfoPage() {
   const [name, setName] = useState<string>("Mohamed Yessine Bouajila");
   const [location, setLocation] = useState<string>("bizerte");
   const [description, setDescription] = useState<string>("");
