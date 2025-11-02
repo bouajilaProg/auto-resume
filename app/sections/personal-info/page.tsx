@@ -1,27 +1,17 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { FaPlus, FaTrash, FaUser, FaMapMarkerAlt, FaEnvelope, FaPhone, FaGlobe, FaGithub, FaLinkedin, FaTwitter, FaInstagram } from 'react-icons/fa';
-import { IconType } from 'react-icons';
-import { Contact, ContactType, PersonalInfo } from '@/types/resumeTypes';
+import { useState } from 'react';
+import { FaUser, FaMapMarkerAlt } from 'react-icons/fa';
+import { Contact, PersonalInfo } from '@/types/resumeTypes';
 import ContactForm from './components/ContactForm';
 import { mockResumeData } from '@/db/mock-data';
 
 
 export default function PersonalInfoPage() {
 
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo>(mockResumeData.personalInfo);
 
-  // init
-  useEffect(() => {
-    // get personal info from mock-data
-    setPersonalInfo(mockResumeData.personalInfo)
-  }, []);
 
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
-    name: "",
-    location: "",
-    description: "",
-    contact: []
-  });
+
 
   function updateName(name: string) {
     setPersonalInfo({ ...personalInfo, name });

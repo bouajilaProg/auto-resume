@@ -1,4 +1,3 @@
-import Navbar from "@/components/NavBar";
 import ResumeList from "./components/ResumeList";
 
 export default function MainPage() {

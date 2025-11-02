@@ -1,20 +1,14 @@
 "use client"
-import React, { useEffect, useState } from 'react';
-import { FaPlus, FaTrash, FaGraduationCap } from 'react-icons/fa';
+import { useState } from 'react';
+import { FaPlus, FaGraduationCap } from 'react-icons/fa';
 import EducationForm from './components/EducationForm';
 import { DegreeType, EducationItem } from '@/types/resumeTypes';
 import { mockResumeData } from '@/db/mock-data';
 
 
 export default function EducationPage() {
-  const [educations, setEducations] = useState<EducationItem[]>([]);
+  const [educations, setEducations] = useState<EducationItem[]>(mockResumeData.educations);
 
-
-
-  useEffect(() => {
-    setEducations(mockResumeData.educations);
-  },
-    []);
 
   const addEducation = () => {
     const newId = educations.length > 0 ? Math.max(...educations.map(e => e.id)) + 1 : 1;

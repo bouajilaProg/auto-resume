@@ -2,7 +2,6 @@
 
 import { contactIcons } from "@/static/contactTypesIcons";
 import { Contact, ContactType } from "@/types/resumeTypes";
-import { useState } from "react";
 import { FaEnvelope, FaPlus, FaTrash } from "react-icons/fa";
 
 export default function ContactForm({ contacts, setContacts }: { contacts: Contact[], setContacts: (contacts: Contact[]) => void }) {
