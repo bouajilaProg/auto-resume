@@ -1,10 +1,9 @@
 // education Info
 enum DegreeType {
-  Bachelor = "BS",
-  Master = "MS",
-  PhD = "PhD"
+  BS = "Bachelor's Degree",
+  MS = "Master's Degree",
+  PhD = "PhD/Doctorate"
 }
-
 
 interface EducationItem {
   id: number;

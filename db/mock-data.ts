@@ -22,7 +22,7 @@ const personalInfo: PersonalInfo = {
 const educations = [
   {
     id: 1,
-    degreeType: DegreeType.Bachelor,
+    degreeType: DegreeType.BS,
     degreeName: "Bachelor of Science in Computer Science",
     institution: "higher institute of computer science and mathematics of Monastir(ISIMM)",
     startDate: "2022-09",
