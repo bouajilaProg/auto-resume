@@ -8,7 +8,7 @@ enum ContactType {
   Twitter,
   Instagram
 }
-interface ContactMethod {
+interface Contact {
   id: number;
   type: ContactType;
   value: string;
@@ -18,8 +18,8 @@ interface PersonalInfo {
   name: string;
   location: string;
   description: string;
-  contactMethods: ContactMethod[];
+  contact: Contact[];
 }
 
-export type { PersonalInfo, ContactMethod };
+export type { PersonalInfo, Contact };
 export { ContactType };

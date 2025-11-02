@@ -9,7 +9,7 @@ const personalInfo: PersonalInfo = {
   name: "Mohamed Yessine Bouajila",
   location: "Bizerte",
   description: "Passionate software developer with expertise in building scalable web applications and a strong background in computer science.",
-  contactMethods: [
+  contact: [
     { id: 1, type: ContactType.Email, value: "bouajilamedyessine@gmail.com" },
     { id: 2, type: ContactType.Phone, value: "+216-28-747-707" },
     { id: 3, type: ContactType.Website, value: "http://bouajilaProg.com/" },
