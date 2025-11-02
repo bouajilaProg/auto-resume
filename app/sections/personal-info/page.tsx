@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FaPlus, FaTrash, FaUser, FaMapMarkerAlt, FaEnvelope, FaPhone, FaGlobe, FaGithub, FaLinkedin, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { IconType } from 'react-icons';
 import { Contact, ContactType, PersonalInfo } from '@/types/resumeTypes';
-import ContactWindow from './components/ContactWindow';
+import ContactForm from './components/ContactForm';
 import { mockResumeData } from '@/db/mock-data';
 
 
@@ -103,7 +103,7 @@ export default function PersonalInfoPage() {
             </div>
 
             {/* Contact Methods */}
-            <ContactWindow contacts={personalInfo.contact} setContacts={updateContacts} />
+            <ContactForm contacts={personalInfo.contact} setContacts={updateContacts} />
 
             {/* Action Buttons */}
             <div className="flex gap-4 pt-6">
