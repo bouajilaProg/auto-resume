@@ -5,6 +5,7 @@ import { FaPlus, FaProjectDiagram } from 'react-icons/fa';
 
 import ProjectForm from './components/ProjectForm';
 import { Project } from '@/types/resumeTypes';
+import Link from 'next/link';
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>(mockResumeData.projects);
@@ -93,11 +94,12 @@ export default function ProjectsPage() {
               >
                 Save Changes
               </button>
-              <button
+              <Link
+                href="/sections"
                 className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
               >
                 Cancel
-              </button>
+              </Link>
             </div>
           </div>
         </div>

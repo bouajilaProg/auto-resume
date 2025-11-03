@@ -4,6 +4,7 @@ import { FaPlus, FaGraduationCap } from 'react-icons/fa';
 import EducationForm from './components/EducationForm';
 import { DegreeType, EducationItem } from '@/types/resumeTypes';
 import { mockResumeData } from '@/db/mock-data';
+import Link from 'next/link';
 
 
 export default function EducationPage() {
@@ -88,11 +89,12 @@ export default function EducationPage() {
               >
                 Save Changes
               </button>
-              <button
+              <Link
+                href="/sections"
                 className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
               >
                 Cancel
-              </button>
+              </Link>
             </div>
           </div>
         </div>

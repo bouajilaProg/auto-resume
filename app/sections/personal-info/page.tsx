@@ -4,6 +4,7 @@ import { FaUser, FaMapMarkerAlt } from 'react-icons/fa';
 import { Contact, PersonalInfo } from '@/types/resumeTypes';
 import ContactForm from './components/ContactForm';
 import { mockResumeData } from '@/db/mock-data';
+import Link from 'next/link';
 
 
 export default function PersonalInfoPage() {
@@ -103,11 +104,12 @@ export default function PersonalInfoPage() {
               >
                 Save Changes
               </button>
-              <button
+              <Link
+                href="/sections"
                 className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
               >
                 Cancel
-              </button>
+              </Link>
             </div>
           </div>
         </div>
