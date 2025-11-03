@@ -1,8 +1,8 @@
 // skills info
 enum skillType {
-  languages,
-  technologies,
-  softSkills
+  LANG = "languages",
+  TECH = "technologies",
+  SOFT = "softSkills"
 }
 
 interface SkillItem {

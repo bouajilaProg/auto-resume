@@ -59,26 +59,26 @@ const experiences: WorkExperience[] = [
 
 const skills: Skills = {
   languages: [
-    { id: 1, type: skillType.languages, name: "TypeScript" },
-    { id: 2, type: skillType.languages, name: "JavaScript" },
-    { id: 3, type: skillType.languages, name: "Python" },
-    { id: 4, type: skillType.languages, name: "Rust" },
+    { id: 1, type: skillType.LANG, name: "TypeScript" },
+    { id: 2, type: skillType.LANG, name: "JavaScript" },
+    { id: 3, type: skillType.LANG, name: "Python" },
+    { id: 4, type: skillType.LANG, name: "Rust" },
   ],
   technologies: [
-    { id: 1, type: skillType.technologies, name: "React" },
-    { id: 2, type: skillType.technologies, name: "NestJS" },
-    { id: 3, type: skillType.technologies, name: "PostgreSQL" },
-    { id: 4, type: skillType.technologies, name: "Docker" },
-    { id: 5, type: skillType.technologies, name: "Caddy" },
-    { id: 6, type: skillType.technologies, name: "Next.js" },
-    { id: 7, type: skillType.technologies, name: "Arch Linux" },
+    { id: 1, type: skillType.TECH, name: "React" },
+    { id: 2, type: skillType.TECH, name: "NestJS" },
+    { id: 3, type: skillType.TECH, name: "PostgreSQL" },
+    { id: 4, type: skillType.TECH, name: "Docker" },
+    { id: 5, type: skillType.TECH, name: "Caddy" },
+    { id: 6, type: skillType.TECH, name: "Next.js" },
+    { id: 7, type: skillType.TECH, name: "Arch Linux" },
   ],
   softSkills: [
-    { id: 1, type: skillType.softSkills, name: "Problem Solving" },
-    { id: 2, type: skillType.softSkills, name: "Leadership" },
-    { id: 3, type: skillType.softSkills, name: "Creativity" },
-    { id: 4, type: skillType.softSkills, name: "Communication" },
-    { id: 5, type: skillType.softSkills, name: "Adaptability" },
+    { id: 1, type: skillType.SOFT, name: "Problem Solving" },
+    { id: 2, type: skillType.SOFT, name: "Leadership" },
+    { id: 3, type: skillType.SOFT, name: "Creativity" },
+    { id: 4, type: skillType.SOFT, name: "Communication" },
+    { id: 5, type: skillType.SOFT, name: "Adaptability" },
   ],
 };
 
