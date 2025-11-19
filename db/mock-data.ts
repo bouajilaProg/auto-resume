@@ -87,8 +87,6 @@ const certifications = [{
   name: "Certified JavaScript Developer",
   issuingOrganization: "Tech Institute",
   issueDate: "2023-05",
-  credentialID: "JS-DEV-12345",
-  credentialURL: "https://www.techinstitute.com/certificates/JS-DEV-12345"
 }];
 
 
