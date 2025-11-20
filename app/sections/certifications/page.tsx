@@ -10,8 +10,10 @@ export default function CertificationsPage() {
   const [certifications, setCertifications] = useState<Certification[]>(mockResumeData.certifications ?? []);
 
   const addCertification = () => {
+    // clean up 
     const newId = certifications.length > 0 ? Math.max(...certifications.map(c => c.id)) + 1 : 1;
-    setCertifications([...certifications, {
+    setCertifications([...certifications.filter(c => c.name.trim() !== "" || c.issuingOrganization.trim() !== "" || c.issueDate.trim() !== "")
+      , {
       id: newId,
       name: "",
       issuingOrganization: "",
@@ -30,8 +32,9 @@ export default function CertificationsPage() {
   };
 
   const handleSave = () => {
-    console.log("Saved Certifications Data:", certifications);
-    alert("Changes saved! Check console for data.");
+    // clean empty certifications
+    const cleanedCertifications = certifications.filter(c => c.name.trim() !== "" || c.issuingOrganization.trim() !== "" || c.issueDate.trim() !== "");
+    setCertifications(cleanedCertifications);
   };
 
   return (

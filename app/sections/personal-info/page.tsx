@@ -31,8 +31,9 @@ export default function PersonalInfoPage() {
   }
 
   function handleSave() {
-    // Implement save logic here (e.g., send data to backend or update global state)
-    console.log("Saved Personal Info:", personalInfo);
+    // clean empty contact  
+    const cleanedContacts = personalInfo.contact.filter(contact => contact.value.trim() !== "");
+    setPersonalInfo({ ...personalInfo, contact: cleanedContacts });
   }
 
 

@@ -12,7 +12,7 @@ export default function ProjectsPage() {
 
   const addProject = () => {
     const newId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
-    setProjects([...projects, {
+    setProjects([...projects.filter((project) => project.title.trim() !== ""), {
       id: newId,
       title: "",
       description: "",
@@ -33,8 +33,9 @@ export default function ProjectsPage() {
   };
 
   const handleSave = () => {
-    console.log("Saved Projects Data:", projects);
-    alert("Changes saved! Check console for data.");
+    // clean empty projects
+    const cleanedProjects = projects.filter(p => p.title.trim() !== "");
+    setProjects(cleanedProjects);
   };
 
   return (

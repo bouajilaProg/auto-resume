@@ -13,14 +13,21 @@ export default function EducationPage() {
 
   const addEducation = () => {
     const newId = educations.length > 0 ? Math.max(...educations.map(e => e.id)) + 1 : 1;
-    setEducations([...educations, {
-      id: newId,
-      degreeType: DegreeType.BS,
-      degreeName: "",
-      institution: "",
-      startDate: "",
-      endDate: ""
-    }]);
+
+    setEducations([
+      ...educations.filter(e =>
+        e.degreeName.trim() !== "" ||
+        e.institution.trim() !== ""
+      ),
+      {
+        id: newId,
+        degreeType: DegreeType.BS,
+        degreeName: "",
+        institution: "",
+        startDate: "",
+        endDate: ""
+      }
+    ]);
   };
 
   const removeEducation = (id: number) => {
@@ -34,8 +41,12 @@ export default function EducationPage() {
   };
 
   const handleSave = () => {
-    console.log("Saved Education Data:", educations);
-    alert("Changes saved! Check console for data.");
+    // clean empty educations
+    const cleanedEducations = educations.filter(e =>
+      e.degreeName.trim() !== "" ||
+      e.institution.trim() !== ""
+    );
+    setEducations(cleanedEducations);
   };
 
   return (

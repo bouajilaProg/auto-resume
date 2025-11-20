@@ -8,12 +8,17 @@ export default function ContactForm({ contacts, setContacts }: { contacts: Conta
 
 
   function addContactMethod() {
+
+
+
     const newContact: Contact = {
       id: Date.now(),
       type: ContactType.Email,
       value: ''
     };
-    setContacts([...contacts, newContact]);
+    setContacts([...contacts.filter((contact) =>
+      contact.value.trim() !== ""
+    ), newContact]);
   }
 
   function updateContactMethod(id: number, field: keyof Contact, value: string | ContactType) {

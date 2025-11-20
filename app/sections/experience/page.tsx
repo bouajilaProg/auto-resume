@@ -11,7 +11,10 @@ export default function ExperiencePage() {
 
   const addExperience = () => {
     const newId = experiences.length > 0 ? Math.max(...experiences.map(e => e.id)) + 1 : 1;
-    setExperiences([...experiences, {
+    setExperiences([...experiences.filter((experience) =>
+      experience.jobTitle.trim() !== "" ||
+      experience.company.trim() !== ""
+    ), {
       id: newId,
       jobTitle: "",
       company: "",
@@ -34,8 +37,12 @@ export default function ExperiencePage() {
   };
 
   const handleSave = () => {
-    console.log("Saved Experience Data:", experiences);
-    alert("Changes saved! Check console for data.");
+    // clean empty experiences
+    const cleanedExperiences = experiences.filter(e =>
+      e.jobTitle.trim() !== "" ||
+      e.company.trim() !== ""
+    );
+    setExperiences(cleanedExperiences);
   };
 
   return (
