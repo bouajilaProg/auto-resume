@@ -2,7 +2,6 @@ import { Certification } from "./certif.type";
 import { EducationItem } from "./education.type";
 import { WorkExperience } from "./experience.type";
 import { ExtraCurricularActivity } from "./extraCurr.type";
-import { hobby } from "./hobby.type";
 import { PersonalInfo } from "./personalInfo.type";
 import { Project } from "./project.type";
 import { Skills } from "./skills.type";
@@ -21,5 +20,4 @@ export interface Resume {
 
   certifications?: Certification[];
   extracurriculars?: ExtraCurricularActivity[];
-  hobbies?: hobby[];
 }

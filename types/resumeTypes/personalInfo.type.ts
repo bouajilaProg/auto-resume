@@ -14,11 +14,13 @@ interface Contact {
   value: string;
 }
 
+
 interface PersonalInfo {
   name: string;
   location: string;
   description: string;
   contact: Contact[];
+  hobbies: string[];
 }
 
 export type { PersonalInfo, Contact };

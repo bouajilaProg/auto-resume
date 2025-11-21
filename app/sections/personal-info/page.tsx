@@ -30,10 +30,17 @@ export default function PersonalInfoPage() {
     setPersonalInfo({ ...personalInfo, contact: contacts });
   }
 
+  function updateHobbies(hobbies: string) {
+    // clean
+    setPersonalInfo({ ...personalInfo, hobbies: hobbies.split(",").map(hobby => hobby.trim()) });
+  }
+
   function handleSave() {
     // clean empty contact  
     const cleanedContacts = personalInfo.contact.filter(contact => contact.value.trim() !== "");
-    setPersonalInfo({ ...personalInfo, contact: cleanedContacts });
+    // clean hobbies
+    const cleanedHobbies = personalInfo.hobbies.filter(hobby => hobby.trim() !== "");
+    setPersonalInfo({ ...personalInfo, hobbies: cleanedHobbies, contact: cleanedContacts });
   }
 
 
@@ -96,6 +103,26 @@ export default function PersonalInfoPage() {
 
             {/* Contact Methods */}
             <ContactForm contacts={personalInfo.contact} setContacts={updateContacts} />
+
+            {/* hobbies */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                hobbies
+              </label>
+              <textarea
+                value={personalInfo.hobbies.join(", ")}
+                onChange={(e) => updateHobbies(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition resize-none"
+                placeholder="A brief description about yourself, your professional summary, or career objectives..."
+                rows={1}
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                {personalInfo.description.length} characters
+              </p>
+            </div>
+
+
+
 
             {/* Action Buttons */}
             <div className="flex gap-4 pt-6">
