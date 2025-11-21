@@ -1,6 +1,6 @@
 // craete a resume mock data
 
-import { ContactType, DegreeType, ExtraCurricularActivity, hobby, PersonalInfo, Resume, Skills, skillType, WorkExperience } from "@/types/resumeTypes";
+import { ContactType, DegreeType, ExtraCurricularActivity, PersonalInfo, Resume, Skills, skillType, WorkExperience } from "@/types/resumeTypes";
 
 
 
@@ -15,7 +15,8 @@ const personalInfo: PersonalInfo = {
     { id: 3, type: ContactType.Website, value: "http://bouajilaProg.com/" },
     { id: 4, type: ContactType.GitHub, value: "bouajil" },
     { id: 5, type: ContactType.LinkedIn, value: "mohamed-yessine-bouajila" }
-  ]
+  ],
+  hobbies: ["development", "reading", "robotics", "woodworking"]
 };
 
 
@@ -100,16 +101,6 @@ const extracurriculars: ExtraCurricularActivity[] = [
 ];
 
 
-const hobbies: hobby[] = [
-  {
-    id: 1,
-    name: "Photography"
-  },
-  {
-    id: 2,
-    name: "Traveling"
-  }];
-
 
 export const mockResumeData: Resume = {
   name: "standard resume",
@@ -124,7 +115,6 @@ export const mockResumeData: Resume = {
   skills,
   certifications,
   extracurriculars,
-  hobbies
 };
 
 

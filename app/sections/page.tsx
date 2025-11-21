@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { FaUser, FaGraduationCap, FaBriefcase, FaBuilding, FaTools, FaUsers, FaHeart, FaCertificate } from 'react-icons/fa';
+import { FaUser, FaGraduationCap, FaBriefcase, FaBuilding, FaTools, FaUsers, FaCertificate } from 'react-icons/fa';
+import { FaDiagramNext } from 'react-icons/fa6';
 
 export default function CVDashboard() {
   const sections = [
@@ -11,7 +12,7 @@ export default function CVDashboard() {
     { id: 'skills', name: 'Skills', icon: FaTools },
     { id: 'certifications', name: 'Certifications', icon: FaCertificate },
     { id: 'extracurricular', name: 'Extracurricular', icon: FaUsers },
-    { id: 'hobbies', name: 'Hobbies', icon: FaHeart }
+    { id: 'to be filled', name: 'to be filled', icon: FaDiagramNext }
   ];
 
   return (
