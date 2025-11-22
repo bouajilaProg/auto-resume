@@ -102,7 +102,7 @@ export default function PersonalInfoPage() {
             </div>
 
             {/* Contact Methods */}
-            <ContactForm contacts={personalInfo.contact} setContacts={updateContacts} />
+            <ContactForm contacts={personalInfo.contact} setContactsAction={updateContacts} />
 
             {/* hobbies */}
             <div>

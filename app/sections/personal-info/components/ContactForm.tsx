@@ -4,13 +4,9 @@ import { contactIcons } from "@/static/contactTypesIcons";
 import { Contact, ContactType } from "@/types/resumeTypes";
 import { FaEnvelope, FaPlus, FaTrash } from "react-icons/fa";
 
-export default function ContactForm({ contacts, setContacts }: { contacts: Contact[], setContacts: (contacts: Contact[]) => void }) {
-
+export default function ContactForm({ contacts, setContactsAction: setContacts }: { contacts: Contact[], setContactsAction: (contacts: Contact[]) => void }) {
 
   function addContactMethod() {
-
-
-
     const newContact: Contact = {
       id: Date.now(),
       type: ContactType.Email,
