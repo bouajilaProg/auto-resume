@@ -1,57 +1,30 @@
-"use client"
-import { mockResumeData } from '@/db/mock-data';
-import { useState } from 'react';
-import { FaPlus, FaBriefcase } from 'react-icons/fa';
-import ExperienceForm from './components/ExperienceForm';
-import { WorkExperience } from '@/types/resumeTypes';
-import Link from 'next/link';
+"use client";
+
+import { FaPlus, FaBriefcase } from "react-icons/fa";
+import ExperienceForm from "./components/ExperienceForm";
+import Link from "next/link";
+import { useExperience } from "@/hooks/useExperience";
 
 export default function ExperiencePage() {
-  const [experiences, setExperiences] = useState<WorkExperience[]>(mockResumeData.experiences);
-
-  const addExperience = () => {
-    const newId = experiences.length > 0 ? Math.max(...experiences.map(e => e.id)) + 1 : 1;
-    setExperiences([...experiences.filter((experience) =>
-      experience.jobTitle.trim() !== "" ||
-      experience.company.trim() !== ""
-    ), {
-      id: newId,
-      jobTitle: "",
-      company: "",
-      location: "",
-      startDate: "",
-      endDate: "",
-      summary: "",
-      keywords: ""
-    }]);
-  };
-
-  const removeExperience = (id: number) => {
-    setExperiences(experiences.filter(e => e.id !== id));
-  };
-
-  const updateExperience = (id: number, field: keyof WorkExperience, value: string) => {
-    setExperiences(experiences.map(e =>
-      e.id === id ? { ...e, [field]: value } : e
-    ));
-  };
-
-  const handleSave = () => {
-    // clean empty experiences
-    const cleanedExperiences = experiences.filter(e =>
-      e.jobTitle.trim() !== "" ||
-      e.company.trim() !== ""
-    );
-    setExperiences(cleanedExperiences);
-  };
+  const {
+    experiences,
+    addExperience,
+    removeExperience,
+    updateExperience,
+    handleSave,
+  } = useExperience();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Work Experience</h1>
-            <p className="text-gray-600">Showcase your professional work history and achievements</p>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Work Experience
+            </h1>
+            <p className="text-gray-600">
+              Showcase your professional work history and achievements
+            </p>
           </div>
 
           <div className="space-y-6">
