@@ -1,42 +1,12 @@
-"use client"
-import { mockResumeData } from '@/db/mock-data';
-import { useState } from 'react';
-import { FaPlus, FaProjectDiagram } from 'react-icons/fa';
+"use client";
 
-import ProjectForm from './components/ProjectForm';
-import { Project } from '@/types/resumeTypes';
-import Link from 'next/link';
+import { FaPlus, FaProjectDiagram } from "react-icons/fa";
+import Link from "next/link";
+import ProjectForm from "./components/ProjectForm";
+import { useProjects } from "@/hooks/useProjects";
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>(mockResumeData.projects);
-
-  const addProject = () => {
-    const newId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
-    setProjects([...projects.filter((project) => project.title.trim() !== ""), {
-      id: newId,
-      title: "",
-      description: "",
-      tools: "",
-      projectLink: "",
-      repoLink: ""
-    }]);
-  };
-
-  const removeProject = (id: number) => {
-    setProjects(projects.filter(p => p.id !== id));
-  };
-
-  const updateProject = (id: number, field: keyof Project, value: string) => {
-    setProjects(projects.map(p =>
-      p.id === id ? { ...p, [field]: value } : p
-    ));
-  };
-
-  const handleSave = () => {
-    // clean empty projects
-    const cleanedProjects = projects.filter(p => p.title.trim() !== "");
-    setProjects(cleanedProjects);
-  };
+  const { projects, addProject, removeProject, updateProject, handleSave } = useProjects();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
@@ -49,9 +19,7 @@ export default function ProjectsPage() {
 
           <div className="space-y-6">
             <div className="flex items-center justify-between mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Project Entries
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Project Entries</label>
               <button
                 onClick={addProject}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
@@ -87,7 +55,6 @@ export default function ProjectsPage() {
               </div>
             )}
 
-            {/* Action Buttons */}
             <div className="flex gap-4 pt-6">
               <button
                 onClick={handleSave}
