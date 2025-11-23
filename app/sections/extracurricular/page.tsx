@@ -1,49 +1,30 @@
-"use client"
-import { mockResumeData } from '@/db/mock-data';
-import { useState } from 'react';
-import { FaPlus, FaTrophy } from 'react-icons/fa';
-import Link from 'next/link';
-import { ExtraCurricularActivity } from '@/types/resumeTypes';
-import ExtraCurricularForm from './components/ExtraCurricularForm';
+"use client";
+
+import { FaPlus, FaTrophy } from "react-icons/fa";
+import Link from "next/link";
+import ExtraCurricularForm from "./components/ExtraCurricularForm";
+import { useExtraCurricular } from "@/hooks/useExtracurricular";
 
 export default function ExtraCurricularActivitiesPage() {
-  const [activities, setActivities] = useState<ExtraCurricularActivity[]>(mockResumeData.extracurriculars ?? []);
-
-  const addActivity = () => {
-    // clean up 
-    const newId = activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1;
-    setActivities([...activities.filter(a => a.activityName.trim() !== "" || a.startDate.trim() !== "")
-      , {
-      id: newId,
-      activityName: "",
-      startDate: "",
-      endDate: ""
-    }]);
-  };
-
-  const removeActivity = (id: number) => {
-    setActivities(activities.filter(a => a.id !== id));
-  };
-
-  const updateActivity = (id: number, field: keyof ExtraCurricularActivity, value: string) => {
-    setActivities(activities.map(a =>
-      a.id === id ? { ...a, [field]: value } : a
-    ));
-  };
-
-  const handleSave = () => {
-    // clean empty activities
-    const cleanedActivities = activities.filter(a => a.activityName.trim() !== "" || a.startDate.trim() !== "");
-    setActivities(cleanedActivities);
-  };
+  const {
+    activities,
+    addActivity,
+    removeActivity,
+    updateActivity,
+    handleSave,
+  } = useExtraCurricular();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Extracurricular Activities</h1>
-            <p className="text-gray-600">Highlight your involvement in clubs, organizations, and activities</p>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Extracurricular Activities
+            </h1>
+            <p className="text-gray-600">
+              Highlight your involvement in clubs, organizations, and activities
+            </p>
           </div>
 
           <div className="space-y-6">
