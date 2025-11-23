@@ -1,45 +1,13 @@
-"use client"
-import { mockResumeData } from '@/db/mock-data';
-import { useState } from 'react';
-import { FaCode, FaCog, FaUsers } from 'react-icons/fa';
-import SkillSection from './components/SkillsSection';
-import { Skills, skillType } from '@/types/resumeTypes';
-import Link from 'next/link';
+"use client";
+
+import { FaCode, FaCog, FaUsers } from "react-icons/fa";
+import Link from "next/link";
+import SkillSection from "./components/SkillsSection";
+import { skillType } from "@/types/resumeTypes";
+import { useSkills } from "@/hooks/useSkills";
 
 export default function SkillsPage() {
-  const [skills, setSkills] = useState<Skills>(mockResumeData.skills);
-
-  const addSkill = (type: skillType) => (name: string) => {
-    setSkills(prevSkills => {
-      const skillList = prevSkills[type];
-      // Generate the next sequential ID
-      const newId = skillList.length > 0 ? Math.max(...skillList.map(s => s.id)) + 1 : 1;
-
-      return {
-        ...prevSkills,
-        [type]: [...skillList, { id: newId, type, name }]
-      };
-    });
-  };
-
-  const removeSkill = (type: skillType) => (id: number) => {
-    setSkills(prevSkills => ({
-      ...prevSkills,
-      [type]: prevSkills[type].filter(s => s.id !== id)
-    }));
-  };
-
-  const updateSkill = (type: skillType) => (id: number, name: string) => {
-    setSkills(prevSkills => ({
-      ...prevSkills,
-      [type]: prevSkills[type].map(s => s.id === id ? { ...s, name } : s)
-    }));
-  };
-
-  const handleSave = () => {
-    console.log("Saved Skills Data:", skills);
-    alert("Changes saved! Check console for data.");
-  };
+  const { skills, addSkill, removeSkill, updateSkill, handleSave } = useSkills();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
@@ -78,7 +46,6 @@ export default function SkillsPage() {
               onUpdate={updateSkill(skillType.SOFT)}
             />
 
-            {/* Action Buttons */}
             <div className="flex gap-4 pt-6">
               <button
                 onClick={handleSave}
