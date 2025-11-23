@@ -1,53 +1,18 @@
-"use client"
-import { useState } from 'react';
-import { FaPlus, FaGraduationCap } from 'react-icons/fa';
-import EducationForm from './components/EducationForm';
-import { DegreeType, EducationItem } from '@/types/resumeTypes';
-import { mockResumeData } from '@/db/mock-data';
-import Link from 'next/link';
+"use client";
 
+import { FaPlus, FaGraduationCap } from "react-icons/fa";
+import EducationForm from "./components/EducationForm";
+import Link from "next/link";
+import { useEducation } from "@/hooks/useEducation";
 
 export default function EducationPage() {
-  const [educations, setEducations] = useState<EducationItem[]>(mockResumeData.educations);
-
-
-  const addEducation = () => {
-    const newId = educations.length > 0 ? Math.max(...educations.map(e => e.id)) + 1 : 1;
-
-    setEducations([
-      ...educations.filter(e =>
-        e.degreeName.trim() !== "" ||
-        e.institution.trim() !== ""
-      ),
-      {
-        id: newId,
-        degreeType: DegreeType.BS,
-        degreeName: "",
-        institution: "",
-        startDate: "",
-        endDate: ""
-      }
-    ]);
-  };
-
-  const removeEducation = (id: number) => {
-    setEducations(educations.filter(e => e.id !== id));
-  };
-
-  const updateEducation = (id: number, field: keyof EducationItem, value: string) => {
-    setEducations(educations.map(e =>
-      e.id === id ? { ...e, [field]: value } : e
-    ));
-  };
-
-  const handleSave = () => {
-    // clean empty educations
-    const cleanedEducations = educations.filter(e =>
-      e.degreeName.trim() !== "" ||
-      e.institution.trim() !== ""
-    );
-    setEducations(cleanedEducations);
-  };
+  const {
+    educations,
+    addEducation,
+    removeEducation,
+    updateEducation,
+    handleSave,
+  } = useEducation();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
@@ -55,7 +20,9 @@ export default function EducationPage() {
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">Education</h1>
-            <p className="text-gray-600">Add your educational background and qualifications</p>
+            <p className="text-gray-600">
+              Add your educational background and qualifications
+            </p>
           </div>
 
           <div className="space-y-6">
@@ -87,7 +54,13 @@ export default function EducationPage() {
             ) : (
               <div className="space-y-6">
                 {educations.map((edu, index) => (
-                  <EducationForm key={index} edu={edu} index={index} updateEducation={updateEducation} removeEducation={removeEducation} />
+                  <EducationForm
+                    key={edu.id}
+                    edu={edu}
+                    index={index}
+                    updateEducation={updateEducation}
+                    removeEducation={removeEducation}
+                  />
                 ))}
               </div>
             )}
