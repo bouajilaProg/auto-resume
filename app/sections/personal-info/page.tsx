@@ -1,56 +1,32 @@
 "use client";
-import { useState } from 'react';
-import { FaUser, FaMapMarkerAlt } from 'react-icons/fa';
-import { Contact, PersonalInfo } from '@/types/resumeTypes';
-import ContactForm from './components/ContactForm';
-import { mockResumeData } from '@/db/mock-data';
-import Link from 'next/link';
 
+import { FaUser, FaMapMarkerAlt } from "react-icons/fa";
+import ContactForm from "./components/ContactForm";
+import Link from "next/link";
+import { usePersonalInfo } from "@/hooks/usePersonalInfo";
 
 export default function PersonalInfoPage() {
-
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfo>(mockResumeData.personalInfo);
-
-
-
-
-  function updateName(name: string) {
-    setPersonalInfo({ ...personalInfo, name });
-  }
-
-  function updateLocation(location: string) {
-    setPersonalInfo({ ...personalInfo, location });
-  }
-
-  function updateDescription(description: string) {
-    setPersonalInfo({ ...personalInfo, description });
-  }
-
-  function updateContacts(contacts: Contact[]) {
-    setPersonalInfo({ ...personalInfo, contact: contacts });
-  }
-
-  function updateHobbies(hobbies: string) {
-    // clean
-    setPersonalInfo({ ...personalInfo, hobbies: hobbies.split(",").map(hobby => hobby.trim()) });
-  }
-
-  function handleSave() {
-    // clean empty contact  
-    const cleanedContacts = personalInfo.contact.filter(contact => contact.value.trim() !== "");
-    // clean hobbies
-    const cleanedHobbies = personalInfo.hobbies.filter(hobby => hobby.trim() !== "");
-    setPersonalInfo({ ...personalInfo, hobbies: cleanedHobbies, contact: cleanedContacts });
-  }
-
+  const {
+    personalInfo,
+    updateName,
+    updateLocation,
+    updateDescription,
+    updateContacts,
+    updateHobbies,
+    handleSave,
+  } = usePersonalInfo();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Personal Information</h1>
-            <p className="text-gray-600">Enter your basic details and contact methods</p>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Personal Information
+            </h1>
+            <p className="text-gray-600">
+              Enter your basic details and contact methods
+            </p>
           </div>
 
           <div className="space-y-6">
@@ -93,7 +69,7 @@ export default function PersonalInfoPage() {
                 value={personalInfo.description}
                 onChange={(e) => updateDescription(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition resize-none"
-                placeholder="A brief description about yourself, your professional summary, or career objectives..."
+                placeholder="A brief description about yourself..."
                 rows={4}
               />
               <p className="text-xs text-gray-500 mt-1">
@@ -104,25 +80,18 @@ export default function PersonalInfoPage() {
             {/* Contact Methods */}
             <ContactForm contacts={personalInfo.contact} setContactsAction={updateContacts} />
 
-            {/* hobbies */}
+            {/* Hobbies */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                hobbies
+                Hobbies
               </label>
               <textarea
                 value={personalInfo.hobbies.join(", ")}
                 onChange={(e) => updateHobbies(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition resize-none"
-                placeholder="A brief description about yourself, your professional summary, or career objectives..."
                 rows={1}
               />
-              <p className="text-xs text-gray-500 mt-1">
-                {personalInfo.description.length} characters
-              </p>
             </div>
-
-
-
 
             {/* Action Buttons */}
             <div className="flex gap-4 pt-6">
