@@ -1,49 +1,30 @@
-"use client"
-import { mockResumeData } from '@/db/mock-data';
-import { useState } from 'react';
-import { FaPlus, FaCertificate } from 'react-icons/fa';
-import Link from 'next/link';
-import { Certification } from '@/types/resumeTypes';
-import CertificationForm from './components/CertificationForm';
+"use client";
+
+import Link from "next/link";
+import { FaPlus, FaCertificate } from "react-icons/fa";
+import CertificationForm from "./components/CertificationForm";
+import { useCertifications } from "@/hooks/useCertifications";
 
 export default function CertificationsPage() {
-  const [certifications, setCertifications] = useState<Certification[]>(mockResumeData.certifications ?? []);
-
-  const addCertification = () => {
-    // clean up 
-    const newId = certifications.length > 0 ? Math.max(...certifications.map(c => c.id)) + 1 : 1;
-    setCertifications([...certifications.filter(c => c.name.trim() !== "" || c.issuingOrganization.trim() !== "" || c.issueDate.trim() !== "")
-      , {
-      id: newId,
-      name: "",
-      issuingOrganization: "",
-      issueDate: ""
-    }]);
-  };
-
-  const removeCertification = (id: number) => {
-    setCertifications(certifications.filter(c => c.id !== id));
-  };
-
-  const updateCertification = (id: number, field: keyof Certification, value: string) => {
-    setCertifications(certifications.map(c =>
-      c.id === id ? { ...c, [field]: value } : c
-    ));
-  };
-
-  const handleSave = () => {
-    // clean empty certifications
-    const cleanedCertifications = certifications.filter(c => c.name.trim() !== "" || c.issuingOrganization.trim() !== "" || c.issueDate.trim() !== "");
-    setCertifications(cleanedCertifications);
-  };
+  const {
+    certifications,
+    addCertification,
+    removeCertification,
+    updateCertification,
+    handleSave,
+  } = useCertifications();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Certifications</h1>
-            <p className="text-gray-600">Showcase your professional certifications and credentials</p>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Certifications
+            </h1>
+            <p className="text-gray-600">
+              Showcase your professional certifications and credentials
+            </p>
           </div>
 
           <div className="space-y-6">
