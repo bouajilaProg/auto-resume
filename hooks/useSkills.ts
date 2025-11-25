@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Skills, skillType } from "@/types/resumeTypes";
-import { mockResumeData } from "@/db/mock-data";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useSkills() {
-  const { updateResumeSectionData } = useResumeSectionData();
-  const [skills, setSkills] = useState<Skills>(mockResumeData.skills);
+  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
+  const [skills, setSkills] = useState<Skills>({} as Skills);
+
+  useEffect(
+    () => {
+      setSkills(
+        resumeSectionData?.skills ?? { languages: [], technologies: [], softSkills: [] } as Skills
+      );
+    }, [resumeSectionData]
+  )
 
   const addSkill = (type: skillType) => (name: string) => {
     setSkills(prevSkills => {

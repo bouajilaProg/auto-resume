@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EducationItem, DegreeType } from "@/types/resumeTypes";
-import { mockResumeData } from "@/db/mock-data";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useEducation() {
 
-  const { updateResumeSectionData } = useResumeSectionData();
+  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
 
-  const [educations, setEducations] = useState<EducationItem[]>(
-    mockResumeData.educations ?? []
-  );
+  const [educations, setEducations] = useState<EducationItem[]>([]);
+
+  useEffect(
+    () => {
+      setEducations(
+        resumeSectionData?.educations ?? []
+      );
+    }, [resumeSectionData]
+  )
 
   const addEducation = () => {
     const newId =

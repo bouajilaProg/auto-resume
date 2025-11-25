@@ -45,7 +45,7 @@ export default function ContactForm({ contacts, setContactsAction: setContacts }
         </div>
 
         {
-          contacts.length === 0 ? (
+          (!contacts || contacts.length === 0) ? (
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
               <FaEnvelope className="mx-auto text-gray-400 text-4xl mb-3" />
               <p className="text-gray-500 mb-4">No contact methods added yet</p>

@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { WorkExperience } from "@/types/resumeTypes";
-import { mockResumeData } from "@/db/mock-data";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useExperience() {
-  const { updateResumeSectionData } = useResumeSectionData();
-  const [experiences, setExperiences] = useState<WorkExperience[]>(
-    mockResumeData.experiences ?? []
-  );
+  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
+  const [experiences, setExperiences] = useState<WorkExperience[]>([]);
+
+  useEffect(
+    () => {
+      setExperiences(
+        resumeSectionData?.experiences ?? []
+      );
+    }, [resumeSectionData]
+  )
+
 
   const addExperience = () => {
     const newId =

@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Project } from "@/types/resumeTypes";
-import { mockResumeData } from "@/db/mock-data";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useProjects() {
-  const { updateResumeSectionData } = useResumeSectionData();
-  const [projects, setProjects] = useState<Project[]>(mockResumeData.projects ?? []);
+  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
+  const [projects, setProjects] = useState<Project[]>([] as Project[]);
+
+  useEffect(
+    () => {
+      setProjects(
+        resumeSectionData?.projects ?? []
+      );
+    }, [resumeSectionData]
+  )
 
   const addProject = () => {
     const newId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;

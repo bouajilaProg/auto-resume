@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PersonalInfo, Contact } from "@/types/resumeTypes";
-import { mockResumeData } from "@/db/mock-data";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function usePersonalInfo() {
-  const { updateResumeSectionData } = useResumeSectionData();
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfo>(
-    mockResumeData.personalInfo
-  );
+  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({} as PersonalInfo);
+
+  useEffect(
+    () => {
+      setPersonalInfo(
+        resumeSectionData?.personalInfo ?? {
+          name: "",
+          location: "",
+          description: "",
+          contact: [],
+          hobbies: [],
+        } as PersonalInfo
+      );
+    }, [resumeSectionData]
+  )
 
   const updateName = (name: string) => {
     setPersonalInfo({ ...personalInfo, name });
