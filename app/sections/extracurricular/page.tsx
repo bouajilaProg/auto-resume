@@ -4,6 +4,7 @@ import { FaPlus, FaTrophy } from "react-icons/fa";
 import Link from "next/link";
 import ExtraCurricularForm from "./components/ExtraCurricularForm";
 import { useExtraCurricular } from "@/hooks/useExtracurricular";
+import Loading from "@/app/components/Loading";
 
 export default function ExtraCurricularActivitiesPage() {
   const {
@@ -12,7 +13,13 @@ export default function ExtraCurricularActivitiesPage() {
     removeActivity,
     updateActivity,
     handleSave,
+    loading
   } = useExtraCurricular();
+
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">

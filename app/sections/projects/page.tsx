@@ -4,9 +4,14 @@ import { FaPlus, FaProjectDiagram } from "react-icons/fa";
 import Link from "next/link";
 import ProjectForm from "./components/ProjectForm";
 import { useProjects } from "@/hooks/useProjects";
+import Loading from "@/app/components/Loading";
 
 export default function ProjectsPage() {
-  const { projects, addProject, removeProject, updateProject, handleSave } = useProjects();
+  const { projects, addProject, removeProject, updateProject, handleSave, loading } = useProjects();
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">

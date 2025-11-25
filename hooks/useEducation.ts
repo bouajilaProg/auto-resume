@@ -4,7 +4,7 @@ import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useEducation() {
 
-  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
+  const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
 
   const [educations, setEducations] = useState<EducationItem[]>([]);
 
@@ -68,5 +68,6 @@ export function useEducation() {
     removeEducation,
     updateEducation,
     handleSave,
+    loading
   };
 }

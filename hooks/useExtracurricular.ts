@@ -3,7 +3,7 @@ import { ExtraCurricularActivity } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useExtraCurricular() {
-  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
+  const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
   const [activities, setActivities] = useState<ExtraCurricularActivity[]>([]);
 
   useEffect(
@@ -59,5 +59,6 @@ export function useExtraCurricular() {
     removeActivity,
     updateActivity,
     handleSave,
+    loading
   };
 }

@@ -3,7 +3,7 @@ import { WorkExperience } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useExperience() {
-  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
+  const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
   const [experiences, setExperiences] = useState<WorkExperience[]>([]);
 
   useEffect(
@@ -69,5 +69,6 @@ export function useExperience() {
     removeExperience,
     updateExperience,
     handleSave,
+    loading
   };
 }

@@ -4,6 +4,7 @@ import { FaPlus, FaGraduationCap } from "react-icons/fa";
 import EducationForm from "./components/EducationForm";
 import Link from "next/link";
 import { useEducation } from "@/hooks/useEducation";
+import Loading from "@/app/components/Loading";
 
 export default function EducationPage() {
   const {
@@ -12,7 +13,15 @@ export default function EducationPage() {
     removeEducation,
     updateEducation,
     handleSave,
+    loading
   } = useEducation();
+
+  if (!educations || loading) {
+    return (
+      <Loading />
+    )
+  }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">

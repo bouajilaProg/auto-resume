@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FaPlus, FaCertificate } from "react-icons/fa";
 import CertificationForm from "./components/CertificationForm";
 import { useCertifications } from "@/hooks/useCertifications";
+import Loading from "@/app/components/Loading";
 
 export default function CertificationsPage() {
   const {
@@ -12,7 +13,15 @@ export default function CertificationsPage() {
     removeCertification,
     updateCertification,
     handleSave,
+    loading
   } = useCertifications();
+
+
+  if (!certifications || loading) {
+    return (
+      <Loading />
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">

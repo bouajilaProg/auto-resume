@@ -5,7 +5,7 @@ import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useCertifications() {
 
-  const { updateResumeSectionData, resumeSectionData } = useResumeSectionData();
+  const { updateResumeSectionData, resumeSectionData, loading } = useResumeSectionData();
 
   const [certifications, setCertifications] = useState<Certification[]>(
     resumeSectionData?.certifications ?? []
@@ -71,5 +71,6 @@ export function useCertifications() {
     removeCertification,
     updateCertification,
     handleSave,
+    loading,
   };
 }

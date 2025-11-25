@@ -13,7 +13,7 @@ export enum SECTIONS {
 }
 
 const RESUME_DATA_KEY = 'resumeDataKey';
-const MIN_LOADING_TIME = 1000;
+const MIN_LOADING_TIME = 300;
 
 
 export default function useResumeSectionData() {
@@ -23,7 +23,6 @@ export default function useResumeSectionData() {
 
   const readResumeData = async () => {
     setLoading(true);
-    const MIN_LOADING_TIME = 500; // ms
     const start = Date.now();
 
     if (typeof window === "undefined") {

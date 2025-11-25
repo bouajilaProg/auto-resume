@@ -5,9 +5,17 @@ import Link from "next/link";
 import SkillSection from "./components/SkillsSection";
 import { skillType } from "@/types/resumeTypes";
 import { useSkills } from "@/hooks/useSkills";
+import Loading from "@/app/components/Loading";
 
 export default function SkillsPage() {
-  const { skills, addSkill, removeSkill, updateSkill, handleSave } = useSkills();
+  const { skills, addSkill, removeSkill, updateSkill, handleSave, loading } = useSkills();
+
+
+  if (loading || !skills || Object.keys(skills).length === 0) {
+    return (
+      <Loading />
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">

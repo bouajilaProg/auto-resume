@@ -3,7 +3,7 @@ import { PersonalInfo, Contact } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function usePersonalInfo() {
-  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
+  const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({} as PersonalInfo);
 
   useEffect(
@@ -62,5 +62,6 @@ export function usePersonalInfo() {
     updateContacts,
     updateHobbies,
     handleSave,
+    loading
   };
 }

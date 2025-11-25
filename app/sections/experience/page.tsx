@@ -4,6 +4,7 @@ import { FaPlus, FaBriefcase } from "react-icons/fa";
 import ExperienceForm from "./components/ExperienceForm";
 import Link from "next/link";
 import { useExperience } from "@/hooks/useExperience";
+import Loading from "@/app/components/Loading";
 
 export default function ExperiencePage() {
   const {
@@ -12,7 +13,13 @@ export default function ExperiencePage() {
     removeExperience,
     updateExperience,
     handleSave,
+    loading
   } = useExperience();
+
+  if (loading) {
+    return <Loading />;
+  }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">

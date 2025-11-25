@@ -3,7 +3,7 @@ import { Project } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useProjects() {
-  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
+  const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
   const [projects, setProjects] = useState<Project[]>([] as Project[]);
 
   useEffect(
@@ -46,5 +46,6 @@ export function useProjects() {
     removeProject,
     updateProject,
     handleSave,
+    loading
   };
 }

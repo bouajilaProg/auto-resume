@@ -3,7 +3,7 @@ import { Skills, skillType } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useSkills() {
-  const { resumeSectionData, updateResumeSectionData } = useResumeSectionData();
+  const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
   const [skills, setSkills] = useState<Skills>({} as Skills);
 
   useEffect(
@@ -49,6 +49,7 @@ export function useSkills() {
     addSkill,
     removeSkill,
     updateSkill,
-    handleSave
+    handleSave,
+    loading
   };
 }
