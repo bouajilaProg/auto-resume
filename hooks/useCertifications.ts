@@ -1,15 +1,24 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Certification } from "@/types/resumeTypes";
-import { mockResumeData } from "@/db/mock-data";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useCertifications() {
 
-  const { updateResumeSectionData } = useResumeSectionData();
+  const { updateResumeSectionData, resumeSectionData } = useResumeSectionData();
+
   const [certifications, setCertifications] = useState<Certification[]>(
-    mockResumeData.certifications ?? []
+    resumeSectionData?.certifications ?? []
   );
+
+  useEffect(
+    () => {
+      setCertifications(
+        resumeSectionData?.certifications ?? []
+      );
+    }, [resumeSectionData]
+  )
+
 
   const addCertification = () => {
     const newId =
