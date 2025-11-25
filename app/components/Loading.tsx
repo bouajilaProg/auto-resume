@@ -10,10 +10,10 @@ export default function Loading() {
 
       <div className="text-center">
         <h2 className="text-gray-900 font-bold text-3xl mb-3">
-          Processing Data...
+          Loading...
         </h2>
         <p className="text-gray-500 text-lg font-medium">
-          Please do not close this tab while we prepare your view.
+          Getting things ready for you.
         </p>
       </div>
 
