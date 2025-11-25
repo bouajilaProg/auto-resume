@@ -1,8 +1,8 @@
 "use client";
 
-import { FaCode, FaCog, FaUsers } from "react-icons/fa";
+import { FaCode, FaLayerGroup, FaUsers, FaSave, FaTimes } from "react-icons/fa";
 import Link from "next/link";
-import SkillSection from "./components/SkillsSection";
+import SkillSection from "./components/SkillsSection"; // Adjust path as needed
 import { skillType } from "@/types/resumeTypes";
 import { useSkills } from "@/hooks/useSkills";
 import Loading from "@/app/components/Loading";
@@ -10,65 +10,77 @@ import Loading from "@/app/components/Loading";
 export default function SkillsPage() {
   const { skills, addSkill, removeSkill, updateSkill, handleSave, loading } = useSkills();
 
-
   if (loading || !skills || Object.keys(skills).length === 0) {
-    return (
-      <Loading />
-    )
+    return <Loading />;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Skills & Expertise</h1>
-            <p className="text-gray-600">Manage your technical skills, languages, and soft skills</p>
+    <div className="min-h-screen bg-gray-50/50 py-10 px-4 sm:px-6">
+      <div className="max-w-4xl mx-auto space-y-6">
+
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Skills & Expertise</h1>
+            <p className="text-gray-500 mt-1">Showcase your technical proficiency and soft skills.</p>
           </div>
 
-          <div className="space-y-6">
-            <SkillSection
-              title="Programming Languages"
-              icon={<FaCode className="text-blue-600" />}
-              skills={skills.languages}
-              onAdd={addSkill(skillType.LANG)}
-              onRemove={removeSkill(skillType.LANG)}
-              onUpdate={updateSkill(skillType.LANG)}
-            />
-
-            <SkillSection
-              title="Technologies & Tools"
-              icon={<FaCog className="text-green-600" />}
-              skills={skills.technologies}
-              onAdd={addSkill(skillType.TECH)}
-              onRemove={removeSkill(skillType.TECH)}
-              onUpdate={updateSkill(skillType.TECH)}
-            />
-
-            <SkillSection
-              title="Soft Skills"
-              icon={<FaUsers className="text-purple-600" />}
-              skills={skills.softSkills}
-              onAdd={addSkill(skillType.SOFT)}
-              onRemove={removeSkill(skillType.SOFT)}
-              onUpdate={updateSkill(skillType.SOFT)}
-            />
-
-            <div className="flex gap-4 pt-6">
-              <button
-                onClick={handleSave}
-                className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
-              >
-                Save Changes
-              </button>
-              <Link
-                href="/sections"
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
-              >
-                Cancel
-              </Link>
-            </div>
+          {/* Action Buttons (Top for easy access) */}
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <Link
+              href="/sections"
+              className="flex-1 sm:flex-none justify-center px-4 py-2.5 border border-gray-200 text-gray-600 bg-white rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all flex items-center gap-2 font-medium shadow-sm"
+            >
+              <FaTimes size={14} />
+              <span>Cancel</span>
+            </Link>
+            <button
+              onClick={handleSave}
+              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
+            >
+              <FaSave size={14} />
+              <span>Save Changes</span>
+            </button>
           </div>
+        </div>
+
+        {/* Content Sections */}
+        <div className="grid gap-6">
+          <SkillSection
+            title="Programming Languages"
+            description="Languages you speak fluently (e.g., Python, JavaScript, C++)"
+            icon={<FaCode className="text-white" />}
+            iconBg="bg-blue-500"
+            skills={skills.languages}
+            onAdd={addSkill(skillType.LANG)}
+            onRemove={removeSkill(skillType.LANG)}
+            onUpdate={updateSkill(skillType.LANG)}
+            colorTheme="blue"
+          />
+
+          <SkillSection
+            title="Technologies & Tools"
+            description="Frameworks, libraries, and dev tools (e.g., React, AWS, Docker)"
+            icon={<FaLayerGroup className="text-white" />}
+            iconBg="bg-emerald-500"
+            skills={skills.technologies}
+            onAdd={addSkill(skillType.TECH)}
+            onRemove={removeSkill(skillType.TECH)}
+            onUpdate={updateSkill(skillType.TECH)}
+            colorTheme="emerald"
+          />
+
+          <SkillSection
+            title="Soft Skills"
+            description="Interpersonal abilities and leadership (e.g., Communication, Agile)"
+            icon={<FaUsers className="text-white" />}
+            iconBg="bg-purple-500"
+            skills={skills.softSkills}
+            onAdd={addSkill(skillType.SOFT)}
+            onRemove={removeSkill(skillType.SOFT)}
+            onUpdate={updateSkill(skillType.SOFT)}
+            colorTheme="purple"
+          />
         </div>
       </div>
     </div>

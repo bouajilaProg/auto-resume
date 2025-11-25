@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FaPlus, FaCertificate } from "react-icons/fa";
+import { FaPlus, FaCertificate, FaSave, FaTimes } from "react-icons/fa";
 import CertificationForm from "./components/CertificationForm";
 import { useCertifications } from "@/hooks/useCertifications";
 import Loading from "@/app/components/Loading";
@@ -17,53 +17,64 @@ export default function CertificationsPage() {
   } = useCertifications();
 
 
-  if (!certifications || loading) {
-    return (
-      <Loading />
-    )
+  if (loading) {
+    return <Loading />;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Certifications
-            </h1>
-            <p className="text-gray-600">
-              Showcase your professional certifications and credentials
+    <div className="min-h-screen bg-gray-50/50 py-10 px-4 sm:px-6">
+      <div className="max-w-4xl mx-auto space-y-8">
+
+        {/* Header Section */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Certifications</h1>
+            <p className="text-gray-500 mt-1">
+              Showcase your professional certifications and credentials.
             </p>
           </div>
 
-          <div className="space-y-6">
-            <div className="flex items-center justify-between mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Certification Entries
-              </label>
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <Link
+              href="/sections"
+              className="flex-1 sm:flex-none justify-center px-4 py-2.5 border border-gray-200 text-gray-600 bg-white rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all flex items-center gap-2 font-medium shadow-sm"
+            >
+              <FaTimes size={14} />
+              <span>Cancel</span>
+            </Link>
+            <button
+              onClick={handleSave}
+              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
+            >
+              <FaSave size={14} />
+              <span>Save Changes</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="space-y-6">
+          {certifications.length === 0 ? (
+            <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-blue-300 transition-colors group">
+              <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <FaCertificate size={32} />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">No certifications added yet</h3>
+              <p className="text-gray-500 mb-6 max-w-sm mx-auto">
+                Certifications validate your skills. Add professional credentials here.
+              </p>
               <button
                 onClick={addCertification}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm font-medium"
               >
                 <FaPlus size={14} />
                 Add Certification
               </button>
             </div>
-
-            {certifications.length === 0 ? (
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                <FaCertificate className="mx-auto text-gray-400 text-4xl mb-3" />
-                <p className="text-gray-500 mb-4">No certifications added yet</p>
-                <button
-                  onClick={addCertification}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                >
-                  <FaPlus size={14} />
-                  Add Your First Certification
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-6">
+          ) : (
+            <>
+              <div className="grid gap-6">
                 {certifications.map((certification, index) => (
                   <CertificationForm
                     key={certification.id}
@@ -74,24 +85,19 @@ export default function CertificationsPage() {
                   />
                 ))}
               </div>
-            )}
 
-            {/* Action Buttons */}
-            <div className="flex gap-4 pt-6">
+              {/* Add New Button (Bottom) */}
               <button
-                onClick={handleSave}
-                className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                onClick={addCertification}
+                className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
               >
-                Save Changes
+                <div className="p-2 bg-gray-100 rounded-full group-hover:bg-blue-100 transition-colors">
+                  <FaPlus size={12} />
+                </div>
+                Add Another Certification
               </button>
-              <Link
-                href="/sections"
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
-              >
-                Cancel
-              </Link>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
     </div>

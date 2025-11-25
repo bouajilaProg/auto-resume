@@ -1,7 +1,7 @@
 "use client"
 import { DegreeType, EducationItem } from "@/types/resumeTypes"
 import { useState } from "react";
-import { FaGraduationCap, FaTrash, FaChevronDown, FaChevronUp } from "react-icons/fa"
+import { FaGraduationCap, FaTrash, FaChevronDown, FaChevronUp, FaUniversity, FaCalendarAlt } from "react-icons/fa"
 
 interface EducationFormProps {
   edu: EducationItem;
@@ -21,147 +21,178 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
 
   if (!isOpen) {
     return (
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all hover:shadow-md">
+        <div className="p-5 flex items-center justify-between">
+          <div
+            className="flex items-center gap-4 flex-1 cursor-pointer"
+            onClick={() => setIsOpen(true)}
+          >
+            <div className="p-3 rounded-lg bg-indigo-100 text-indigo-600 shadow-sm">
+              <FaGraduationCap size={20} />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-800">
+                {edu.degreeName || "(No Degree Specified)"}
+              </h3>
+              <p className="text-sm text-gray-500 flex items-center gap-2">
+                <span className="font-medium text-gray-700">{edu.institution || "Institution"}</span>
+                {edu.startDate && (
+                  <>
+                    <span>•</span>
+                    <span>{edu.startDate} - {edu.endDate || "Present"}</span>
+                  </>
+                )}
+              </p>
+            </div>
+          </div>
 
-      <div className="border border-gray-200 rounded-lg p-6 space-y-4 bg-white shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-            <FaGraduationCap className="text-blue-600" />
-            Education #{index + 1}
-          </h3>
           <div className="flex items-center gap-2">
             <button
               onClick={() => removeEducation(edu.id)}
-              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
-              aria-label="Delete education entry"
+              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+              title="Delete"
             >
-              <FaTrash />
-            </button>          <button
+              <FaTrash size={14} />
+            </button>
+            <button
               onClick={() => setIsOpen(true)}
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
-              aria-label="Collapse education entry"
+              className="p-2 text-gray-400 hover:bg-gray-50 rounded-full transition-colors"
             >
               <FaChevronDown />
             </button>
-
           </div>
         </div>
-
-        {/* details part */}
-        <div>
-          <p className="text-gray-700"><span className="font-semibold">Degree Name:</span> {edu.degreeName}</p>
-          <p className="text-gray-700"><span className="font-semibold">Institution:</span> {edu.institution}</p>
-          <p className="text-gray-700">
-            <span className="font-semibold">Duration:</span> {edu.startDate} - {edu.endDate || "Present"}
-          </p>
-        </div>
       </div>
-
-
     );
   }
 
   return (
-    <div className="border border-gray-200 rounded-lg p-6 space-y-4 bg-white shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-          <FaGraduationCap className="text-blue-600" />
-          Education #{index + 1}
-        </h3>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-indigo-50">
+      {/* Header */}
+      <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-lg bg-indigo-600 text-white shadow-sm">
+            <FaGraduationCap size={16} />
+          </div>
+          <h3 className="font-semibold text-gray-800">
+            Education #{index + 1}
+          </h3>
+        </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => removeEducation(edu.id)}
-            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
-            aria-label="Delete education entry"
+            className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium flex items-center gap-1"
           >
-            <FaTrash />
-          </button>          <button
+            <FaTrash size={12} />
+            <span className="hidden sm:inline">Delete</span>
+          </button>
+          <button
             onClick={() => setIsOpen(false)}
-            className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
-            aria-label="Collapse education entry"
+            className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <FaChevronUp />
           </button>
-
         </div>
       </div>
 
-      {/* Degree Type */}
-      <div>
-        <label htmlFor={`degreeType-${edu.id}`} className="block text-sm font-medium text-gray-700 mb-2">
-          Degree Type
-        </label>
-        <select
-          id={`degreeType-${edu.id}`}
-          value={edu.degreeType}
-          onChange={handleFieldChange('degreeType')}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition"
-        >
-          {Object.entries(DegreeType).map(([key, value]) => (
-            <option key={key} value={key}>
-              {value}
-            </option>
-          ))}
-        </select>
-      </div>
+      {/* Form Fields */}
+      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 
-      {/* Degree Name */}
-      <div>
-        <label htmlFor={`degreeName-${edu.id}`} className="block text-sm font-medium text-gray-700 mb-2">
-          Degree Name
-        </label>
-        <input
-          id={`degreeName-${edu.id}`}
-          type="text"
-          value={edu.degreeName}
-          onChange={handleFieldChange('degreeName')}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition"
-          placeholder="e.g., Computer Science, Business Administration"
-        />
-      </div>
+        {/* Degree Type */}
+        <div className="col-span-1">
+          <label htmlFor={`degreeType-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            Degree Type
+          </label>
+          <div className="relative">
+            <select
+              id={`degreeType-${edu.id}`}
+              value={edu.degreeType}
+              onChange={handleFieldChange('degreeType')}
+              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none text-gray-700"
+            >
+              {Object.entries(DegreeType).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
+              <FaChevronDown size={12} />
+            </div>
+          </div>
+        </div>
 
-      {/* Institution */}
-      <div>
-        <label htmlFor={`institution-${edu.id}`} className="block text-sm font-medium text-gray-700 mb-2">
-          Institution Name
-        </label>
-        <input
-          id={`institution-${edu.id}`}
-          type="text"
-          value={edu.institution}
-          onChange={handleFieldChange('institution')}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition"
-          placeholder="e.g., University of Tunisia"
-        />
-      </div>
+        {/* Degree Name */}
+        <div className="col-span-1">
+          <label htmlFor={`degreeName-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            Degree / Major Name
+          </label>
+          <input
+            id={`degreeName-${edu.id}`}
+            type="text"
+            value={edu.degreeName}
+            onChange={handleFieldChange('degreeName')}
+            className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400"
+            placeholder="e.g. Computer Science"
+          />
+        </div>
 
-      {/* Dates */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Institution */}
+        <div className="col-span-1 md:col-span-2">
+          <label htmlFor={`institution-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            Institution
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <FaUniversity />
+            </div>
+            <input
+              id={`institution-${edu.id}`}
+              type="text"
+              value={edu.institution}
+              onChange={handleFieldChange('institution')}
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400"
+              placeholder="e.g. Stanford University"
+            />
+          </div>
+        </div>
+
+        {/* Start Date */}
         <div>
-          <label htmlFor={`startDate-${edu.id}`} className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor={`startDate-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
             Start Date
           </label>
-          <input
-            id={`startDate-${edu.id}`}
-            type="month"
-            value={edu.startDate}
-            onChange={handleFieldChange('startDate')}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition"
-          />
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <FaCalendarAlt />
+            </div>
+            <input
+              id={`startDate-${edu.id}`}
+              type="month"
+              value={edu.startDate}
+              onChange={handleFieldChange('startDate')}
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700"
+            />
+          </div>
         </div>
+
+        {/* End Date */}
         <div>
-          <label htmlFor={`endDate-${edu.id}`} className="block text-sm font-medium text-gray-700 mb-2">
-            End Date
+          <label htmlFor={`endDate-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            End Date <span className="normal-case font-normal text-gray-400 ml-1">(or expected)</span>
           </label>
-          <input
-            id={`endDate-${edu.id}`}
-            type="month"
-            value={edu.endDate}
-            onChange={handleFieldChange('endDate')}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition"
-          />
-          <p className="text-xs text-gray-500 mt-1">
-            Leave empty if currently enrolled
-          </p>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <FaCalendarAlt />
+            </div>
+            <input
+              id={`endDate-${edu.id}`}
+              type="month"
+              value={edu.endDate}
+              onChange={handleFieldChange('endDate')}
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700"
+            />
+          </div>
         </div>
       </div>
     </div>
