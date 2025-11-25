@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { EducationItem, DegreeType } from "@/types/resumeTypes";
 import { mockResumeData } from "@/db/mock-data";
+import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useEducation() {
+
+  const { updateResumeSectionData } = useResumeSectionData();
+
   const [educations, setEducations] = useState<EducationItem[]>(
     mockResumeData.educations ?? []
   );
@@ -50,6 +54,7 @@ export function useEducation() {
       (e) => e.degreeName.trim() !== "" || e.institution.trim() !== ""
     );
     setEducations(cleaned);
+    updateResumeSectionData(SECTIONS.EDUCATION, cleaned);
   };
 
   return {

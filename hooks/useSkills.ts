@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Skills, skillType } from "@/types/resumeTypes";
 import { mockResumeData } from "@/db/mock-data";
+import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useSkills() {
+  const { updateResumeSectionData } = useResumeSectionData();
   const [skills, setSkills] = useState<Skills>(mockResumeData.skills);
 
   const addSkill = (type: skillType) => (name: string) => {
@@ -32,8 +34,7 @@ export function useSkills() {
   };
 
   const handleSave = () => {
-    console.log("Saved Skills Data:", skills);
-    alert("Changes saved! Check console for data.");
+    updateResumeSectionData(SECTIONS.SKILLS, skills);
   };
 
   return {

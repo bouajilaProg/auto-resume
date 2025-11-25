@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { ExtraCurricularActivity } from "@/types/resumeTypes";
 import { mockResumeData } from "@/db/mock-data";
+import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useExtraCurricular() {
+  const { updateResumeSectionData } = useResumeSectionData();
   const [activities, setActivities] = useState<ExtraCurricularActivity[]>(
     mockResumeData.extracurriculars ?? []
   );
@@ -43,6 +45,7 @@ export function useExtraCurricular() {
       (a) => a.activityName.trim() !== "" || a.startDate.trim() !== ""
     );
     setActivities(cleaned);
+    updateResumeSectionData(SECTIONS.EXTRACURRICULARS, cleaned);
   };
 
   return {

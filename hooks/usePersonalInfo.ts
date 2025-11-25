@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { PersonalInfo, Contact } from "@/types/resumeTypes";
 import { mockResumeData } from "@/db/mock-data";
+import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function usePersonalInfo() {
+  const { updateResumeSectionData } = useResumeSectionData();
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>(
     mockResumeData.personalInfo
   );
@@ -38,6 +40,7 @@ export function usePersonalInfo() {
       (hobby) => hobby.trim() !== ""
     );
     setPersonalInfo({ ...personalInfo, contact: cleanedContacts, hobbies: cleanedHobbies });
+    updateResumeSectionData(SECTIONS.PERSONAL_INFO, personalInfo);
   };
 
   return {

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Project } from "@/types/resumeTypes";
 import { mockResumeData } from "@/db/mock-data";
+import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useProjects() {
+  const { updateResumeSectionData } = useResumeSectionData();
   const [projects, setProjects] = useState<Project[]>(mockResumeData.projects ?? []);
 
   const addProject = () => {
@@ -28,6 +30,7 @@ export function useProjects() {
   const handleSave = () => {
     const cleaned = projects.filter(p => p.title.trim() !== "");
     setProjects(cleaned);
+    updateResumeSectionData(SECTIONS.PROJECTS, cleaned);
   };
 
   return {

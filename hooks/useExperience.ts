@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { WorkExperience } from "@/types/resumeTypes";
 import { mockResumeData } from "@/db/mock-data";
+import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useExperience() {
+  const { updateResumeSectionData } = useResumeSectionData();
   const [experiences, setExperiences] = useState<WorkExperience[]>(
     mockResumeData.experiences ?? []
   );
@@ -52,6 +54,7 @@ export function useExperience() {
       (e) => e.jobTitle.trim() !== "" || e.company.trim() !== ""
     );
     setExperiences(cleaned);
+    updateResumeSectionData(SECTIONS.EXPERIENCE, cleaned);
   };
 
   return {

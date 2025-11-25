@@ -2,8 +2,11 @@
 import { useState } from "react";
 import { Certification } from "@/types/resumeTypes";
 import { mockResumeData } from "@/db/mock-data";
+import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
 
 export function useCertifications() {
+
+  const { updateResumeSectionData } = useResumeSectionData();
   const [certifications, setCertifications] = useState<Certification[]>(
     mockResumeData.certifications ?? []
   );
@@ -50,6 +53,7 @@ export function useCertifications() {
         c.issueDate.trim() !== ""
     );
     setCertifications(cleaned);
+    updateResumeSectionData(SECTIONS.CERTIFICATIONS, cleaned);
   };
 
   return {
