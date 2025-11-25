@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { EducationItem, DegreeType } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
+import { useRouter } from "next/navigation";
+
 
 export function useEducation() {
 
   const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
 
   const [educations, setEducations] = useState<EducationItem[]>([]);
-
+  const router = useRouter();
   useEffect(
     () => {
       setEducations(
@@ -60,6 +62,7 @@ export function useEducation() {
     );
     setEducations(cleaned);
     updateResumeSectionData(SECTIONS.EDUCATION, cleaned);
+    router.push("/sections");
   };
 
   return {

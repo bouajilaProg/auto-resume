@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { WorkExperience } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
+import { useRouter } from "next/navigation";
 
 export function useExperience() {
   const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
   const [experiences, setExperiences] = useState<WorkExperience[]>([]);
 
+  const router = useRouter();
   useEffect(
     () => {
       setExperiences(
@@ -61,6 +63,7 @@ export function useExperience() {
     );
     setExperiences(cleaned);
     updateResumeSectionData(SECTIONS.EXPERIENCE, cleaned);
+    router.push("/sections")
   };
 
   return {

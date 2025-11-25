@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { ExtraCurricularActivity } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
+import { useRouter } from "next/navigation";
 
 export function useExtraCurricular() {
   const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
   const [activities, setActivities] = useState<ExtraCurricularActivity[]>([]);
 
+
+  const router = useRouter();
   useEffect(
     () => {
       setActivities(
@@ -51,6 +54,7 @@ export function useExtraCurricular() {
     );
     setActivities(cleaned);
     updateResumeSectionData(SECTIONS.EXTRACURRICULARS, cleaned);
+    router.push("/sections")
   };
 
   return {

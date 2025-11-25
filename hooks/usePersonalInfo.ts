@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { PersonalInfo, Contact } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
+import { useRouter } from "next/navigation";
 
 export function usePersonalInfo() {
   const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({} as PersonalInfo);
+  const router = useRouter();
 
   useEffect(
     () => {
@@ -52,6 +54,7 @@ export function usePersonalInfo() {
     );
     setPersonalInfo({ ...personalInfo, contact: cleanedContacts, hobbies: cleanedHobbies });
     updateResumeSectionData(SECTIONS.PERSONAL_INFO, personalInfo);
+    router.push("/sections")
   };
 
   return {

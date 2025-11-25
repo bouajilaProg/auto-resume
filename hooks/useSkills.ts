@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Skills, skillType } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
+import { useRouter } from "next/navigation";
 
 export function useSkills() {
   const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
   const [skills, setSkills] = useState<Skills>({} as Skills);
 
+  const router = useRouter();
   useEffect(
     () => {
       setSkills(
@@ -42,6 +44,7 @@ export function useSkills() {
 
   const handleSave = () => {
     updateResumeSectionData(SECTIONS.SKILLS, skills);
+    router.push("/sections")
   };
 
   return {

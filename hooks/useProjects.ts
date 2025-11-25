@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Project } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
+import { useRouter } from "next/navigation";
 
 export function useProjects() {
   const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
   const [projects, setProjects] = useState<Project[]>([] as Project[]);
-
+  const router = useRouter();
   useEffect(
     () => {
       setProjects(
@@ -38,6 +39,7 @@ export function useProjects() {
     const cleaned = projects.filter(p => p.title.trim() !== "");
     setProjects(cleaned);
     updateResumeSectionData(SECTIONS.PROJECTS, cleaned);
+    router.push("/sections")
   };
 
   return {

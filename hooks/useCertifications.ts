@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Certification } from "@/types/resumeTypes";
 import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
+import { useRouter } from "next/navigation";
 
 export function useCertifications() {
 
@@ -11,6 +12,7 @@ export function useCertifications() {
     resumeSectionData?.certifications ?? []
   );
 
+  const router = useRouter();
   useEffect(
     () => {
       setCertifications(
@@ -63,6 +65,7 @@ export function useCertifications() {
     );
     setCertifications(cleaned);
     updateResumeSectionData(SECTIONS.CERTIFICATIONS, cleaned);
+    router.push("/sections")
   };
 
   return {
