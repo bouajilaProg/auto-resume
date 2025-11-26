@@ -60,7 +60,17 @@ export function useExperience() {
   const handleSave = () => {
     const cleaned = experiences.filter(
       (e) => e.jobTitle.trim() !== "" || e.company.trim() !== ""
-    );
+    ).map((e) => {
+      // Trim all string fields
+      e.jobTitle = e.jobTitle.trim();
+      e.company = e.company.trim();
+      e.location = e.location.trim();
+      e.startDate = e.startDate.trim();
+      e.endDate = e.endDate.trim();
+      e.summary = e.summary.trim();
+      e.keywords = e.keywords.trim();
+      return e;
+    });
     setExperiences(cleaned);
     updateResumeSectionData(SECTIONS.EXPERIENCE, cleaned);
     router.push("/sections")

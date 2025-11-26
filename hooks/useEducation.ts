@@ -59,7 +59,14 @@ export function useEducation() {
   const handleSave = () => {
     const cleaned = educations.filter(
       (e) => e.degreeName.trim() !== "" || e.institution.trim() !== ""
-    );
+    ).map((e) => {
+      // Trim all string fields
+      e.degreeName = e.degreeName.trim();
+      e.institution = e.institution.trim();
+      e.startDate = e.startDate.trim();
+      e.endDate = e.endDate.trim();
+      return e;
+    })
     setEducations(cleaned);
     updateResumeSectionData(SECTIONS.EDUCATION, cleaned);
     router.push("/sections");

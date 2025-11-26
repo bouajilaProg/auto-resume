@@ -51,7 +51,12 @@ export function useExtraCurricular() {
   const handleSave = () => {
     const cleaned = activities.filter(
       (a) => a.activityName.trim() !== "" || a.startDate.trim() !== ""
-    );
+    ).map((a) => ({
+      id: a.id,
+      activityName: a.activityName.trim(),
+      startDate: a.startDate.trim(),
+      endDate: a.endDate?.trim()
+    }));
     setActivities(cleaned);
     updateResumeSectionData(SECTIONS.EXTRACURRICULARS, cleaned);
     router.push("/sections")

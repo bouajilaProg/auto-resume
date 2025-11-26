@@ -36,7 +36,15 @@ export function useProjects() {
   };
 
   const handleSave = () => {
-    const cleaned = projects.filter(p => p.title.trim() !== "");
+    const cleaned = projects.filter(p => p.title.trim() !== "").map(p => ({
+      id: p.id,
+      title: p.title.trim(),
+      description: p.description.trim(),
+      tools: p.tools.trim(),
+      projectLink: p.projectLink?.trim(),
+      repoLink: p.repoLink?.trim()
+    }));
+
     setProjects(cleaned);
     updateResumeSectionData(SECTIONS.PROJECTS, cleaned);
     router.push("/sections")

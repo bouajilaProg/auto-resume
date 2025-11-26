@@ -48,10 +48,13 @@ export function usePersonalInfo() {
   const handleSave = () => {
     const cleanedContacts = personalInfo.contact.filter(
       (contact) => contact.value.trim() !== ""
-    );
+    ).map((contact) => (
+      { id: contact.id, type: contact.type, value: contact.value.trim() }
+    ));
+
     const cleanedHobbies = personalInfo.hobbies.filter(
       (hobby) => hobby.trim() !== ""
-    );
+    ).map((hobby) => hobby.trim());
     setPersonalInfo({ ...personalInfo, contact: cleanedContacts, hobbies: cleanedHobbies });
     updateResumeSectionData(SECTIONS.PERSONAL_INFO, personalInfo);
     router.push("/sections")

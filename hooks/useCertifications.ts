@@ -62,7 +62,13 @@ export function useCertifications() {
         c.name.trim() !== "" ||
         c.issuingOrganization.trim() !== "" ||
         c.issueDate.trim() !== ""
-    );
+    ).map((c) => {
+      // Trim all string fields
+      c.name = c.name.trim();
+      c.issuingOrganization = c.issuingOrganization.trim();
+      c.issueDate = c.issueDate.trim();
+      return c;
+    });
     setCertifications(cleaned);
     updateResumeSectionData(SECTIONS.CERTIFICATIONS, cleaned);
     router.push("/sections")
