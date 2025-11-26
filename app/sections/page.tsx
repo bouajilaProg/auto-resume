@@ -1,13 +1,13 @@
 import Link from 'next/link';
-import { FaUser, FaGraduationCap, FaBriefcase, FaBuilding, FaTools, FaUsers, FaCertificate } from 'react-icons/fa';
+import { FaUser, FaGraduationCap, FaBriefcase, FaTools, FaUsers, FaCertificate, FaLightbulb } from 'react-icons/fa';
 import { FaDiagramNext } from 'react-icons/fa6';
 
-export default function CVDashboard() {
+export default function Sections() {
   const sections = [
     { id: 'personal-info', name: 'Personal Info', icon: FaUser },
     { id: 'education', name: 'Education', icon: FaGraduationCap },
-    { id: 'projects', name: 'Projects', icon: FaBriefcase },
-    { id: 'experience', name: 'Experience', icon: FaBuilding },
+    { id: 'projects', name: 'Projects', icon: FaLightbulb },
+    { id: 'experience', name: 'Experience', icon: FaBriefcase },
     { id: 'skills', name: 'Skills', icon: FaTools },
     { id: 'certifications', name: 'Certifications', icon: FaCertificate },
     { id: 'extracurricular', name: 'Extracurricular', icon: FaUsers },

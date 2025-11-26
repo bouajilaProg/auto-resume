@@ -1,6 +1,6 @@
 import { Project } from "@/types/resumeTypes";
 import { useState } from "react";
-import { FaChevronDown, FaChevronUp, FaProjectDiagram, FaTrash, FaLink, FaGithub, FaTools, FaAlignLeft } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp, FaTrash, FaLink, FaGithub, FaTools, FaAlignLeft, FaLightbulb } from "react-icons/fa";
 
 export default function ProjectForm({ project, index, updateProject, removeProject }: {
   project: Project;
@@ -24,8 +24,8 @@ export default function ProjectForm({ project, index, updateProject, removeProje
             className="flex items-center gap-4 flex-1 cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
-            <div className="p-3 rounded-lg bg-teal-100 text-teal-600 shadow-sm">
-              <FaProjectDiagram size={20} />
+            <div className="p-3 rounded-lg bg-blue-100 text-blue-600 shadow-sm">
+              <FaLightbulb size={20} />
             </div>
             <div>
               <h3 className="text-lg font-bold text-gray-800">
@@ -64,12 +64,12 @@ export default function ProjectForm({ project, index, updateProject, removeProje
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-teal-50">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-blue-50">
       {/* Header */}
       <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-lg bg-teal-600 text-white shadow-sm">
-            <FaProjectDiagram size={16} />
+          <div className="p-2.5 rounded-lg bg-blue-600 text-white shadow-sm">
+            <FaLightbulb size={16} />
           </div>
           <h3 className="font-semibold text-gray-800">
             Project #{index + 1}
@@ -106,7 +106,7 @@ export default function ProjectForm({ project, index, updateProject, removeProje
               type="text"
               value={project.title}
               onChange={handleFieldChange('title')}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all placeholder:text-gray-400 bg-white"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 bg-white"
               placeholder="e.g., E-Commerce Platform"
             />
           </div>
@@ -124,7 +124,7 @@ export default function ProjectForm({ project, index, updateProject, removeProje
                 type="text"
                 value={project.tools}
                 onChange={handleFieldChange('tools')}
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all placeholder:text-gray-400 bg-white"
+                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 bg-white"
                 placeholder="React, Node.js, AWS..."
               />
             </div>
@@ -144,7 +144,7 @@ export default function ProjectForm({ project, index, updateProject, removeProje
               id={`description-${project.id}`}
               value={project.description}
               onChange={handleFieldChange('description')}
-              className="w-full pl-9 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all placeholder:text-gray-400 min-h-[100px] bg-white"
+              className="w-full pl-9 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 min-h-[100px] bg-white"
               placeholder="Describe the problem you solved and the impact of this project..."
             />
           </div>
@@ -153,7 +153,7 @@ export default function ProjectForm({ project, index, updateProject, removeProje
         {/* Links Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor={`projectLink-${project.id}`} className="block text-xs font-semibold text-gray-500  uppercase tracking-wider mb-1.5">
+            <label htmlFor={`projectLink-${project.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
               Live Link
             </label>
             <div className="relative">
@@ -165,7 +165,7 @@ export default function ProjectForm({ project, index, updateProject, removeProje
                 type="url"
                 value={project.projectLink || ''}
                 onChange={handleFieldChange('projectLink')}
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white"
+                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white"
                 placeholder="https://my-app.com"
               />
             </div>
@@ -184,7 +184,7 @@ export default function ProjectForm({ project, index, updateProject, removeProje
                 type="url"
                 value={project.repoLink || ''}
                 onChange={handleFieldChange('repoLink')}
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white"
+                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white"
                 placeholder="https://github.com/user/repo"
               />
             </div>
