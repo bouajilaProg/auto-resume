@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { createContext, useState, useCallback, ReactNode } from "react";
 
 export interface ButtonConfig {
@@ -12,11 +12,13 @@ export interface ModalContextType {
   description: string;
   buttons: ButtonConfig[];
   isOpen: boolean;
-  openModal: (title: string, description: string, buttons?: ButtonConfig[]) => void;
+  openModal: (config: { title: string; description: string; buttons?: ButtonConfig[] }) => void;
   closeModal: () => void;
 }
 
 export const ModalContext = createContext<ModalContextType | undefined>(undefined);
+
+export type ModalType = Omit<ModalContextType, "isOpen" | "openModal" | "closeModal">;
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState({
@@ -26,9 +28,12 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
     isOpen: false,
   });
 
-  const openModal = useCallback((title: string, description: string, buttons: ButtonConfig[] = []) => {
-    setState({ title, description, buttons, isOpen: true });
-  }, []);
+  const openModal = useCallback(
+    ({ title, description, buttons = [] }: { title: string; description: string; buttons?: ButtonConfig[] }) => {
+      setState({ title, description, buttons, isOpen: true });
+    },
+    []
+  );
 
   const closeModal = useCallback(() => {
     setState((s) => ({ ...s, isOpen: false }));
@@ -40,6 +45,3 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
     </ModalContext.Provider>
   );
 };
-
-
-
