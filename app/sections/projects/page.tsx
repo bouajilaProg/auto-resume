@@ -10,11 +10,20 @@ import ProjectForm from "./components/ProjectForm";
 import { useProjects } from "@/hooks/useProjects";
 
 import Loading from "@/app/components/Loading";
+import { useModal } from "@/context/Modal/useModal";
+import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 
 
 export default function ProjectsPage() {
 
   const { projects, addProject, removeProject, updateProject, handleSave, loading } = useProjects();
+
+  const { openModal, closeModal } = useModal();
+  const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
+    handleSave();
+  });
+
+
 
 
   if (loading) {
@@ -68,7 +77,7 @@ export default function ProjectsPage() {
 
             <button
 
-              onClick={handleSave}
+              onClick={() => openModal(ConfirmModal)}
 
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
 

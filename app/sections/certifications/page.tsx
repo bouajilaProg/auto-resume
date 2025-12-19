@@ -5,6 +5,8 @@ import { FaPlus, FaCertificate, FaSave, FaTimes } from "react-icons/fa";
 import CertificationForm from "./components/CertificationForm";
 import { useCertifications } from "@/hooks/useCertifications";
 import Loading from "@/app/components/Loading";
+import { useModal } from "@/context/Modal/useModal";
+import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 
 export default function CertificationsPage() {
   const {
@@ -17,9 +19,17 @@ export default function CertificationsPage() {
   } = useCertifications();
 
 
+  const { openModal, closeModal } = useModal();
+  const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
+    handleSave();
+  });
+
+
   if (loading) {
     return <Loading />;
   }
+
+
 
   return (
     <div className="min-h-screen bg-gray-50/50 py-10 px-4 sm:px-6">
@@ -44,7 +54,8 @@ export default function CertificationsPage() {
               <span>Cancel</span>
             </Link>
             <button
-              onClick={handleSave}
+              onClick={() => { openModal(ConfirmModal); }
+              }
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <FaSave size={14} />

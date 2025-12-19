@@ -5,6 +5,8 @@ import EducationForm from "./components/EducationForm";
 import Link from "next/link";
 import { useEducation } from "@/hooks/useEducation";
 import Loading from "@/app/components/Loading";
+import ModalCreator from "@/context/Modal/modals/ModelsFactory";
+import { useModal } from "@/context/Modal/useModal";
 
 export default function EducationPage() {
   const {
@@ -15,6 +17,12 @@ export default function EducationPage() {
     handleSave,
     loading
   } = useEducation();
+
+  const { openModal, closeModal } = useModal();
+  const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
+    handleSave();
+  });
+
 
   if (!educations || loading) {
     return <Loading />;
@@ -43,7 +51,7 @@ export default function EducationPage() {
               <span>Cancel</span>
             </Link>
             <button
-              onClick={handleSave}
+              onClick={() => { openModal(ConfirmModal); }}
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <FaSave size={14} />

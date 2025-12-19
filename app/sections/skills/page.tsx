@@ -6,9 +6,16 @@ import SkillSection from "./components/SkillsSection"; // Adjust path as needed
 import { skillType } from "@/types/resumeTypes";
 import { useSkills } from "@/hooks/useSkills";
 import Loading from "@/app/components/Loading";
+import { useModal } from "@/context/Modal/useModal";
+import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 
 export default function SkillsPage() {
   const { skills, addSkill, removeSkill, updateSkill, handleSave, loading } = useSkills();
+
+  const { openModal, closeModal } = useModal();
+  const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
+    handleSave();
+  });
 
   if (loading || !skills || Object.keys(skills).length === 0) {
     return <Loading />;
@@ -35,7 +42,7 @@ export default function SkillsPage() {
               <span>Cancel</span>
             </Link>
             <button
-              onClick={handleSave}
+              onClick={() => openModal(ConfirmModal)}
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <FaSave size={14} />

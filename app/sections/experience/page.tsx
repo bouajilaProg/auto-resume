@@ -5,6 +5,8 @@ import ExperienceForm from "./components/ExperienceForm";
 import Link from "next/link";
 import { useExperience } from "@/hooks/useExperience";
 import Loading from "@/app/components/Loading";
+import ModalCreator from "@/context/Modal/modals/ModelsFactory";
+import { useModal } from "@/context/Modal/useModal";
 
 export default function ExperiencePage() {
   const {
@@ -15,6 +17,12 @@ export default function ExperiencePage() {
     handleSave,
     loading
   } = useExperience();
+
+
+  const { openModal, closeModal } = useModal();
+  const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
+    handleSave();
+  });
 
   if (loading) {
     return <Loading />;
@@ -43,7 +51,7 @@ export default function ExperiencePage() {
               <span>Cancel</span>
             </Link>
             <button
-              onClick={handleSave}
+              onClick={() => { openModal(ConfirmModal); }}
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <FaSave size={14} />
