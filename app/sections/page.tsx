@@ -1,19 +1,27 @@
-import Link from 'next/link';
-import { FaUser, FaGraduationCap, FaBriefcase, FaTools, FaUsers, FaCertificate, FaLightbulb } from 'react-icons/fa';
-import { FaDiagramNext } from 'react-icons/fa6';
+
+import Link from "next/link";
+import {
+  User,
+  GraduationCap,
+  Briefcase,
+  Wrench,
+  Users,
+  Award,
+  Lightbulb,
+  Network
+} from "lucide-react";
 
 export default function Sections() {
   const sections = [
-    { id: 'personal-info', name: 'Personal Info', icon: FaUser },
-    { id: 'education', name: 'Education', icon: FaGraduationCap },
-    { id: 'projects', name: 'Projects', icon: FaLightbulb },
-    { id: 'experience', name: 'Experience', icon: FaBriefcase },
-    { id: 'skills', name: 'Skills', icon: FaTools },
-    { id: 'certifications', name: 'Certifications', icon: FaCertificate },
-    { id: 'extracurricular', name: 'Extracurricular', icon: FaUsers },
-    { id: ' ', name: 'to be filled', icon: FaDiagramNext }
+    { id: "personal-info", name: "Personal Info", icon: User },
+    { id: "education", name: "Education", icon: GraduationCap },
+    { id: "projects", name: "Projects", icon: Lightbulb },
+    { id: "experience", name: "Experience", icon: Briefcase },
+    { id: "skills", name: "Skills", icon: Wrench },
+    { id: "certifications", name: "Certifications", icon: Award },
+    { id: "extracurricular", name: "Extracurricular", icon: Users },
+    { id: " ", name: "To be filled", icon: Network }
   ];
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
       <div className="max-w-6xl mx-auto">
