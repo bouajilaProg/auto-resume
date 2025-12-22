@@ -11,6 +11,12 @@ importers:
       '@yamlresume/core':
         specifier: ^0.8.1
         version: 0.8.1
+      cn:
+        specifier: ^0.1.1
+        version: 0.1.1
+      lucide-react:
+        specifier: ^0.562.0
+        version: 0.562.0(react@19.2.0)
       next:
         specifier: 16.0.10
         version: 16.0.10(@babel/core@7.28.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)

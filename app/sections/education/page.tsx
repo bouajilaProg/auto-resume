@@ -1,6 +1,6 @@
 "use client";
 
-import { FaPlus, FaGraduationCap, FaSave, FaTimes } from "react-icons/fa";
+import { Plus, GraduationCap, Save, X } from "lucide-react";
 import EducationForm from "./components/EducationForm";
 import Link from "next/link";
 import { useEducation } from "@/hooks/useEducation";
@@ -15,14 +15,13 @@ export default function EducationPage() {
     removeEducation,
     updateEducation,
     handleSave,
-    loading
+    loading,
   } = useEducation();
 
   const { openModal, closeModal } = useModal();
   const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
   });
-
 
   if (!educations || loading) {
     return <Loading />;
@@ -35,7 +34,9 @@ export default function EducationPage() {
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Education</h1>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+              Education
+            </h1>
             <p className="text-gray-500 mt-1">
               Add your academic background, degrees, and certificates.
             </p>
@@ -47,14 +48,15 @@ export default function EducationPage() {
               href="/sections"
               className="flex-1 sm:flex-none justify-center px-4 py-2.5 border border-gray-200 text-gray-600 bg-white rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all flex items-center gap-2 font-medium shadow-sm"
             >
-              <FaTimes size={14} />
+              <X size={14} />
               <span>Cancel</span>
             </Link>
+
             <button
-              onClick={() => { openModal(ConfirmModal); }}
+              onClick={() => openModal(ConfirmModal)}
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
-              <FaSave size={14} />
+              <Save size={14} />
               <span>Save Changes</span>
             </button>
           </div>
@@ -65,17 +67,22 @@ export default function EducationPage() {
           {educations.length === 0 ? (
             <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-indigo-300 transition-colors group">
               <div className="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <FaGraduationCap size={32} />
+                <GraduationCap size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">No education added yet</h3>
+
+              <h3 className="text-lg font-semibold text-gray-900">
+                No education added yet
+              </h3>
+
               <p className="text-gray-500 mb-6 max-w-sm mx-auto">
                 Highlighting your academic background helps employers understand your foundation.
               </p>
+
               <button
                 onClick={addEducation}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-sm font-medium"
               >
-                <FaPlus size={14} />
+                <Plus size={14} />
                 Add Education
               </button>
             </div>
@@ -93,13 +100,13 @@ export default function EducationPage() {
                 ))}
               </div>
 
-              {/* Add New Button (at bottom of list) */}
+              {/* Add New Button */}
               <button
                 onClick={addEducation}
                 className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
               >
                 <div className="p-2 bg-gray-100 rounded-full group-hover:bg-indigo-100 transition-colors">
-                  <FaPlus size={12} />
+                  <Plus size={12} />
                 </div>
                 Add Another Education Entry
               </button>

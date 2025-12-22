@@ -1,6 +1,6 @@
 import { WorkExperience } from "@/types/resumeTypes";
 import { useState } from "react";
-import { FaChevronDown, FaChevronUp, FaBriefcase, FaTrash, FaBuilding, FaMapMarkerAlt, FaCalendarAlt, FaAlignLeft, FaTags } from "react-icons/fa";
+import { ChevronDown, ChevronUp, Briefcase, Trash, Building, MapPin, Calendar, AlignLeft, Tag } from "lucide-react";
 
 export default function ExperienceForm({ experience, index, updateExperience, removeExperience }: {
   experience: WorkExperience;
@@ -16,7 +16,6 @@ export default function ExperienceForm({ experience, index, updateExperience, re
     updateExperience(experience.id, field, e.target.value);
   };
 
-  // 1. Minimized View (Summary)
   if (!isOpen) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all hover:shadow-md">
@@ -25,9 +24,8 @@ export default function ExperienceForm({ experience, index, updateExperience, re
             className="flex items-center gap-4 flex-1 cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
-            {/* COLOR CHANGE: orange-100 -> blue-100, orange-600 -> blue-600 */}
             <div className="p-3 rounded-lg bg-blue-100 text-blue-600 shadow-sm">
-              <FaBriefcase size={20} />
+              <Briefcase size={20} />
             </div>
             <div>
               <h3 className="text-lg font-bold text-gray-800">
@@ -50,29 +48,27 @@ export default function ExperienceForm({ experience, index, updateExperience, re
               onClick={() => removeExperience(experience.id)}
               className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
             >
-              <FaTrash size={14} />
+              <Trash size={14} />
             </button>
             <button
               onClick={() => setIsOpen(true)}
               className="p-2 text-gray-400 hover:bg-gray-50 rounded-full transition-colors"
             >
-              <FaChevronDown />
+              <ChevronDown />
             </button>
           </div>
         </div>
       </div>
     );
-  };
+  }
 
-  // 2. Expanded View (Edit Mode)
   return (
-    < div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-blue-50" >
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-blue-50">
       {/* Header */}
-      < div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl" >
+      <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
         <div className="flex items-center gap-3">
-          {/* COLOR CHANGE: bg-orange-600 -> bg-blue-600 */}
           <div className="p-2.5 rounded-lg bg-blue-600 text-white shadow-sm">
-            <FaBriefcase size={16} />
+            <Briefcase size={16} />
           </div>
           <h3 className="font-semibold text-gray-800">
             Experience #{index + 1}
@@ -83,23 +79,22 @@ export default function ExperienceForm({ experience, index, updateExperience, re
             onClick={() => removeExperience(experience.id)}
             className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium flex items-center gap-1"
           >
-            <FaTrash size={12} />
+            <Trash size={12} />
             <span className="hidden sm:inline">Delete</span>
           </button>
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <FaChevronUp />
+            <ChevronUp />
           </button>
         </div>
-      </div >
+      </div>
 
       {/* Form Fields */}
-      < div className="p-6 space-y-6" >
-
+      <div className="p-6 space-y-6">
         {/* Job Title & Company */}
-        < div className="grid grid-cols-1 md:grid-cols-2 gap-6" >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="col-span-1">
             <label htmlFor={`jobTitle-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
               Job Title
@@ -120,7 +115,7 @@ export default function ExperienceForm({ experience, index, updateExperience, re
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <FaBuilding size={12} />
+                <Building size={12} />
               </div>
               <input
                 id={`company-${experience.id}`}
@@ -132,17 +127,17 @@ export default function ExperienceForm({ experience, index, updateExperience, re
               />
             </div>
           </div>
-        </div >
+        </div>
 
         {/* Location & Dates */}
-        < div className="grid grid-cols-1 md:grid-cols-3 gap-6" >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="col-span-1">
             <label htmlFor={`location-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
               Location
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <FaMapMarkerAlt size={12} />
+                <MapPin size={12} />
               </div>
               <input
                 id={`location-${experience.id}`}
@@ -161,7 +156,7 @@ export default function ExperienceForm({ experience, index, updateExperience, re
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <FaCalendarAlt size={12} />
+                <Calendar size={12} />
               </div>
               <input
                 id={`startDate-${experience.id}`}
@@ -179,7 +174,7 @@ export default function ExperienceForm({ experience, index, updateExperience, re
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <FaCalendarAlt size={12} />
+                <Calendar size={12} />
               </div>
               <input
                 id={`endDate-${experience.id}`}
@@ -190,16 +185,16 @@ export default function ExperienceForm({ experience, index, updateExperience, re
               />
             </div>
           </div>
-        </div >
+        </div>
 
         {/* Summary */}
-        < div >
+        <div>
           <label htmlFor={`summary-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
             Role Description / Achievements
           </label>
           <div className="relative">
             <div className="absolute top-3 left-3 pointer-events-none text-gray-400">
-              <FaAlignLeft size={12} />
+              <AlignLeft size={12} />
             </div>
             <textarea
               id={`summary-${experience.id}`}
@@ -209,16 +204,16 @@ export default function ExperienceForm({ experience, index, updateExperience, re
               placeholder="• Led a team of 5 developers...&#10;• Increased performance by 20%..."
             />
           </div>
-        </div >
+        </div>
 
         {/* Keywords */}
-        < div >
+        <div>
           <label htmlFor={`keywords-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
             Skills / Technologies Used
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-              <FaTags size={12} />
+              <Tag size={12} />
             </div>
             <input
               id={`keywords-${experience.id}`}
@@ -229,9 +224,8 @@ export default function ExperienceForm({ experience, index, updateExperience, re
               placeholder="React, TypeScript, Agile..."
             />
           </div>
-        </div >
-
-      </div >
-    </div >
+        </div>
+      </div>
+    </div>
   );
 }

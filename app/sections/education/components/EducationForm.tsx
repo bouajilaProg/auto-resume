@@ -1,7 +1,15 @@
 "use client"
+
 import { DegreeType, EducationItem } from "@/types/resumeTypes"
 import { useState } from "react";
-import { FaGraduationCap, FaTrash, FaChevronDown, FaChevronUp, FaUniversity, FaCalendarAlt } from "react-icons/fa"
+import {
+  GraduationCap,
+  Trash2,
+  ChevronDown,
+  ChevronUp,
+  Building2,
+  Calendar,
+} from "lucide-react";
 
 interface EducationFormProps {
   edu: EducationItem;
@@ -28,7 +36,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
             onClick={() => setIsOpen(true)}
           >
             <div className="p-3 rounded-lg bg-indigo-100 text-indigo-600 shadow-sm">
-              <FaGraduationCap size={20} />
+              <GraduationCap size={20} />
             </div>
             <div>
               <h3 className="text-lg font-bold text-gray-800">
@@ -52,13 +60,13 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
               className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
               title="Delete"
             >
-              <FaTrash size={14} />
+              <Trash2 size={14} />
             </button>
             <button
               onClick={() => setIsOpen(true)}
               className="p-2 text-gray-400 hover:bg-gray-50 rounded-full transition-colors"
             >
-              <FaChevronDown />
+              <ChevronDown size={16} />
             </button>
           </div>
         </div>
@@ -72,7 +80,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
       <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-lg bg-indigo-600 text-white shadow-sm">
-            <FaGraduationCap size={16} />
+            <GraduationCap size={16} />
           </div>
           <h3 className="font-semibold text-gray-800">
             Education #{index + 1}
@@ -83,14 +91,14 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
             onClick={() => removeEducation(edu.id)}
             className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium flex items-center gap-1"
           >
-            <FaTrash size={12} />
+            <Trash2 size={12} />
             <span className="hidden sm:inline">Delete</span>
           </button>
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <FaChevronUp />
+            <ChevronUp size={16} />
           </button>
         </div>
       </div>
@@ -117,7 +125,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
               ))}
             </select>
             <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
-              <FaChevronDown size={12} />
+              <ChevronDown size={12} />
             </div>
           </div>
         </div>
@@ -144,7 +152,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-              <FaUniversity />
+              <Building2 size={16} />
             </div>
             <input
               id={`institution-${edu.id}`}
@@ -164,7 +172,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-              <FaCalendarAlt />
+              <Calendar size={16} />
             </div>
             <input
               id={`startDate-${edu.id}`}
@@ -183,7 +191,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-              <FaCalendarAlt />
+              <Calendar size={16} />
             </div>
             <input
               id={`endDate-${edu.id}`}

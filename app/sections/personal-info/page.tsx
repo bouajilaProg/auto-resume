@@ -1,6 +1,6 @@
 "use client";
 
-import { FaUser, FaMapMarkerAlt, FaSave, FaTimes } from "react-icons/fa";
+import { User, MapPin, Save, X } from "lucide-react";
 import ContactForm from "./components/ContactForm";
 import Link from "next/link";
 import { usePersonalInfo } from "@/hooks/usePersonalInfo";
@@ -50,7 +50,7 @@ export default function PersonalInfoPage() {
               href="/sections"
               className="flex-1 sm:flex-none justify-center px-4 py-2.5 border border-gray-200 text-gray-600 bg-white rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all flex items-center gap-2 font-medium shadow-sm"
             >
-              <FaTimes size={14} />
+              <X size={14} />
               <span>Cancel</span>
             </Link>
             <button
@@ -59,7 +59,7 @@ export default function PersonalInfoPage() {
               }}
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
-              <FaSave size={14} />
+              <Save size={14} />
               <span>Save Changes</span>
             </button>
           </div>
@@ -70,7 +70,7 @@ export default function PersonalInfoPage() {
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              <FaUser className="inline mr-2 text-blue-600" />
+              <User className="inline mr-2 text-blue-600" size={16} />
               Full Name
             </label>
             <input
@@ -85,7 +85,7 @@ export default function PersonalInfoPage() {
           {/* Location */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              <FaMapMarkerAlt className="inline mr-2 text-blue-600" />
+              <MapPin className="inline mr-2 text-blue-600" size={16} />
               Location
             </label>
             <input

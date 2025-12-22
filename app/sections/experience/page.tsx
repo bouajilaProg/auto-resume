@@ -1,6 +1,6 @@
 "use client";
 
-import { FaPlus, FaBriefcase, FaSave, FaTimes } from "react-icons/fa";
+import { Plus, Briefcase, Save, X } from "lucide-react";
 import ExperienceForm from "./components/ExperienceForm";
 import Link from "next/link";
 import { useExperience } from "@/hooks/useExperience";
@@ -17,7 +17,6 @@ export default function ExperiencePage() {
     handleSave,
     loading
   } = useExperience();
-
 
   const { openModal, closeModal } = useModal();
   const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
@@ -47,14 +46,14 @@ export default function ExperiencePage() {
               href="/sections"
               className="flex-1 sm:flex-none justify-center px-4 py-2.5 border border-gray-200 text-gray-600 bg-white rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all flex items-center gap-2 font-medium shadow-sm"
             >
-              <FaTimes size={14} />
+              <X size={14} />
               <span>Cancel</span>
             </Link>
             <button
               onClick={() => { openModal(ConfirmModal); }}
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
-              <FaSave size={14} />
+              <Save size={14} />
               <span>Save Changes</span>
             </button>
           </div>
@@ -65,7 +64,7 @@ export default function ExperiencePage() {
           {experiences.length === 0 ? (
             <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-blue-300 transition-colors group">
               <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <FaBriefcase size={32} />
+                <Briefcase size={32} />
               </div>
               <h3 className="text-lg font-semibold text-gray-900">No work experience added</h3>
               <p className="text-gray-500 mb-6 max-w-sm mx-auto">
@@ -75,7 +74,7 @@ export default function ExperiencePage() {
                 onClick={addExperience}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm font-medium"
               >
-                <FaPlus size={14} />
+                <Plus size={14} />
                 Add Experience
               </button>
             </div>
@@ -99,7 +98,7 @@ export default function ExperiencePage() {
                 className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
               >
                 <div className="p-2 bg-gray-100 rounded-full group-hover:bg-blue-100 transition-colors">
-                  <FaPlus size={12} />
+                  <Plus size={12} />
                 </div>
                 Add Another Role
               </button>
