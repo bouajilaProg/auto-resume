@@ -94,7 +94,7 @@ export default function SkillSection({
   /* Expanded */
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-      <div className="p-5 border-b flex justify-between items-center">
+      <div className="p-5 pb-0 flex justify-between items-center">
         <div className="flex gap-4 items-center">
           <div className={`p-3 rounded-lg ${iconBg} text-white`}>
             {icon}
