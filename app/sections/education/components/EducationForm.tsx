@@ -9,6 +9,7 @@ import {
   ChevronUp,
   Building2,
   Calendar,
+  Brain,
 } from "lucide-react";
 
 interface EducationFormProps {
@@ -22,7 +23,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
   const [isOpen, setIsOpen] = useState(true);
 
   const handleFieldChange = (field: keyof EducationItem) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     updateEducation(edu.id, field, e.target.value);
   };
@@ -199,6 +200,26 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
               value={edu.endDate}
               onChange={handleFieldChange('endDate')}
               className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700"
+            />
+          </div>
+        </div>
+
+        {/* Key Skills */}
+        <div className="col-span-1 md:col-span-2">
+          <label htmlFor={`keySkills-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            Key Skills / Core Modules
+          </label>
+          <div className="relative">
+            <div className="absolute top-3 left-3 flex items-center pointer-events-none text-gray-400">
+              <Brain size={16} />
+            </div>
+            <textarea
+              id={`keySkills-${edu.id}`}
+              value={edu.keySkills}
+              onChange={handleFieldChange('keySkills')}
+              rows={3}
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none"
+              placeholder="e.g. Data Structures, Algorithms, Neural Networks, Research Methodology..."
             />
           </div>
         </div>

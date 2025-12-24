@@ -34,6 +34,7 @@ export function useEducation() {
       {
         id: newId,
         degreeType: DegreeType.BS,
+        keySkills: "",
         degreeName: "",
         institution: "",
         startDate: "",
