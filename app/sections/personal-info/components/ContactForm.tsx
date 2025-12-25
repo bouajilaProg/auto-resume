@@ -1,7 +1,6 @@
 "use client";
 
-import { contactIcons } from "@/static/contactTypesIcons";
-import { Contact, ContactType } from "@/types/resumeTypes";
+import { Contact, CONTACT_TYPES, contactIcons, ContactType } from "@/types/resumeTypes";
 import { Mail, Plus, Trash2 } from "lucide-react";
 
 export default function ContactForm({
@@ -15,7 +14,7 @@ export default function ContactForm({
   function addContactMethod() {
     const newContact: Contact = {
       id: Date.now(),
-      type: ContactType.Email,
+      type: "Email",
       value: ""
     };
 
@@ -93,18 +92,16 @@ export default function ContactForm({
                           updateContactMethod(
                             contact.id,
                             "type",
-                            Number(e.target.value)
+                            e.target.value
                           )
                         }
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition"
                       >
-                        {Object.values(ContactType)
-                          .filter((value) => typeof value === "number")
-                          .map((type) => (
-                            <option key={type} value={type}>
-                              {ContactType[type]}
-                            </option>
-                          ))}
+                        {CONTACT_TYPES.map((type) => (
+                          <option key={type} value={type}>
+                            {type}
+                          </option>
+                        ))}
                       </select>
                     </div>
 
