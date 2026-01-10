@@ -33,7 +33,7 @@ export function useEducation() {
       ...cleaned,
       {
         id: newId,
-        degreeType: DegreeType.BS,
+        degreeType: "BS",
         keySkills: "",
         degreeName: "",
         institution: "",

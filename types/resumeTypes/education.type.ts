@@ -1,9 +1,11 @@
 // education Info
-enum DegreeType {
-  BS = "Bachelor's Degree",
-  MS = "Master's Degree",
-  PhD = "PhD/Doctorate"
-}
+const DEGREES = {
+  BS: "Bachelor's Degree",
+  MS: "Master's Degree",
+  PhD: "PhD/Doctorate",
+} as const;
+
+type DegreeType = keyof typeof DEGREES;
 
 interface EducationItem {
   id: number;
@@ -15,5 +17,7 @@ interface EducationItem {
   keySkills: string;
 }
 
-export type { EducationItem };
-export { DegreeType };
+
+
+export type { EducationItem, DegreeType };
+export { DEGREES };

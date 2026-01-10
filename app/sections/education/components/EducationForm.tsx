@@ -1,6 +1,6 @@
 "use client"
 
-import { DegreeType, EducationItem } from "@/types/resumeTypes"
+import { DEGREES, DegreeType, EducationItem } from "@/types/resumeTypes"
 import { useState } from "react";
 import {
   GraduationCap,
@@ -119,7 +119,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
               onChange={handleFieldChange('degreeType')}
               className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none text-gray-700"
             >
-              {Object.entries(DegreeType).map(([key, value]) => (
+              {Object.entries(DEGREES).map(([key, value]) => (
                 <option key={key} value={key}>
                   {value}
                 </option>
