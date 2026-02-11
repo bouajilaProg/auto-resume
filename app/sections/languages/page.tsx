@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Plus, Languages as LanguagesIcon, Save, X } from "lucide-react";
 import LanguageForm from "./components/LanguageForm";
-import { useLanguages } from "@/hooks/useLanguages";
+import { useLanguages } from "@hooks/ResumeSections/useLanguages";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";

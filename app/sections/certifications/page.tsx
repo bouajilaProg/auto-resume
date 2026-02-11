@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Plus, Award, Save, X } from "lucide-react";
 import CertificationForm from "./components/CertificationForm";
-import { useCertifications } from "@/hooks/useCertifications";
+import { useCertifications } from "@hooks/ResumeSections/useCertifications";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";

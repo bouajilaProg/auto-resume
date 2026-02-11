@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import useResumeSectionData from "./useResumeSectionData";
+import useResumeSectionData from "@hooks/useResumeSectionData";
 import { SectionTypeValue, SECTION_DEFAULTS } from "@/types/resumeTypes";
 import { z } from "zod";
 
@@ -22,6 +22,7 @@ export function useGenericListSection<T extends { id: number }>(
       const data = (section?.body as unknown as T[]) ?? [];
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setItems(data);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInitialItems(JSON.parse(JSON.stringify(data)));
     }
   }, [resumeSectionData, sectionType, loading]);

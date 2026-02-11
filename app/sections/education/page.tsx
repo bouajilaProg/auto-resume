@@ -3,7 +3,7 @@
 import { Plus, GraduationCap, Save, X } from "lucide-react";
 import EducationForm from "./components/EducationForm";
 import Link from "next/link";
-import { useEducation } from "@/hooks/useEducation";
+import { useEducation } from "@hooks/ResumeSections/useEducation";
 import Loading from "@/app/components/Loading";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 import { useModal } from "@/context/Modal/useModal";
