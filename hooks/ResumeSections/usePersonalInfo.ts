@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { PersonalInfo, Contact, PersonalInfoSchema, Hobby, SectionType } from "@/types/resumeTypes";
-import useResumeSectionData from "./useResumeSectionData";
+import useResumeSectionData from "@hooks/useResumeSectionData";
 import { useRouter } from "next/navigation";
 
 export function usePersonalInfo() {
@@ -13,7 +13,7 @@ export function usePersonalInfo() {
   } as PersonalInfo);
   
   const [hobbies, setHobbies] = useState<Hobby[]>([]);
-  const initialDataRef = useRef<{ personalInfo: PersonalInfo; hobbies: Hobby[] } | null>(null);
+  const [initialData, setInitialData] = useState<{ personalInfo: PersonalInfo; hobbies: Hobby[] } | null>(null);
   const isInitialized = useRef(false);
   
   const router = useRouter();
@@ -25,34 +25,38 @@ export function usePersonalInfo() {
 
       if (resumeSectionData.personalInfo) {
         currentPersonalInfo = resumeSectionData.personalInfo;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPersonalInfo(currentPersonalInfo);
       }
       const hobbiesSection = resumeSectionData.sections?.find(s => s.type === SectionType.Hobbies);
       if (hobbiesSection) {
         currentHobbies = hobbiesSection.body as Hobby[];
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setHobbies(currentHobbies);
       }
       
-      initialDataRef.current = {
+      const initData = {
         personalInfo: JSON.parse(JSON.stringify(currentPersonalInfo)),
         hobbies: JSON.parse(JSON.stringify(currentHobbies))
       };
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setInitialData(initData);
       
       isInitialized.current = true;
     }
   }, [resumeSectionData, loading]);
 
-  const hasChanges = () => {
-    if (!initialDataRef.current) return false;
+  const hasChangesValue = useMemo(() => {
+    if (!initialData) return false;
     
     const currentPersonalInfo = JSON.stringify(personalInfo);
-    const initialPersonalInfo = JSON.stringify(initialDataRef.current.personalInfo);
+    const initialPersonalInfo = JSON.stringify(initialData.personalInfo);
     
     const currentHobbies = JSON.stringify(hobbies);
-    const initialHobbies = JSON.stringify(initialDataRef.current.hobbies);
+    const initialHobbies = JSON.stringify(initialData.hobbies);
     
     return currentPersonalInfo !== initialPersonalInfo || currentHobbies !== initialHobbies;
-  };
+  }, [personalInfo, hobbies, initialData]);
 
   const updateName = (name: string) => {
     setPersonalInfo({ ...personalInfo, name });
@@ -114,7 +118,7 @@ export function usePersonalInfo() {
     updateContacts,
     updateHobbies,
     handleSave,
-    hasChanges: hasChanges(),
+    hasChanges: hasChangesValue,
     loading,
   };
 }

@@ -3,7 +3,7 @@
 import { Plus, FolderKanban, Save, X } from "lucide-react";
 import Link from "next/link";
 import ProjectForm from "./components/ProjectForm";
-import { useProjects } from "@/hooks/useProjects";
+import { useProjects } from "@hooks/ResumeSections/useProjects";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";

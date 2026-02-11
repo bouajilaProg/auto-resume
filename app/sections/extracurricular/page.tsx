@@ -3,7 +3,7 @@
 import { Plus, Trophy, Save, X } from "lucide-react";
 import Link from "next/link";
 import ExtraCurricularForm from "./components/ExtraCurricularForm";
-import { useExtraCurricular } from "@/hooks/useExtracurricular";
+import { useExtraCurricular } from "@hooks/ResumeSections/useExtracurricular";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";

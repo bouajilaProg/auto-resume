@@ -4,7 +4,7 @@ import { Code, Layers, Users, Save, X } from "lucide-react";
 import Link from "next/link";
 import SkillSection from "./components/SkillsSection";
 import { skillType } from "@/types/resumeTypes";
-import { useSkills } from "@/hooks/useSkills";
+import { useSkills } from "@hooks/ResumeSections/useSkills";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";

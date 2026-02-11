@@ -3,7 +3,7 @@
 import { User, MapPin, Save, X } from "lucide-react";
 import ContactForm from "./components/ContactForm";
 import Link from "next/link";
-import { usePersonalInfo } from "@/hooks/usePersonalInfo";
+import { usePersonalInfo } from "@hooks/ResumeSections/usePersonalInfo";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";

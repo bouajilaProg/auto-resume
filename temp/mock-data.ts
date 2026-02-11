@@ -1,4 +1,5 @@
-import { ContactType, DegreeType, Resume, skillType } from "@/types/resumeTypes";
+import { ContactType, DegreeType, Resume, skillType, SectionType } from "@/types/resumeTypes";
+
 // --- Mock Data (Personalized) ---
 export const myResume: Resume = {
   name: "Bouajila",
@@ -12,88 +13,106 @@ export const myResume: Resume = {
     description:
       "Computer Science bachelor graduate passionate about building clean, reusable systems and scalable web applications.",
     contact: [
-      { id: 1, type: ContactType.Email, value: "your.email@example.com" },
-      { id: 2, type: ContactType.GitHub, value: "github.com/yourusername" },
+      { id: 1, type: "Email", value: "your.email@example.com" },
+      { id: 2, type: "GitHub", value: "github.com/yourusername" },
       {
         id: 3,
-        type: ContactType.LinkedIn,
+        type: "LinkedIn",
         value: "linkedin.com/in/yourusername",
       },
     ],
-    hobbies: ["Learning", "Innovation", "Woodworking", "Fitness"],
   },
 
-  educations: [
+  sections: [
     {
-      id: 1,
-      degreeType: DegreeType.BS,
-      degreeName: "Computer Science",
-      institution: "ISIMM",
-      startDate: "2021",
-      endDate: "2024",
-    },
-  ],
-
-  experiences: [
-    {
-      id: 1,
-      jobTitle: "Junior Full-Stack Developer",
-      company: "Freelance / Personal Projects",
-      location: "Remote",
-      startDate: "2023",
-      endDate: "Present",
-      summary:
-        "Built and maintained full-stack applications using React, TypeScript, and NestJS. Focused on reusable components, clean architecture, and small-business solutions.",
-      keywords: "React TypeScript NestJS PostgreSQL Docker",
-    },
-  ],
-
-  projects: [
-    {
-      id: 1,
-      title: "Invoicing & Stock Management App",
-      description:
-        "A web application for small businesses to manage invoices, products, and stock with a simple UI.",
-      tools: "React, NestJS, PostgreSQL, Docker",
-      projectLink: "",
-      repoLink: "",
+      type: SectionType.Education,
+      body: [
+        {
+          id: 1,
+          degreeType: "BS",
+          degreeName: "Computer Science",
+          institution: "ISIMM",
+          startDate: "2021",
+          endDate: "2024",
+          notes: [],
+          keySkills: "",
+        },
+      ],
     },
     {
-      id: 2,
-      title: "Reusable Full-Stack Starter",
-      description:
-        "A plug-and-play project template to avoid repetitive setup and speed up new client projects.",
-      tools: "Next.js, NestJS, pnpm",
-      projectLink: "",
-      repoLink: "",
+      type: SectionType.WorkExperience,
+      body: [
+        {
+          id: 1,
+          jobTitle: "Junior Full-Stack Developer",
+          company: "Freelance / Personal Projects",
+          location: "Remote",
+          startDate: "2023",
+          endDate: "Present",
+          highlights: [
+            "Built and maintained full-stack applications using React, TypeScript, and NestJS.",
+            "Focused on reusable components, clean architecture, and small-business solutions."
+          ],
+          keywords: "React TypeScript NestJS PostgreSQL Docker",
+        },
+      ],
     },
-  ],
-
-  skills: {
-    languages: [
-      { id: 1, type: skillType.LANG, name: "TypeScript" },
-      { id: 2, type: skillType.LANG, name: "JavaScript" },
-      { id: 3, type: skillType.LANG, name: "Rust" },
-    ],
-    technologies: [
-      { id: 4, type: skillType.TECH, name: "React" },
-      { id: 5, type: skillType.TECH, name: "NestJS" },
-      { id: 6, type: skillType.TECH, name: "Node.js" },
-      { id: 7, type: skillType.TECH, name: "Docker" },
-      { id: 8, type: skillType.TECH, name: "PostgreSQL" },
-    ],
-    softSkills: [
-      { id: 9, type: skillType.SOFT, name: "Independent Problem Solving" },
-      { id: 10, type: skillType.SOFT, name: "System Thinking" },
-    ],
-  },
-
-  extracurriculars: [
     {
-      id: 1,
-      activityName: "Self-Directed Learning & Open-Source Exploration",
-      startDate: "2022",
-      endDate: "Present",
+      type: SectionType.Project,
+      body: [
+        {
+          id: 1,
+          title: "Invoicing & Stock Management App",
+          notes: [
+            "A web application for small businesses to manage invoices, products, and stock with a simple UI."
+          ],
+          tools: "React, NestJS, PostgreSQL, Docker",
+          projectLink: "",
+          repoLink: "",
+        },
+        {
+          id: 2,
+          title: "Reusable Full-Stack Starter",
+          notes: [
+            "A plug-and-play project template to avoid repetitive setup and speed up new client projects."
+          ],
+          tools: "Next.js, NestJS, pnpm",
+          projectLink: "",
+          repoLink: "",
+        },
+      ],
+    },
+    {
+      type: SectionType.Skills,
+      body: {
+        languages: [
+          { id: 1, type: "LANG", name: "TypeScript" },
+          { id: 2, type: "LANG", name: "JavaScript" },
+          { id: 3, type: "LANG", name: "Rust" },
+        ],
+        technologies: [
+          { id: 4, type: "TECH", name: "React" },
+          { id: 5, type: "TECH", name: "NestJS" },
+          { id: 6, type: "TECH", name: "Node.js" },
+          { id: 7, type: "TECH", name: "Docker" },
+          { id: 8, type: "TECH", name: "PostgreSQL" },
+        ],
+        softSkills: [
+          { id: 9, type: "SOFT", name: "Independent Problem Solving" },
+          { id: 10, type: "SOFT", name: "System Thinking" },
+        ],
+      },
+    },
+    {
+      type: SectionType.ExtraCurricular,
+      body: [
+        {
+          id: 1,
+          activityName: "Self-Directed Learning & Open-Source Exploration",
+          startDate: "2022",
+          endDate: "Present",
+        },
+      ],
     },
   ],
 };

@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { Skills, SectionType } from "@/types/resumeTypes";
-import useResumeSectionData from "./useResumeSectionData";
+import useResumeSectionData from "@hooks/useResumeSectionData";
 import { useRouter } from "next/navigation";
 
 export function useSkills() {
@@ -10,7 +10,7 @@ export function useSkills() {
     technologies: [],
     softSkills: [],
   });
-  const initialSkillsRef = useRef<Skills | null>(null);
+  const [initialSkills, setInitialSkills] = useState<Skills | null>(null);
   const isInitialized = useRef(false);
 
   const router = useRouter();
@@ -22,19 +22,24 @@ export function useSkills() {
         const skillsData = section.body as Skills;
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setSkills(skillsData);
-        initialSkillsRef.current = JSON.parse(JSON.stringify(skillsData));
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setInitialSkills(JSON.parse(JSON.stringify(skillsData)));
       } else {
-        initialSkillsRef.current = {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setInitialSkills({
           languages: [],
           technologies: [],
           softSkills: [],
-        };
+        });
       }
       isInitialized.current = true;
     }
   }, [resumeSectionData, loading]);
 
-  const hasChanges = JSON.stringify(skills) !== JSON.stringify(initialSkillsRef.current);
+  const hasChanges = useMemo(() => 
+    JSON.stringify(skills) !== JSON.stringify(initialSkills),
+    [skills, initialSkills]
+  );
 
   const addSkill = (type: keyof Skills) => (name: string) => {
     setSkills(prevSkills => {
