@@ -21,3 +21,8 @@ export const LanguagesSchema = z.array(LanguageSchema);
 export type ProficiencyLevel = (typeof PROFICIENCY_LEVELS)[number];
 export type Language = z.infer<typeof LanguageSchema>;
 export type Languages = z.infer<typeof LanguagesSchema>;
+
+export const DEFAULT_LANGUAGE: Omit<Language, "id"> = {
+  name: "",
+  proficiency: "Intermediate",
+};

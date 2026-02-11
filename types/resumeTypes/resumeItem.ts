@@ -32,14 +32,14 @@ export const SectionTypeSchema = z.enum([
 ]);
 
 export const ResumeSectionSchema = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("education"), body: z.array(EducationItemSchema) }),
-  z.object({ type: z.literal("project"), body: z.array(ProjectSchema) }),
-  z.object({ type: z.literal("work_experience"), body: z.array(WorkExperienceSchema) }),
-  z.object({ type: z.literal("skills"), body: SkillsSchema }),
-  z.object({ type: z.literal("certification"), body: z.array(CertificationSchema) }),
-  z.object({ type: z.literal("extracurricular"), body: z.array(ExtraCurricularActivitySchema) }),
-  z.object({ type: z.literal("hobbies"), body: HobbiesSchema }),
-  z.object({ type: z.literal("languages"), body: LanguagesSchema }),
+  z.object({ type: z.literal("education"), body: z.array(EducationItemSchema), enabled: z.boolean().optional() }),
+  z.object({ type: z.literal("project"), body: z.array(ProjectSchema), enabled: z.boolean().optional() }),
+  z.object({ type: z.literal("work_experience"), body: z.array(WorkExperienceSchema), enabled: z.boolean().optional() }),
+  z.object({ type: z.literal("skills"), body: SkillsSchema, enabled: z.boolean().optional() }),
+  z.object({ type: z.literal("certification"), body: z.array(CertificationSchema), enabled: z.boolean().optional() }),
+  z.object({ type: z.literal("extracurricular"), body: z.array(ExtraCurricularActivitySchema), enabled: z.boolean().optional() }),
+  z.object({ type: z.literal("hobbies"), body: HobbiesSchema, enabled: z.boolean().optional() }),
+  z.object({ type: z.literal("languages"), body: LanguagesSchema, enabled: z.boolean().optional() }),
 ]);
 
 export const ResumeSchema = z.object({
@@ -51,6 +51,7 @@ export const ResumeSchema = z.object({
   sections: z.array(ResumeSectionSchema),
 });
 
-export type SectionTypeValue = typeof SectionType[keyof typeof SectionType];
+export type SectionTypeValue = (typeof SectionType)[keyof typeof SectionType];
 export type ResumeSection = z.infer<typeof ResumeSectionSchema>;
 export type Resume = z.infer<typeof ResumeSchema>;
+

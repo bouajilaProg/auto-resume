@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SKILL_TYPES = {
+export const skillType = {
   LANG: "languages",
   TECH: "technologies",
   SOFT: "softSkills",
@@ -23,3 +23,9 @@ export const SkillsSchema = z.object({
 export type SkillType = z.infer<typeof SkillTypeSchema>;
 export type SkillItem = z.infer<typeof SkillItemSchema>;
 export type Skills = z.infer<typeof SkillsSchema>;
+
+export const DEFAULT_SKILLS: Skills = {
+  languages: [],
+  technologies: [],
+  softSkills: [],
+};
