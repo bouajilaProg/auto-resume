@@ -14,15 +14,17 @@ export default function CertificationForm({
   index,
   updateCertification,
   removeCertification,
+  errors,
 }: {
   certification: Certification;
   index: number;
-  updateCertification: (
+  updateCertification: <K extends keyof Certification>(
     id: number,
-    field: keyof Certification,
-    value: string
+    field: K,
+    value: Certification[K]
   ) => void;
   removeCertification: (id: number) => void;
+  errors?: Record<string, string>;
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -123,8 +125,10 @@ export default function CertificationForm({
             type="text"
             value={certification.name}
             onChange={handleFieldChange("name")}
-            className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500/20"
+            className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 bg-white ${errors?.name ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              }`}
           />
+          {errors?.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -141,9 +145,11 @@ export default function CertificationForm({
                 type="text"
                 value={certification.issuingOrganization}
                 onChange={handleFieldChange("issuingOrganization")}
-                className="w-full pl-9 pr-4 py-2.5 border rounded-lg"
+                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 bg-white ${errors?.issuingOrganization ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                  }`}
               />
             </div>
+            {errors?.issuingOrganization && <p className="text-xs text-red-500 mt-1">{errors.issuingOrganization}</p>}
           </div>
 
           <div>
@@ -159,9 +165,11 @@ export default function CertificationForm({
                 type="month"
                 value={certification.issueDate}
                 onChange={handleFieldChange("issueDate")}
-                className="w-full pl-9 pr-4 py-2.5 border rounded-lg"
+                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-700 bg-white ${errors?.issueDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                  }`}
               />
             </div>
+            {errors?.issueDate && <p className="text-xs text-red-500 mt-1">{errors.issueDate}</p>}
           </div>
         </div>
       </div>

@@ -1,47 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import { Plus, Award, Save, X } from "lucide-react";
-import CertificationForm from "./components/CertificationForm";
-import { useCertifications } from "@/hooks/useCertifications";
+import { Plus, Languages as LanguagesIcon, Save, X } from "lucide-react";
+import LanguageForm from "./components/LanguageForm";
+import { useLanguages } from "@/hooks/useLanguages";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 
-export default function CertificationsPage() {
+export default function LanguagesPage() {
   const {
-    certifications,
-    addCertification,
-    removeCertification,
-    updateCertification,
+    languages,
+    addLanguage,
+    removeLanguage,
+    updateLanguage,
     handleSave,
     hasChanges,
-    loading
-  } = useCertifications();
-
+    loading,
+    errors
+  } = useLanguages();
 
   const { openModal, closeModal } = useModal();
   const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
   });
 
-
   if (loading) {
     return <Loading />;
   }
 
-
-
   return (
     <div className="min-h-screen bg-gray-50/50 py-10 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto space-y-8">
-
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Certifications</h1>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Languages</h1>
             <p className="text-gray-500 mt-1">
-              Showcase your professional certifications and credentials.
+              List the languages you speak and your proficiency level.
             </p>
           </div>
 
@@ -72,46 +68,47 @@ export default function CertificationsPage() {
 
         {/* Content Area */}
         <div className="space-y-6">
-          {certifications.length === 0 ? (
+          {languages.length === 0 ? (
             <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-blue-300 transition-colors group">
               <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <Award size={32} />
+                <LanguagesIcon size={32} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">No certifications added yet</h3>
+              <h3 className="text-lg font-semibold text-gray-900">No languages added yet</h3>
               <p className="text-gray-500 mb-6 max-w-sm mx-auto">
-                Certifications validate your skills. Add professional credentials here.
+                Add the languages you know to help recruiters understand your communication skills.
               </p>
               <button
-                onClick={addCertification}
+                onClick={addLanguage}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm font-medium"
               >
                 <Plus size={14} />
-                Add Certification
+                Add Language
               </button>
             </div>
           ) : (
             <>
               <div className="grid gap-6">
-                {certifications.map((certification, index) => (
-                  <CertificationForm
-                    key={certification.id}
-                    certification={certification}
+                {languages.map((language, index) => (
+                  <LanguageForm
+                    key={language.id}
+                    language={language}
                     index={index}
-                    updateCertification={updateCertification}
-                    removeCertification={removeCertification}
+                    updateLanguage={updateLanguage}
+                    removeLanguage={removeLanguage}
+                    errors={errors?.[language.id]}
                   />
                 ))}
               </div>
 
               {/* Add New Button (Bottom) */}
               <button
-                onClick={addCertification}
+                onClick={addLanguage}
                 className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
               >
                 <div className="p-2 bg-gray-100 rounded-full group-hover:bg-blue-100 transition-colors">
                   <Plus size={12} />
                 </div>
-                Add Another Certification
+                Add Another Language
               </button>
             </>
           )}

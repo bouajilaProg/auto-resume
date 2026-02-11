@@ -1,76 +1,25 @@
-import { useEffect, useState } from "react";
-import { EducationItem, DegreeType } from "@/types/resumeTypes";
-import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
-import { useRouter } from "next/navigation";
-
+import { EducationItem, EducationItemSchema, SectionType } from "@/types/resumeTypes";
+import { useGenericListSection } from "./useGenericListSection";
+import { z } from "zod";
 
 export function useEducation() {
+  const {
+    items: educations,
+    addItem: addEducation,
+    removeItem: removeEducation,
+    updateItem,
+    handleSave,
+    hasChanges,
+    loading,
+    errors,
+  } = useGenericListSection<EducationItem>(
+    SectionType.Education,
+    z.array(EducationItemSchema),
+    (edu) => edu.institution.trim() !== "" || edu.degreeName.trim() !== ""
+  );
 
-  const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
-
-  const [educations, setEducations] = useState<EducationItem[]>([]);
-  const router = useRouter();
-  useEffect(
-    () => {
-      setEducations(
-        resumeSectionData?.educations ?? []
-      );
-    }, [resumeSectionData]
-  )
-
-  const addEducation = () => {
-    const newId =
-      educations.length > 0
-        ? Math.max(...educations.map((e) => e.id)) + 1
-        : 1;
-
-    // remove completely empty entries
-    const cleaned = educations.filter(
-      (e) => e.degreeName.trim() !== "" || e.institution.trim() !== ""
-    );
-
-    setEducations([
-      ...cleaned,
-      {
-        id: newId,
-        degreeType: "BS",
-        keySkills: "",
-        degreeName: "",
-        institution: "",
-        startDate: "",
-        endDate: "",
-      },
-    ]);
-  };
-
-  const removeEducation = (id: number) => {
-    setEducations(educations.filter((e) => e.id !== id));
-  };
-
-  const updateEducation = (
-    id: number,
-    field: keyof EducationItem,
-    value: string
-  ) => {
-    setEducations(
-      educations.map((e) => (e.id === id ? { ...e, [field]: value } : e))
-    );
-  };
-
-  const handleSave = () => {
-    const cleaned = educations.filter(
-      (e) => e.degreeName.trim() !== "" || e.institution.trim() !== ""
-    ).map((e) => {
-      // Trim all string fields
-      e.degreeName = e.degreeName.trim();
-      e.institution = e.institution.trim();
-      e.startDate = e.startDate.trim();
-      e.endDate = e.endDate.trim();
-      return e;
-    })
-    setEducations(cleaned);
-    updateResumeSectionData(SECTIONS.EDUCATION, cleaned);
-    router.push("/sections");
+  const updateEducation = <K extends keyof EducationItem>(id: number, field: K, value: EducationItem[K]) => {
+    updateItem(id, field, value);
   };
 
   return {
@@ -79,6 +28,10 @@ export function useEducation() {
     removeEducation,
     updateEducation,
     handleSave,
-    loading
+    hasChanges,
+    loading,
+    errors,
   };
 }
+
+

@@ -2,18 +2,23 @@ import { WorkExperience } from "@/types/resumeTypes";
 import { useState } from "react";
 import { ChevronDown, ChevronUp, Briefcase, Trash, Building, MapPin, Calendar, AlignLeft, Tag } from "lucide-react";
 
-export default function ExperienceForm({ experience, index, updateExperience, removeExperience }: {
+export default function ExperienceForm({ experience, index, updateExperience, removeExperience, errors }: {
   experience: WorkExperience;
   index: number;
-  updateExperience: (id: number, field: keyof WorkExperience, value: string) => void;
+  updateExperience: <K extends keyof WorkExperience>(id: number, field: K, value: WorkExperience[K]) => void;
   removeExperience: (id: number) => void;
+  errors?: Record<string, string>;
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleFieldChange = (field: keyof WorkExperience) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    updateExperience(experience.id, field, e.target.value);
+    let value: string | string[] = e.target.value;
+    if (field === "highlights") {
+      value = e.target.value.split("\n");
+    }
+    updateExperience(experience.id, field, value as WorkExperience[typeof field]);
   };
 
   if (!isOpen) {
@@ -99,112 +104,124 @@ export default function ExperienceForm({ experience, index, updateExperience, re
             <label htmlFor={`jobTitle-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
               Job Title
             </label>
-            <input
-              id={`jobTitle-${experience.id}`}
-              type="text"
-              value={experience.jobTitle}
-              onChange={handleFieldChange('jobTitle')}
-              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400"
-              placeholder="e.g. Senior Frontend Developer"
-            />
-          </div>
-
-          <div className="col-span-1">
-            <label htmlFor={`company-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-              Company Name
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <Building size={12} />
-              </div>
-              <input
-                id={`company-${experience.id}`}
-                type="text"
-                value={experience.company}
-                onChange={handleFieldChange('company')}
-                className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400"
-                placeholder="e.g. Google"
-              />
-            </div>
-          </div>
+          <input
+            id={`jobTitle-${experience.id}`}
+            type="text"
+            value={experience.jobTitle}
+            onChange={handleFieldChange('jobTitle')}
+            className={`w-full px-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 ${errors?.jobTitle ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              }`}
+            placeholder="e.g. Senior Frontend Developer"
+          />
+          {errors?.jobTitle && <p className="text-xs text-red-500 mt-1">{errors.jobTitle}</p>}
         </div>
 
-        {/* Location & Dates */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="col-span-1">
-            <label htmlFor={`location-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-              Location
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <MapPin size={12} />
-              </div>
-              <input
-                id={`location-${experience.id}`}
-                type="text"
-                value={experience.location}
-                onChange={handleFieldChange('location')}
-                className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400"
-                placeholder="e.g. New York, NY"
-              />
-            </div>
-          </div>
-
-          <div className="col-span-1">
-            <label htmlFor={`startDate-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-              Start Date
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <Calendar size={12} />
-              </div>
-              <input
-                id={`startDate-${experience.id}`}
-                type="month"
-                value={experience.startDate}
-                onChange={handleFieldChange('startDate')}
-                className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-700"
-              />
-            </div>
-          </div>
-
-          <div className="col-span-1">
-            <label htmlFor={`endDate-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-              End Date <span className="normal-case font-normal text-gray-400 ml-1">(empty if current)</span>
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <Calendar size={12} />
-              </div>
-              <input
-                id={`endDate-${experience.id}`}
-                type="month"
-                value={experience.endDate}
-                onChange={handleFieldChange('endDate')}
-                className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-700"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Summary */}
-        <div>
-          <label htmlFor={`summary-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-            Role Description / Achievements
+        <div className="col-span-1">
+          <label htmlFor={`company-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            Company Name
           </label>
           <div className="relative">
-            <div className="absolute top-3 left-3 pointer-events-none text-gray-400">
-              <AlignLeft size={12} />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <Building size={12} />
             </div>
-            <textarea
-              id={`summary-${experience.id}`}
-              value={experience.summary}
-              onChange={handleFieldChange('summary')}
-              className="w-full pl-9 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 min-h-[120px]"
-              placeholder="• Led a team of 5 developers...&#10;• Increased performance by 20%..."
+            <input
+              id={`company-${experience.id}`}
+              type="text"
+              value={experience.company}
+              onChange={handleFieldChange('company')}
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 ${errors?.company ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
+              placeholder="e.g. Google"
             />
           </div>
+          {errors?.company && <p className="text-xs text-red-500 mt-1">{errors.company}</p>}
         </div>
+      </div>
+
+      {/* Location & Dates */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="col-span-1">
+          <label htmlFor={`location-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            Location
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <MapPin size={12} />
+            </div>
+            <input
+              id={`location-${experience.id}`}
+              type="text"
+              value={experience.location}
+              onChange={handleFieldChange('location')}
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 ${errors?.location ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
+              placeholder="e.g. New York, NY"
+            />
+          </div>
+          {errors?.location && <p className="text-xs text-red-500 mt-1">{errors.location}</p>}
+        </div>
+
+        <div className="col-span-1">
+          <label htmlFor={`startDate-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            Start Date
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <Calendar size={12} />
+            </div>
+            <input
+              id={`startDate-${experience.id}`}
+              type="month"
+              value={experience.startDate}
+              onChange={handleFieldChange('startDate')}
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-700 ${errors?.startDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
+            />
+          </div>
+          {errors?.startDate && <p className="text-xs text-red-500 mt-1">{errors.startDate}</p>}
+        </div>
+
+        <div className="col-span-1">
+          <label htmlFor={`endDate-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            End Date <span className="normal-case font-normal text-gray-400 ml-1">(empty if current)</span>
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <Calendar size={12} />
+            </div>
+            <input
+              id={`endDate-${experience.id}`}
+              type="month"
+              value={experience.endDate}
+              onChange={handleFieldChange('endDate')}
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-700 ${errors?.endDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
+            />
+          </div>
+          {errors?.endDate && <p className="text-xs text-red-500 mt-1">{errors.endDate}</p>}
+        </div>
+      </div>
+
+      {/* Highlights */}
+      <div>
+        <label htmlFor={`highlights-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+          Role Description / Achievements
+        </label>
+        <div className="relative">
+          <div className="absolute top-3 left-3 pointer-events-none text-gray-400">
+            <AlignLeft size={12} />
+          </div>
+          <textarea
+            id={`highlights-${experience.id}`}
+            value={experience.highlights.join("\n")}
+            onChange={handleFieldChange('highlights')}
+            className={`w-full pl-9 pr-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 min-h-[120px] ${errors?.highlights ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              }`}
+            placeholder="• Led a team of 5 developers...&#10;• Increased performance by 20%..."
+          />
+        </div>
+        {errors?.highlights && <p className="text-xs text-red-500 mt-1">{errors.highlights}</p>}
+      </div>
 
         {/* Keywords */}
         <div>
@@ -220,10 +237,12 @@ export default function ExperienceForm({ experience, index, updateExperience, re
               type="text"
               value={experience.keywords}
               onChange={handleFieldChange('keywords')}
-              className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400"
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 ${errors?.keywords ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
               placeholder="React, TypeScript, Agile..."
             />
           </div>
+          {errors?.keywords && <p className="text-xs text-red-500 mt-1">{errors.keywords}</p>}
         </div>
       </div>
     </div>

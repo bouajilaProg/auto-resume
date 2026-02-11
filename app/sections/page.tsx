@@ -8,7 +8,8 @@ import {
   Users,
   Award,
   Lightbulb,
-  Network
+  Languages,
+  Heart
 } from "lucide-react";
 
 export default function Sections() {
@@ -20,42 +21,38 @@ export default function Sections() {
     { id: "skills", name: "Skills", icon: Wrench },
     { id: "certifications", name: "Certifications", icon: Award },
     { id: "extracurricular", name: "Extracurricular", icon: Users },
-    { id: " ", name: "To be filled", icon: Network }
+    { id: "languages", name: "Languages", icon: Languages },
   ];
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8 lg:pt-40">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Build Your CV
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">
+            Resume Builder
           </h1>
-          <p className="text-gray-600">
-            Select a section to edit
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+            Select a section to edit your professional details and build your perfect resume.
           </p>
         </div>
 
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {sections.map((section) => {
             const Icon = section.icon;
             return (
               <Link
                 key={section.id}
                 href={`/sections/${section.id}`}
-                className="aspect-square bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6 flex flex-col items-center justify-center gap-4 group"
+                className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-8 flex flex-col items-center justify-center gap-5 group border border-gray-100"
               >
-                <div className="text-blue-600 transition-transform duration-300 group-hover:scale-110">
-                  <Icon size={48} />
+                <div className="p-4 rounded-2xl bg-blue-50 text-blue-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white shadow-sm">
+                  <Icon size={40} />
                 </div>
-                <span className="text-gray-700 font-medium text-center text-lg">
+                <span className="text-gray-800 font-bold text-center text-lg">
                   {section.name}
                 </span>
               </Link>
             );
           })}
-        </div>
-
-        <div className="mt-8 text-center text-sm text-gray-500">
-          <p>Click any section to start editing</p>
         </div>
       </div>
     </div>

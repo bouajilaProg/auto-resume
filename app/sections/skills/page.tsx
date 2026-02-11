@@ -16,6 +16,7 @@ export default function SkillsPage() {
     removeSkill,
     updateSkill,
     handleSave,
+    hasChanges,
     loading
   } = useSkills();
 
@@ -54,7 +55,13 @@ export default function SkillsPage() {
             </Link>
 
             <button
-              onClick={() => openModal(ConfirmModal)}
+              onClick={() => {
+                if (hasChanges) {
+                  openModal(ConfirmModal);
+                } else {
+                  handleSave();
+                }
+              }}
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <Save size={14} />
@@ -69,7 +76,6 @@ export default function SkillsPage() {
             title="Programming Languages"
             description="Languages you speak fluently (e.g., Python, JavaScript, C++)"
             icon={<Code className="text-white" />}
-            iconBg="bg-blue-500"
             skills={skills.languages}
             onAdd={addSkill(skillType.LANG)}
             onRemove={removeSkill(skillType.LANG)}
@@ -81,7 +87,6 @@ export default function SkillsPage() {
             title="Technologies & Tools"
             description="Frameworks, libraries, and dev tools (e.g., React, AWS, Docker)"
             icon={<Layers className="text-white" />}
-            iconBg="bg-emerald-500"
             skills={skills.technologies}
             onAdd={addSkill(skillType.TECH)}
             onRemove={removeSkill(skillType.TECH)}
@@ -93,7 +98,6 @@ export default function SkillsPage() {
             title="Soft Skills"
             description="Interpersonal abilities and leadership (e.g., Communication, Agile)"
             icon={<Users className="text-white" />}
-            iconBg="bg-purple-500"
             skills={skills.softSkills}
             onAdd={addSkill(skillType.SOFT)}
             onRemove={removeSkill(skillType.SOFT)}

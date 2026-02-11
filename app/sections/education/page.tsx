@@ -15,6 +15,7 @@ export default function EducationPage() {
     removeEducation,
     updateEducation,
     handleSave,
+    hasChanges,
     loading,
   } = useEducation();
 
@@ -53,7 +54,13 @@ export default function EducationPage() {
             </Link>
 
             <button
-              onClick={() => openModal(ConfirmModal)}
+              onClick={() => {
+                if (hasChanges) {
+                  openModal(ConfirmModal);
+                } else {
+                  handleSave();
+                }
+              }}
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <Save size={14} />

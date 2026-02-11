@@ -11,12 +11,14 @@ import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 export default function PersonalInfoPage() {
   const {
     personalInfo,
+    hobbies,
     updateName,
     updateLocation,
     updateDescription,
     updateContacts,
     updateHobbies,
     handleSave,
+    hasChanges,
     loading
   } = usePersonalInfo();
 
@@ -55,7 +57,11 @@ export default function PersonalInfoPage() {
             </Link>
             <button
               onClick={() => {
-                openModal(ConfirmModal);
+                if (hasChanges) {
+                  openModal(ConfirmModal);
+                } else {
+                  handleSave();
+                }
               }}
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
@@ -127,7 +133,7 @@ export default function PersonalInfoPage() {
               Hobbies
             </label>
             <input
-              value={personalInfo.hobbies.join(", ")}
+              value={hobbies.map(h => h.name).join(", ")}
               onChange={(e) => updateHobbies(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition resize-none"
               placeholder="Reading, Coding, Traveling..."

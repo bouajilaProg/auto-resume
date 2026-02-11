@@ -15,19 +15,25 @@ export default function ProjectForm({
   project,
   index,
   updateProject,
-  removeProject
+  removeProject,
+  errors,
 }: {
   project: Project;
   index: number;
-  updateProject: (id: number, field: keyof Project, value: string) => void;
+  updateProject: <K extends keyof Project>(id: number, field: K, value: Project[K]) => void;
   removeProject: (id: number) => void;
+  errors?: Record<string, string>;
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleFieldChange =
     (field: keyof Project) =>
       (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        updateProject(project.id, field, e.target.value);
+        let value: string | string[] = e.target.value;
+        if (field === "notes") {
+          value = e.target.value.split("\n");
+        }
+        updateProject(project.id, field, value as Project[typeof field]);
       };
 
   if (!isOpen) {
@@ -127,9 +133,11 @@ export default function ProjectForm({
               type="text"
               value={project.title}
               onChange={handleFieldChange("title")}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 bg-white"
+              className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 bg-white ${errors?.title ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
               placeholder="e.g., E-Commerce Platform"
             />
+            {errors?.title && <p className="text-xs text-red-500 mt-1">{errors.title}</p>}
           </div>
 
           <div>
@@ -148,10 +156,12 @@ export default function ProjectForm({
                 type="text"
                 value={project.tools}
                 onChange={handleFieldChange("tools")}
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 bg-white"
+                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 bg-white ${errors?.tools ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                  }`}
                 placeholder="React, Node.js, AWS..."
               />
             </div>
+            {errors?.tools && <p className="text-xs text-red-500 mt-1">{errors.tools}</p>}
           </div>
         </div>
 
@@ -168,13 +178,15 @@ export default function ProjectForm({
               <AlignLeft size={12} />
             </div>
             <textarea
-              id={`description-${project.id}`}
-              value={project.description}
-              onChange={handleFieldChange("description")}
-              className="w-full pl-9 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 min-h-[100px] bg-white"
+              id={`notes-${project.id}`}
+              value={project.notes.join("\n")}
+              onChange={handleFieldChange("notes")}
+              className={`w-full pl-9 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 min-h-[100px] bg-white ${errors?.notes ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
               placeholder="Describe the problem you solved and the impact of this project..."
             />
           </div>
+          {errors?.notes && <p className="text-xs text-red-500 mt-1">{errors.notes}</p>}
         </div>
 
         {/* Links Row */}
@@ -195,10 +207,12 @@ export default function ProjectForm({
                 type="url"
                 value={project.projectLink || ""}
                 onChange={handleFieldChange("projectLink")}
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white"
+                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white ${errors?.projectLink ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                  }`}
                 placeholder="https://my-app.com"
               />
             </div>
+            {errors?.projectLink && <p className="text-xs text-red-500 mt-1">{errors.projectLink}</p>}
           </div>
 
           <div>
@@ -217,10 +231,12 @@ export default function ProjectForm({
                 type="url"
                 value={project.repoLink || ""}
                 onChange={handleFieldChange("repoLink")}
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white"
+                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white ${errors?.repoLink ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                  }`}
                 placeholder="https://github.com/user/repo"
               />
             </div>
+            {errors?.repoLink && <p className="text-xs text-red-500 mt-1">{errors.repoLink}</p>}
           </div>
         </div>
       </div>
