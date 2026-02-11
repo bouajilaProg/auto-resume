@@ -1,25 +1,13 @@
 "use client"
-import { EducationItem, PersonalInfo, Project, Resume } from "@/types/resumeTypes";
+import { Resume, SectionTypeValue, PersonalInfo, ResumeSection, DEFAULT_RESUME } from "@/types/resumeTypes";
 import { useEffect, useState } from "react";
-
-export enum SECTIONS {
-  PERSONAL_INFO = "personalInfo",
-  EDUCATION = "educations",
-  PROJECTS = "projects",
-  EXPERIENCE = "experiences",
-  SKILLS = "skills",
-  CERTIFICATIONS = "certifications",
-  EXTRACURRICULARS = "extracurriculars",
-}
 
 const RESUME_DATA_KEY = 'resumeDataKey';
 const MIN_LOADING_TIME = 300;
 
-
 export default function useResumeSectionData() {
   const [resumeSectionData, setResumeSectionData] = useState<Resume | null>(null);
   const [loading, setLoading] = useState(true);
-
 
   const readResumeData = async () => {
     setLoading(true);
@@ -55,18 +43,31 @@ export default function useResumeSectionData() {
 
   const syncResumeSectionData = (updated: Resume) => {
     if (typeof window === "undefined") return;
-
     localStorage.setItem(RESUME_DATA_KEY, JSON.stringify(updated));
     setResumeSectionData(updated);
   };
 
-  const updateResumeSectionData = (field: SECTIONS, value: any) => {
+  const updateSection = (type: SectionTypeValue, body: unknown) => {
     if (!resumeSectionData) return;
 
-    const updated = { ...resumeSectionData, [field]: value };
+    const sections = [...(resumeSectionData.sections || [])];
+    const index = sections.findIndex(s => s.type === type);
+
+    if (index > -1) {
+      sections[index] = { ...sections[index], body } as ResumeSection;
+    } else {
+      sections.push({ type, body, enabled: true } as ResumeSection);
+    }
+
+    const updated = { ...resumeSectionData, sections };
     syncResumeSectionData(updated);
   };
 
+  const updatePersonalInfo = (personalInfo: PersonalInfo) => {
+    if (!resumeSectionData) return;
+    const updated = { ...resumeSectionData, personalInfo };
+    syncResumeSectionData(updated);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,14 +75,11 @@ export default function useResumeSectionData() {
       if (data) {
         setResumeSectionData(data);
       } else {
-        setResumeSectionData({} as Resume);
+        setResumeSectionData(DEFAULT_RESUME);
       }
     };
-
     fetchData();
   }, []);
 
-
-  return { resumeSectionData, updateResumeSectionData, loading };
+  return { resumeSectionData, updateSection, updatePersonalInfo, loading };
 }
-

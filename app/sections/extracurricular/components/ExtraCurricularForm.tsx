@@ -9,11 +9,13 @@ export default function ExtraCurricularForm({
   index,
   updateActivity,
   removeActivity,
+  errors,
 }: {
   activity: ExtraCurricularActivity;
   index: number;
-  updateActivity: (id: number, field: keyof ExtraCurricularActivity, value: string) => void;
+  updateActivity: <K extends keyof ExtraCurricularActivity>(id: number, field: K, value: ExtraCurricularActivity[K]) => void;
   removeActivity: (id: number) => void;
+  errors?: Record<string, string>;
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -116,10 +118,12 @@ export default function ExtraCurricularForm({
               type="text"
               value={activity.activityName}
               onChange={handleFieldChange("activityName")}
-              className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400"
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 ${errors?.activityName ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
               placeholder="e.g., Student Government President, Varsity Basketball"
             />
           </div>
+          {errors?.activityName && <p className="text-xs text-red-500 mt-1">{errors.activityName}</p>}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -139,9 +143,11 @@ export default function ExtraCurricularForm({
                 type="month"
                 value={activity.startDate}
                 onChange={handleFieldChange("startDate")}
-                className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-700"
+                className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-700 ${errors?.startDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                  }`}
               />
             </div>
+            {errors?.startDate && <p className="text-xs text-red-500 mt-1">{errors.startDate}</p>}
           </div>
 
           <div className="col-span-1">
@@ -160,9 +166,11 @@ export default function ExtraCurricularForm({
                 type="month"
                 value={activity.endDate || ""}
                 onChange={handleFieldChange("endDate")}
-                className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-700"
+                className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-700 ${errors?.endDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                  }`}
               />
             </div>
+            {errors?.endDate && <p className="text-xs text-red-500 mt-1">{errors.endDate}</p>}
           </div>
         </div>
       </div>

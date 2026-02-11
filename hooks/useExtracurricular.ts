@@ -1,65 +1,25 @@
-import { useEffect, useState } from "react";
-import { ExtraCurricularActivity } from "@/types/resumeTypes";
-import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
-import { useRouter } from "next/navigation";
+import { ExtraCurricularActivity, ExtraCurricularActivitySchema, SectionType } from "@/types/resumeTypes";
+import { useGenericListSection } from "./useGenericListSection";
+import { z } from "zod";
 
 export function useExtraCurricular() {
-  const { resumeSectionData, updateResumeSectionData, loading } = useResumeSectionData();
-  const [activities, setActivities] = useState<ExtraCurricularActivity[]>([]);
+  const {
+    items: activities,
+    addItem: addActivity,
+    removeItem: removeActivity,
+    updateItem,
+    handleSave,
+    hasChanges,
+    loading,
+    errors,
+  } = useGenericListSection<ExtraCurricularActivity>(
+    SectionType.ExtraCurricular,
+    z.array(ExtraCurricularActivitySchema),
+    (a) => a.activityName.trim() !== "" || a.startDate.trim() !== ""
+  );
 
-
-  const router = useRouter();
-  useEffect(
-    () => {
-      setActivities(
-        resumeSectionData?.extracurriculars ?? []
-      );
-    }, [resumeSectionData]
-  )
-
-  const addActivity = () => {
-    const newId =
-      activities.length > 0
-        ? Math.max(...activities.map((a) => a.id)) + 1
-        : 1;
-
-    // remove empty activities
-    const cleaned = activities.filter(
-      (a) => a.activityName.trim() !== "" || a.startDate.trim() !== ""
-    );
-
-    setActivities([
-      ...cleaned,
-      { id: newId, activityName: "", startDate: "", endDate: "" },
-    ]);
-  };
-
-  const removeActivity = (id: number) => {
-    setActivities(activities.filter((a) => a.id !== id));
-  };
-
-  const updateActivity = (
-    id: number,
-    field: keyof ExtraCurricularActivity,
-    value: string
-  ) => {
-    setActivities(
-      activities.map((a) => (a.id === id ? { ...a, [field]: value } : a))
-    );
-  };
-
-  const handleSave = () => {
-    const cleaned = activities.filter(
-      (a) => a.activityName.trim() !== "" || a.startDate.trim() !== ""
-    ).map((a) => ({
-      id: a.id,
-      activityName: a.activityName.trim(),
-      startDate: a.startDate.trim(),
-      endDate: a.endDate?.trim()
-    }));
-    setActivities(cleaned);
-    updateResumeSectionData(SECTIONS.EXTRACURRICULARS, cleaned);
-    router.push("/sections")
+  const updateActivity = <K extends keyof ExtraCurricularActivity>(id: number, field: K, value: ExtraCurricularActivity[K]) => {
+    updateItem(id, field, value);
   };
 
   return {
@@ -68,6 +28,8 @@ export function useExtraCurricular() {
     removeActivity,
     updateActivity,
     handleSave,
-    loading
+    hasChanges,
+    loading,
+    errors,
   };
 }

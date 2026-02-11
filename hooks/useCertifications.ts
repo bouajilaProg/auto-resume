@@ -1,77 +1,25 @@
-
-import { useEffect, useState } from "react";
-import { Certification } from "@/types/resumeTypes";
-import useResumeSectionData, { SECTIONS } from "./useResumeSectionData";
-import { useRouter } from "next/navigation";
+import { Certification, CertificationSchema, SectionType } from "@/types/resumeTypes";
+import { useGenericListSection } from "./useGenericListSection";
+import { z } from "zod";
 
 export function useCertifications() {
-
-  const { updateResumeSectionData, resumeSectionData, loading } = useResumeSectionData();
-
-  const [certifications, setCertifications] = useState<Certification[]>(
-    resumeSectionData?.certifications ?? []
+  const {
+    items: certifications,
+    addItem: addCertification,
+    removeItem: removeCertification,
+    updateItem,
+    handleSave,
+    hasChanges,
+    loading,
+    errors,
+  } = useGenericListSection<Certification>(
+    SectionType.Certification,
+    z.array(CertificationSchema),
+    (c) => c.name.trim() !== "" || c.issuingOrganization.trim() !== ""
   );
 
-  const router = useRouter();
-  useEffect(
-    () => {
-      setCertifications(
-        resumeSectionData?.certifications ?? []
-      );
-    }, [resumeSectionData]
-  )
-
-
-  const addCertification = () => {
-    const newId =
-      certifications.length > 0
-        ? Math.max(...certifications.map((c) => c.id)) + 1
-        : 1;
-
-    // remove completely empty certifications
-    const cleaned = certifications.filter(
-      (c) =>
-        c.name.trim() !== "" ||
-        c.issuingOrganization.trim() !== "" ||
-        c.issueDate.trim() !== ""
-    );
-
-    setCertifications([
-      ...cleaned,
-      { id: newId, name: "", issuingOrganization: "", issueDate: "" },
-    ]);
-  };
-
-  const removeCertification = (id: number) => {
-    setCertifications(certifications.filter((c) => c.id !== id));
-  };
-
-  const updateCertification = (
-    id: number,
-    field: keyof Certification,
-    value: string
-  ) => {
-    setCertifications(
-      certifications.map((c) => (c.id === id ? { ...c, [field]: value } : c))
-    );
-  };
-
-  const handleSave = () => {
-    const cleaned = certifications.filter(
-      (c) =>
-        c.name.trim() !== "" ||
-        c.issuingOrganization.trim() !== "" ||
-        c.issueDate.trim() !== ""
-    ).map((c) => {
-      // Trim all string fields
-      c.name = c.name.trim();
-      c.issuingOrganization = c.issuingOrganization.trim();
-      c.issueDate = c.issueDate.trim();
-      return c;
-    });
-    setCertifications(cleaned);
-    updateResumeSectionData(SECTIONS.CERTIFICATIONS, cleaned);
-    router.push("/sections")
+  const updateCertification = <K extends keyof Certification>(id: number, field: K, value: Certification[K]) => {
+    updateItem(id, field, value);
   };
 
   return {
@@ -80,6 +28,8 @@ export function useCertifications() {
     removeCertification,
     updateCertification,
     handleSave,
+    hasChanges,
     loading,
+    errors,
   };
 }

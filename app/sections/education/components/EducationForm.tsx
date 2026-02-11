@@ -1,6 +1,6 @@
 "use client"
 
-import { DEGREES, DegreeType, EducationItem } from "@/types/resumeTypes"
+import { DEGREES, EducationItem } from "@/types/resumeTypes"
 import { useState } from "react";
 import {
   GraduationCap,
@@ -15,17 +15,22 @@ import {
 interface EducationFormProps {
   edu: EducationItem;
   index: number;
-  updateEducation: (id: number, field: keyof EducationItem, value: string) => void;
+  updateEducation: <K extends keyof EducationItem>(id: number, field: K, value: EducationItem[K]) => void;
   removeEducation: (id: number) => void;
+  errors?: Record<string, string>;
 }
 
-function EducationForm({ edu, index, updateEducation, removeEducation }: EducationFormProps) {
+function EducationForm({ edu, index, updateEducation, removeEducation, errors }: EducationFormProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleFieldChange = (field: keyof EducationItem) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    updateEducation(edu.id, field, e.target.value);
+    let value: string | string[] = e.target.value;
+    if (field === "notes") {
+      value = e.target.value.split("\n");
+    }
+    updateEducation(edu.id, field, value as EducationItem[typeof field]);
   };
 
   if (!isOpen) {
@@ -117,7 +122,8 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
               id={`degreeType-${edu.id}`}
               value={edu.degreeType}
               onChange={handleFieldChange('degreeType')}
-              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none text-gray-700"
+              className={`w-full px-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none text-gray-700 ${errors?.degreeType ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
             >
               {Object.entries(DEGREES).map(([key, value]) => (
                 <option key={key} value={key}>
@@ -129,6 +135,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
               <ChevronDown size={12} />
             </div>
           </div>
+          {errors?.degreeType && <p className="text-xs text-red-500 mt-1">{errors.degreeType}</p>}
         </div>
 
         {/* Degree Name */}
@@ -141,9 +148,11 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
             type="text"
             value={edu.degreeName}
             onChange={handleFieldChange('degreeName')}
-            className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400"
+            className={`w-full px-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 ${errors?.degreeName ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              }`}
             placeholder="e.g. Computer Science"
           />
+          {errors?.degreeName && <p className="text-xs text-red-500 mt-1">{errors.degreeName}</p>}
         </div>
 
         {/* Institution */}
@@ -160,10 +169,12 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
               type="text"
               value={edu.institution}
               onChange={handleFieldChange('institution')}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 ${errors?.institution ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
               placeholder="e.g. Stanford University"
             />
           </div>
+          {errors?.institution && <p className="text-xs text-red-500 mt-1">{errors.institution}</p>}
         </div>
 
         {/* Start Date */}
@@ -180,9 +191,11 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
               type="month"
               value={edu.startDate}
               onChange={handleFieldChange('startDate')}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700 ${errors?.startDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
             />
           </div>
+          {errors?.startDate && <p className="text-xs text-red-500 mt-1">{errors.startDate}</p>}
         </div>
 
         {/* End Date */}
@@ -199,9 +212,33 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
               type="month"
               value={edu.endDate}
               onChange={handleFieldChange('endDate')}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700 ${errors?.endDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
             />
           </div>
+          {errors?.endDate && <p className="text-xs text-red-500 mt-1">{errors.endDate}</p>}
+        </div>
+
+        {/* Notes */}
+        <div className="col-span-1 md:col-span-2">
+          <label htmlFor={`notes-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            Additional Information / Achievements
+          </label>
+          <div className="relative">
+            <div className="absolute top-3 left-3 flex items-center pointer-events-none text-gray-400">
+              <Brain size={16} />
+            </div>
+            <textarea
+              id={`notes-${edu.id}`}
+              value={edu.notes.join("\n")}
+              onChange={handleFieldChange('notes')}
+              rows={3}
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 ${errors?.notes ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
+              placeholder="e.g. GPA: 3.8/4.0, Specialized in Distributed Systems..."
+            />
+          </div>
+          {errors?.notes && <p className="text-xs text-red-500 mt-1">{errors.notes}</p>}
         </div>
 
         {/* Key Skills */}
@@ -218,10 +255,12 @@ function EducationForm({ edu, index, updateEducation, removeEducation }: Educati
               value={edu.keySkills}
               onChange={handleFieldChange('keySkills')}
               rows={3}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none ${errors?.keySkills ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
               placeholder="e.g. Data Structures, Algorithms, Neural Networks, Research Methodology..."
             />
           </div>
+          {errors?.keySkills && <p className="text-xs text-red-500 mt-1">{errors.keySkills}</p>}
         </div>
       </div>
     </div>

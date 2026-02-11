@@ -15,7 +15,9 @@ export default function ProjectsPage() {
     removeProject,
     updateProject,
     handleSave,
-    loading
+    hasChanges,
+    loading,
+    errors
   } = useProjects();
 
   const { openModal, closeModal } = useModal();
@@ -53,7 +55,13 @@ export default function ProjectsPage() {
             </Link>
 
             <button
-              onClick={() => openModal(ConfirmModal)}
+              onClick={() => {
+                if (hasChanges) {
+                  openModal(ConfirmModal);
+                } else {
+                  handleSave();
+                }
+              }}
               className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <Save size={14} />
@@ -96,6 +104,7 @@ export default function ProjectsPage() {
                     index={index}
                     updateProject={updateProject}
                     removeProject={removeProject}
+                    errors={errors?.[project.id]}
                   />
                 ))}
               </div>
