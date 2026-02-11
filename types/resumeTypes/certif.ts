@@ -8,3 +8,9 @@ export const CertificationSchema = z.object({
 });
 
 export type Certification = z.infer<typeof CertificationSchema>;
+
+export const DEFAULT_CERTIFICATION: Omit<Certification, "id"> = {
+  name: "",
+  issuingOrganization: "",
+  issueDate: "",
+};

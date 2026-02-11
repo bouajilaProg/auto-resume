@@ -8,3 +8,9 @@ export const ExtraCurricularActivitySchema = z.object({
 });
 
 export type ExtraCurricularActivity = z.infer<typeof ExtraCurricularActivitySchema>;
+
+export const DEFAULT_EXTRACURRICULAR: Omit<ExtraCurricularActivity, "id"> = {
+  activityName: "",
+  startDate: "",
+  endDate: "",
+};
