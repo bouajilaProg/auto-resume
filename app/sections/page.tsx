@@ -22,6 +22,7 @@ export default function Sections() {
     { id: "certifications", name: "Certifications", icon: Award },
     { id: "extracurricular", name: "Extracurricular", icon: Users },
     { id: "languages", name: "Languages", icon: Languages },
+    { id: "hobbies", name: "Hobbies", icon: Heart },
   ];
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8 lg:pt-40">
