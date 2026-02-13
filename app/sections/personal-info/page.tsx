@@ -11,6 +11,7 @@ import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 export default function PersonalInfoPage() {
   const {
     personalInfo,
+    hobbies,
     updateName,
     updateLocation,
     updateDescription,

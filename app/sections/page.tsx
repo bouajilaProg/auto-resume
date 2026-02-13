@@ -9,7 +9,7 @@ export default function Sections() {
     icon: SECTION_ICONS[id],
   }));
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8 lg:pt-40">
       <div className="max-w-6xl mx-auto">
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">
