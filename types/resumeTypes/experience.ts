@@ -8,6 +8,7 @@ export const WorkExperienceSchema = z.object({
   startDate: z.string(),
   endDate: z.string(),
   highlights: z.array(z.string()),
+  summary: z.string().optional().default(""),
   keywords: z.string(),
 });
 
@@ -20,5 +21,6 @@ export const DEFAULT_EXPERIENCE: Omit<WorkExperience, "id"> = {
   startDate: "",
   endDate: "",
   highlights: [],
+  summary: "",
   keywords: "",
 };

@@ -1,14 +1,15 @@
 import { z } from "zod";
-import { PersonalInfoSchema } from "./personalInfo";
-import { EducationItemSchema } from "./education";
-import { ProjectSchema } from "./project";
-import { WorkExperienceSchema } from "./experience";
-import { SkillsSchema } from "./skills";
-import { CertificationSchema } from "./certif";
-import { ExtraCurricularActivitySchema } from "./extraCurr";
-import { HobbiesSchema } from "./hobbies";
-import { LanguagesSchema } from "./languages";
+import { Certification } from "./certif";
+import { EducationItem } from "./education";
+import { WorkExperience } from "./experience";
+import { ExtraCurricularActivity } from "./extraCurr";
+import { Hobbies } from "./hobbies";
+import { Languages } from "./languages";
+import { PersonalInfo } from "./personalInfo";
+import { Project } from "./project";
+import { Skills } from "./skills";
 
+// 1. Define the possible section types as constants
 export const SectionType = {
   Education: "education",
   Project: "project",
@@ -31,27 +32,23 @@ export const SectionTypeSchema = z.enum([
   "languages",
 ]);
 
-export const ResumeSectionSchema = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("education"), body: z.array(EducationItemSchema), enabled: z.boolean().optional() }),
-  z.object({ type: z.literal("project"), body: z.array(ProjectSchema), enabled: z.boolean().optional() }),
-  z.object({ type: z.literal("work_experience"), body: z.array(WorkExperienceSchema), enabled: z.boolean().optional() }),
-  z.object({ type: z.literal("skills"), body: SkillsSchema, enabled: z.boolean().optional() }),
-  z.object({ type: z.literal("certification"), body: z.array(CertificationSchema), enabled: z.boolean().optional() }),
-  z.object({ type: z.literal("extracurricular"), body: z.array(ExtraCurricularActivitySchema), enabled: z.boolean().optional() }),
-  z.object({ type: z.literal("hobbies"), body: HobbiesSchema, enabled: z.boolean().optional() }),
-  z.object({ type: z.literal("languages"), body: LanguagesSchema, enabled: z.boolean().optional() }),
-]);
+export type SectionTypeValue = typeof SectionType[keyof typeof SectionType];
 
-export const ResumeSchema = z.object({
-  name: z.string(),
-  description: z.string(),
-  template: z.string(),
-  lastUpdate: z.string(),
-  personalInfo: PersonalInfoSchema.optional(),
-  sections: z.array(ResumeSectionSchema),
-});
+export type ResumeSection =
+  | { type: typeof SectionType.Education; body: EducationItem[] }
+  | { type: typeof SectionType.Project; body: Project[] }
+  | { type: typeof SectionType.WorkExperience; body: WorkExperience[] }
+  | { type: typeof SectionType.Skills; body: Skills }
+  | { type: typeof SectionType.Certification; body: Certification[] }
+  | { type: typeof SectionType.ExtraCurricular; body: ExtraCurricularActivity[] }
+  | { type: typeof SectionType.Hobbies; body: Hobbies }
+  | { type: typeof SectionType.Languages; body: Languages };
 
-export type SectionTypeValue = (typeof SectionType)[keyof typeof SectionType];
-export type ResumeSection = z.infer<typeof ResumeSectionSchema>;
-export type Resume = z.infer<typeof ResumeSchema>;
+export interface Resume {
+  name: string;
+  description: string;
+  lastUpdate: string;
+  personalInfo?: PersonalInfo;
 
+  sections: ResumeSection[];
+}

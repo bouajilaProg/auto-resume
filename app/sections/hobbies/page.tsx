@@ -1,0 +1,119 @@
+"use client";
+
+import Link from "next/link";
+import { Plus, Heart, Save, X } from "lucide-react";
+import HobbyForm from "./components/HobbyForm";
+import { useHobbies } from "@hooks/ResumeSections/useHobbies";
+import Loading from "@/app/components/Loading";
+import { useModal } from "@/context/Modal/useModal";
+import ModalCreator from "@/context/Modal/modals/ModelsFactory";
+
+export default function HobbiesPage() {
+  const {
+    hobbies,
+    addHobby,
+    removeHobby,
+    updateHobby,
+    handleSave,
+    hasChanges,
+    loading,
+    errors
+  } = useHobbies();
+
+  const { openModal, closeModal } = useModal();
+  const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
+    handleSave();
+  });
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50/50 py-10 px-4 sm:px-6">
+      <div className="max-w-4xl mx-auto space-y-8">
+        {/* Header Section */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Hobbies</h1>
+            <p className="text-gray-500 mt-1">
+              Add your interests and pastimes to show more of your personality.
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <Link
+              href="/sections"
+              className="flex-1 sm:flex-none justify-center px-4 py-2.5 border border-gray-200 text-gray-600 bg-white rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all flex items-center gap-2 font-medium shadow-sm"
+            >
+              <X size={14} />
+              <span>Cancel</span>
+            </Link>
+            <button
+              onClick={() => {
+                if (hasChanges) {
+                  openModal(ConfirmModal);
+                } else {
+                  handleSave();
+                }
+              }}
+              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-pink-600 text-white rounded-lg hover:bg-pink-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
+            >
+              <Save size={14} />
+              <span>Save Changes</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="space-y-6">
+          {hobbies.length === 0 ? (
+            <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-pink-300 transition-colors group">
+              <div className="w-16 h-16 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <Heart size={32} />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">No hobbies added yet</h3>
+              <p className="text-gray-500 mb-6 max-w-sm mx-auto">
+                Sharing your hobbies can help you connect with interviewers and show a well-rounded personality.
+              </p>
+              <button
+                onClick={addHobby}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition shadow-sm font-medium"
+              >
+                <Plus size={14} />
+                Add Hobby
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="grid gap-6">
+                {hobbies.map((hobby, index) => (
+                  <HobbyForm
+                    key={hobby.id}
+                    hobby={hobby}
+                    index={index}
+                    updateHobby={updateHobby}
+                    removeHobby={removeHobby}
+                    errors={errors?.[hobby.id]}
+                  />
+                ))}
+              </div>
+
+              {/* Add New Button (Bottom) */}
+              <button
+                onClick={addHobby}
+                className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-pink-400 hover:text-pink-600 hover:bg-pink-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
+              >
+                <div className="p-2 bg-gray-100 rounded-full group-hover:bg-pink-100 transition-colors">
+                  <Plus size={12} />
+                </div>
+                Add Another Hobby
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,28 +1,13 @@
 
 import Link from "next/link";
-import {
-  User,
-  GraduationCap,
-  Briefcase,
-  Wrench,
-  Users,
-  Award,
-  Lightbulb,
-  Languages,
-  Heart
-} from "lucide-react";
+import { ALL_SECTIONS, SECTION_ICONS, SECTION_LABELS, SECTION_PATHS } from "@/constants/sections";
 
 export default function Sections() {
-  const sections = [
-    { id: "personal-info", name: "Personal Info", icon: User },
-    { id: "education", name: "Education", icon: GraduationCap },
-    { id: "projects", name: "Projects", icon: Lightbulb },
-    { id: "experience", name: "Experience", icon: Briefcase },
-    { id: "skills", name: "Skills", icon: Wrench },
-    { id: "certifications", name: "Certifications", icon: Award },
-    { id: "extracurricular", name: "Extracurricular", icon: Users },
-    { id: "languages", name: "Languages", icon: Languages },
-  ];
+  const sections = ALL_SECTIONS.map((id) => ({
+    id: SECTION_PATHS[id],
+    name: SECTION_LABELS[id],
+    icon: SECTION_ICONS[id],
+  }));
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8 lg:pt-40">
       <div className="max-w-6xl mx-auto">
@@ -35,7 +20,7 @@ export default function Sections() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {sections.map((section) => {
             const Icon = section.icon;
             return (

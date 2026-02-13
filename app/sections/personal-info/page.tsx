@@ -16,7 +16,6 @@ export default function PersonalInfoPage() {
     updateLocation,
     updateDescription,
     updateContacts,
-    updateHobbies,
     handleSave,
     hasChanges,
     loading
@@ -126,19 +125,6 @@ export default function PersonalInfoPage() {
             contacts={personalInfo.contact}
             setContactsAction={updateContacts}
           />
-
-          {/* Hobbies */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Hobbies
-            </label>
-            <input
-              value={hobbies.map(h => h.name).join(", ")}
-              onChange={(e) => updateHobbies(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition resize-none"
-              placeholder="Reading, Coding, Traveling..."
-            />
-          </div>
         </div>
       </div>
     </div>
