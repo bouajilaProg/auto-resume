@@ -7,23 +7,22 @@ import { Loader2, Settings, Plus, Layout, MoreVertical, Trash2, Edit3, X } from 
 import { useState } from "react";
 
 export default function ResumeMainPage() {
-  const { 
-    masterData, 
-    activeConfig, 
-    configs, 
-    assembledResume, 
-    isDirty, 
-    toggleItem, 
+  const {
+    masterData,
+    activeConfig,
+    configs,
+    assembledResume,
+    isDirty,
+    toggleItem,
     toggleAll,
-    moveSection, 
-    save, 
-    cancel, 
-    setActiveConfigId, 
-    createNewConfig, 
+    moveSection,
+    save,
+    cancel,
+    setActiveConfigId,
+    createNewConfig,
     deleteConfig,
     renameConfig,
-    setTemplate,
-    loading 
+    loading
   } = useResumeEditor();
 
   const [showConfigMenu, setShowConfigMenu] = useState(false);
@@ -60,7 +59,7 @@ export default function ResumeMainPage() {
         <div className="p-2 mb-8 bg-indigo-600 rounded-xl text-white">
           <Layout size={24} />
         </div>
-        
+
         <div className="flex flex-col gap-4">
           {configs.map(config => (
             <button
@@ -70,11 +69,10 @@ export default function ResumeMainPage() {
                 setIsRenaming(false);
                 setShowConfigMenu(false);
               }}
-              className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all relative ${
-                activeConfig.id === config.id 
-                  ? "bg-indigo-100 text-indigo-600 shadow-sm ring-1 ring-indigo-200" 
-                  : "bg-white text-gray-400 hover:bg-gray-100 border border-gray-200"
-              }`}
+              className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all relative ${activeConfig.id === config.id
+                ? "bg-indigo-100 text-indigo-600 shadow-sm ring-1 ring-indigo-200"
+                : "bg-white text-gray-400 hover:bg-gray-100 border border-gray-200"
+                }`}
               title={config.name}
             >
               <span className="text-xs font-bold uppercase">{config.name.substring(0, 2)}</span>
@@ -83,7 +81,7 @@ export default function ResumeMainPage() {
               )}
             </button>
           ))}
-          
+
           <button
             onClick={() => {
               const name = prompt("Enter resume name:");
@@ -95,12 +93,7 @@ export default function ResumeMainPage() {
             <Plus size={20} />
           </button>
         </div>
-        
-        <div className="mt-auto">
-          <button className="w-10 h-10 rounded-lg flex items-center justify-center bg-white text-gray-400 hover:bg-gray-100 border border-gray-200">
-            <Settings size={20} />
-          </button>
-        </div>
+
       </div>
 
       {/* Left Pane - Editor (35%) */}
@@ -127,20 +120,31 @@ export default function ResumeMainPage() {
             </div>
           ) : (
             <>
-              <div className="flex flex-col">
-                <h1 className="text-lg font-black text-gray-900 leading-tight">
-                  {activeConfig.name.toUpperCase()}
-                </h1>
+              <div 
+                className="flex flex-col cursor-pointer group"
+                onClick={() => {
+                  setTempName(activeConfig.name);
+                  setIsRenaming(true);
+                }}
+              >
                 <div className="flex items-center gap-2">
-                  <span className={`w-1.5 h-1.5 rounded-full ${isDirty ? "bg-amber-400 animate-pulse" : "bg-emerald-400"}`} />
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                    {isDirty ? "Unsaved Changes" : "Synced"}
-                  </span>
+                  <h1 className="text-lg font-black text-gray-900 leading-tight group-hover:text-indigo-600 transition-colors">
+                    {activeConfig.name.toUpperCase()}
+                  </h1>
+                  <Edit3 size={14} className="text-gray-300 group-hover:text-indigo-400 transition-colors" />
                 </div>
+                {isDirty && (
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-amber-500">
+                      Unsaved Changes
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center gap-2">
-                <button 
+                <button
                   onClick={() => setShowConfigMenu(!showConfigMenu)}
                   className={`p-2 rounded-lg transition-colors ${showConfigMenu ? "bg-gray-100 text-gray-900" : "text-gray-400 hover:bg-gray-50"}`}
                 >
@@ -150,7 +154,7 @@ export default function ResumeMainPage() {
 
               {showConfigMenu && (
                 <div className="absolute top-14 right-6 w-48 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-10 animate-in fade-in slide-in-from-top-2 duration-200">
-                  <button 
+                  <button
                     onClick={() => {
                       setTempName(activeConfig.name);
                       setIsRenaming(true);
@@ -162,7 +166,7 @@ export default function ResumeMainPage() {
                     Rename Resume
                   </button>
                   <div className="h-px bg-gray-100 my-1" />
-                  <button 
+                  <button
                     onClick={handleDelete}
                     disabled={configs.length <= 1}
                     className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:hover:bg-transparent"
@@ -175,25 +179,23 @@ export default function ResumeMainPage() {
             </>
           )}
         </header>
-        
-        <EditorPane 
-          masterData={masterData} 
+
+        <EditorPane
+          masterData={masterData}
           activeConfig={activeConfig}
-          toggleItem={toggleItem} 
+          toggleItem={toggleItem}
           toggleAll={toggleAll}
-          moveSection={moveSection} 
+          moveSection={moveSection}
         />
       </div>
 
       {/* Right Pane - Preview (Remaining) */}
       <div className="flex-1 flex flex-col">
-        <PreviewPane 
-          resume={assembledResume} 
-          isDirty={isDirty} 
-          onSave={save} 
-          onCancel={cancel} 
-          activeTemplate={activeConfig.template}
-          onTemplateChange={(template) => setTemplate(activeConfig.id, template)}
+        <PreviewPane
+          resume={assembledResume}
+          isDirty={isDirty}
+          onSave={save}
+          onCancel={cancel}
         />
       </div>
     </div>
