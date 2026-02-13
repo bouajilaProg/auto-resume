@@ -103,7 +103,6 @@ export default function useResumeEditor() {
     return {
       name: resumeSectionData.name,
       description: resumeSectionData.description,
-      template: activeConfig.template,
       lastUpdate: resumeSectionData.lastUpdate,
       personalInfo: resumeSectionData.personalInfo,
       sections: filteredSections as ResumeSection[],
@@ -241,11 +240,6 @@ export default function useResumeEditor() {
     setIsDirty(true);
   }, []);
 
-  const setTemplate = useCallback((id: string, template: string) => {
-    setConfigs(prev => prev.map(c => c.id === id ? { ...c, template } : c));
-    setIsDirty(true);
-  }, []);
-
   return {
     masterData: resumeSectionData,
     activeConfig,
@@ -261,7 +255,6 @@ export default function useResumeEditor() {
     createNewConfig,
     deleteConfig,
     renameConfig,
-    setTemplate,
     loading: globalLoading || !resumeSectionData || configs.length === 0,
   };
 }

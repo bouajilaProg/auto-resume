@@ -9,23 +9,13 @@ interface PreviewPaneProps {
   isDirty: boolean;
   onSave: () => void;
   onCancel: () => void;
-  activeTemplate: string;
-  onTemplateChange: (template: string) => void;
 }
-
-const TEMPLATES = [
-  { id: "basic-resume", name: "Modern Minimalist" },
-  { id: "standard", name: "Traditional Standard" },
-  { id: "compact", name: "Compact Professional" },
-];
 
 export default function PreviewPane({
   resume,
   isDirty,
   onSave,
   onCancel,
-  activeTemplate,
-  onTemplateChange
 }: PreviewPaneProps) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -103,21 +93,6 @@ export default function PreviewPane({
             <span className="font-bold">Live Preview</span>
             {loading && <Loader2 size={16} className="animate-spin text-indigo-500 ml-2" />}
           </div>
-
-          <div className="h-8 w-px bg-gray-200" />
-
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Template</span>
-            <select
-              value={activeTemplate}
-              onChange={(e) => onTemplateChange(e.target.value)}
-              className="bg-gray-50 border border-gray-200 text-xs font-bold rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-200 cursor-pointer"
-            >
-              {TEMPLATES.map(t => (
-                <option key={t.id} value={t.id}>{t.name}</option>
-              ))}
-            </select>
-          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -159,9 +134,6 @@ export default function PreviewPane({
       <div className="flex-1 p-8 overflow-hidden flex flex-col items-center justify-start">
         {pdfUrl ? (
           <div className="w-full h-full bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-300 relative group">
-            <div className="absolute top-2 right-2 z-20 px-2 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold rounded border border-amber-200 opacity-0 group-hover:opacity-100 transition-opacity">
-              TESTING MODE: PDF MOCK
-            </div>
             <iframe
               src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
               className="w-full h-full border-none"

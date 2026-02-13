@@ -47,7 +47,6 @@ export type ResumeSection =
 export interface Resume {
   name: string;
   description: string;
-  template: string;
   lastUpdate: string;
   personalInfo?: PersonalInfo;
 
