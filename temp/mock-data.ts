@@ -1,4 +1,4 @@
-import { ContactType, DegreeType, Resume, skillType, SectionType } from "@/types/resumeTypes";
+import { ContactType, Resume, SectionType } from "@/types/resumeTypes";
 
 // --- Mock Data (Personalized) ---
 export const myResume: Resume = {
@@ -53,6 +53,7 @@ export const myResume: Resume = {
             "Built and maintained full-stack applications using React, TypeScript, and NestJS.",
             "Focused on reusable components, clean architecture, and small-business solutions."
           ],
+          summary: "Built and maintained full-stack applications using React, TypeScript, and NestJS.\nFocused on reusable components, clean architecture, and small-business solutions.",
           keywords: "React TypeScript NestJS PostgreSQL Docker",
         },
       ],
@@ -66,6 +67,7 @@ export const myResume: Resume = {
           notes: [
             "A web application for small businesses to manage invoices, products, and stock with a simple UI."
           ],
+          description: "A web application for small businesses to manage invoices, products, and stock with a simple UI.",
           tools: "React, NestJS, PostgreSQL, Docker",
           projectLink: "",
           repoLink: "",
@@ -76,6 +78,7 @@ export const myResume: Resume = {
           notes: [
             "A plug-and-play project template to avoid repetitive setup and speed up new client projects."
           ],
+          description: "A plug-and-play project template to avoid repetitive setup and speed up new client projects.",
           tools: "Next.js, NestJS, pnpm",
           projectLink: "",
           repoLink: "",

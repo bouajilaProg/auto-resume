@@ -8,5 +8,6 @@ export * from "./certif";
 export * from "./extraCurr";
 export * from "./hobbies";
 export * from "./languages";
+export * from "./config";
 export * from "./result";
 export * from "./defaults";

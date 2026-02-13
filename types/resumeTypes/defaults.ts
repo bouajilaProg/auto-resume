@@ -20,9 +20,19 @@ export const SECTION_DEFAULTS: Record<SectionTypeValue, Record<string, unknown>>
 };
 
 export const DEFAULT_RESUME: Resume = {
-  name: "",
-  description: "",
+  name: "My Resume",
+  description: "New Resume",
   template: "basic-resume",
   lastUpdate: new Date().toLocaleDateString(),
-  sections: [],
+  personalInfo: { name: "", location: "", description: "", contact: [] },
+  sections: [
+    { type: "education", body: [] },
+    { type: "work_experience", body: [] },
+    { type: "project", body: [] },
+    { type: "skills", body: { languages: [], technologies: [], softSkills: [] } },
+    { type: "certification", body: [] },
+    { type: "extracurricular", body: [] },
+    { type: "languages", body: [] },
+    { type: "hobbies", body: [] },
+  ],
 };
