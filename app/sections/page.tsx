@@ -20,7 +20,7 @@ export default function Sections() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {sections.map((section) => {
             const Icon = section.icon;
             return (
