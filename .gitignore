@@ -44,3 +44,6 @@ next-env.d.ts
 # local notes and files
 *notes*.md
 
+# agents
+plan.md
+prompt.md
