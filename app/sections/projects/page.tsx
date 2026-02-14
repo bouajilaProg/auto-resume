@@ -62,7 +62,7 @@ export default function ProjectsPage() {
                   handleSave();
                 }
               }}
-              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
+              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <Save size={14} />
               <span>Save Changes</span>
@@ -73,8 +73,8 @@ export default function ProjectsPage() {
         {/* Content Area */}
         <div className="space-y-6">
           {projects.length === 0 ? (
-            <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-teal-300 transition-colors group">
-              <div className="w-16 h-16 bg-teal-50 text-teal-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+            <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-indigo-300 transition-colors group">
+              <div className="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <FolderKanban size={32} />
               </div>
 
@@ -88,7 +88,7 @@ export default function ProjectsPage() {
 
               <button
                 onClick={addProject}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition shadow-sm font-medium"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-sm font-medium"
               >
                 <Plus size={14} />
                 Add Project
@@ -112,9 +112,9 @@ export default function ProjectsPage() {
               {/* Add New Button (Bottom) */}
               <button
                 onClick={addProject}
-                className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-teal-400 hover:text-teal-600 hover:bg-teal-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
+                className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
               >
-                <div className="p-2 bg-gray-100 rounded-full group-hover:bg-teal-100 transition-colors">
+                <div className="p-2 bg-gray-100 rounded-full group-hover:bg-indigo-100 transition-colors">
                   <Plus size={12} />
                 </div>
                 Add Another Project

@@ -10,6 +10,7 @@ import {
   Building2,
   Calendar,
   Brain,
+  BookOpen,
 } from "lucide-react";
 
 interface EducationFormProps {
@@ -41,9 +42,9 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
             className="flex items-center gap-4 flex-1 cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
-            <div className="p-3 rounded-lg bg-indigo-100 text-indigo-600 shadow-sm">
-              <GraduationCap size={20} />
-            </div>
+          <div className="p-3 rounded-lg bg-indigo-600 text-white shadow-sm">
+            <GraduationCap size={20} />
+          </div>
             <div>
               <h3 className="text-lg font-bold text-gray-800">
                 {edu.degreeName || "(No Degree Specified)"}
@@ -95,10 +96,10 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
         <div className="flex items-center gap-2">
           <button
             onClick={() => removeEducation(edu.id)}
-            className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium flex items-center gap-1"
+            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+            title="Delete education"
           >
-            <Trash2 size={12} />
-            <span className="hidden sm:inline">Delete</span>
+            <Trash2 size={16} />
           </button>
           <button
             onClick={() => setIsOpen(false)}
@@ -143,15 +144,20 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
           <label htmlFor={`degreeName-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
             Degree / Major Name
           </label>
-          <input
-            id={`degreeName-${edu.id}`}
-            type="text"
-            value={edu.degreeName}
-            onChange={handleFieldChange('degreeName')}
-            className={`w-full px-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 ${errors?.degreeName ? "border-red-500 bg-red-50/10" : "border-gray-200"
-              }`}
-            placeholder="e.g. Computer Science"
-          />
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <BookOpen size={16} />
+            </div>
+            <input
+              id={`degreeName-${edu.id}`}
+              type="text"
+              value={edu.degreeName}
+              onChange={handleFieldChange('degreeName')}
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 ${errors?.degreeName ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
+              placeholder="e.g. Computer Science"
+            />
+          </div>
           {errors?.degreeName && <p className="text-xs text-red-500 mt-1">{errors.degreeName}</p>}
         </div>
 

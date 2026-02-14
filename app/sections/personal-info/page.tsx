@@ -11,7 +11,6 @@ import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 export default function PersonalInfoPage() {
   const {
     personalInfo,
-    hobbies,
     updateName,
     updateLocation,
     updateDescription,
@@ -62,7 +61,7 @@ export default function PersonalInfoPage() {
                   handleSave();
                 }
               }}
-              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
+              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <Save size={14} />
               <span>Save Changes</span>
@@ -72,52 +71,77 @@ export default function PersonalInfoPage() {
 
         {/* Content Area */}
         <div className="space-y-6">
-          {/* Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <User className="inline mr-2 text-blue-600" size={16} />
-              Full Name
-            </label>
-            <input
-              type="text"
-              value={personalInfo.name}
-              onChange={(e) => updateName(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition"
-              placeholder="Your full name"
-            />
-          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-indigo-50 overflow-hidden">
+            {/* Header */}
+            <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-lg bg-indigo-600 text-white shadow-sm">
+                  <User size={16} />
+                </div>
+                <h3 className="font-semibold text-gray-800">Basic Details</h3>
+              </div>
+            </div>
 
-          {/* Location */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <MapPin className="inline mr-2 text-blue-600" size={16} />
-              Location
-            </label>
-            <input
-              type="text"
-              value={personalInfo.location}
-              onChange={(e) => updateLocation(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition"
-              placeholder="City, Country"
-            />
-          </div>
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Name */}
+                <div className="col-span-1 md:col-span-2">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Full Name
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                      <User size={16} />
+                    </div>
+                    <input
+                      type="text"
+                      value={personalInfo.name}
+                      onChange={(e) => updateName(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700"
+                      placeholder="Your full name"
+                    />
+                  </div>
+                </div>
 
-          {/* Description */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description <span className="text-gray-400 text-xs">(Optional)</span>
-            </label>
-            <textarea
-              value={personalInfo.description}
-              onChange={(e) => updateDescription(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition resize-none"
-              placeholder="A brief description about yourself..."
-              rows={4}
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              {personalInfo.description ? personalInfo.description.length : 0}{" "}
-              characters
-            </p>
+                {/* Location */}
+                <div className="col-span-1 md:col-span-2">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Location
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                      <MapPin size={16} />
+                    </div>
+                    <input
+                      type="text"
+                      value={personalInfo.location}
+                      onChange={(e) => updateLocation(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700"
+                      placeholder="City, Country"
+                    />
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div className="col-span-1 md:col-span-2">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Description <span className="normal-case font-normal text-gray-400 ml-1">(Optional)</span>
+                  </label>
+                  <textarea
+                    value={personalInfo.description}
+                    onChange={(e) => updateDescription(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none"
+                    placeholder="A brief description about yourself..."
+                    rows={4}
+                  />
+                  <div className="flex justify-end mt-1">
+                    <p className="text-[10px] font-medium text-gray-400 uppercase tracking-tight">
+                      {personalInfo.description ? personalInfo.description.length : 0} characters
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Contact Methods */}
