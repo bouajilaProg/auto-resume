@@ -7,13 +7,13 @@ import {
   Plus,
   CheckCircle2,
   Circle,
-  FolderKanban,
-  LucideIcon
+  FolderKanban
 } from "lucide-react";
 
 import { useMemo } from "react";
 import { SECTION_ICONS, SECTION_LABELS, SECTION_PATHS, ALL_SECTIONS } from "@/constants/sections";
 import { Resume, ResumeConfig, SectionType, SectionTypeValue, Skills } from "@/types/resumeTypes";
+import { getSectionItemDisplay, SectionItem } from "@/utils/sectionDisplay";
 
 interface EditorPaneProps {
   masterData: Resume;
@@ -23,18 +23,16 @@ interface EditorPaneProps {
   moveSection: (index: number, direction: "up" | "down") => void;
 }
 
-interface IdentifiableItem {
+interface Identifiable {
   id: number;
-  [key: string]: any;
 }
 
 export default function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSection }: EditorPaneProps) {
   const sectionOrder = useMemo(() => {
     const order = [...activeConfig.sectionOrder];
-    // Ensure all sections from ALL_SECTIONS (except personalInfo) are present
     ALL_SECTIONS.forEach(id => {
-      if (id !== "personalInfo" && !order.includes(id as any)) {
-        order.push(id as any);
+      if (id !== "personalInfo" && !order.includes(id)) {
+        order.push(id);
       }
     });
     return order;
@@ -85,7 +83,7 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
         const allIds = sectionType === SectionType.Skills
           ? []
           : Array.isArray(section.body)
-            ? (section.body as IdentifiableItem[]).map((item) => item.id)
+            ? (section.body as Identifiable[]).map((item) => item.id)
             : [];
 
         const isAllSelected = sectionType !== SectionType.Skills && allIds.length > 0 && allIds.every(id => {
@@ -207,9 +205,11 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
                   </Link>
                 ) : (
                   <div className="space-y-2">
-                    {(section.body as IdentifiableItem[]).map((item) => {
+                    {(section.body as Identifiable[]).map((item) => {
                       const key = sectionType as keyof Omit<ResumeConfig['selectedItems'], 'skills'>;
                       const isSelected = (activeConfig.selectedItems[key] || []).includes(item.id);
+                      const display = getSectionItemDisplay(sectionType, item as SectionItem);
+
                       return (
                         <div
                           key={item.id}
@@ -224,10 +224,10 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
                           </div>
                           <div className="flex-1">
                             <p className={`font-bold text-sm ${isSelected ? "text-gray-800" : "text-gray-500"}`}>
-                              {item.jobTitle || item.degreeName || item.title || item.activityName || item.name}
+                              {display.title}
                             </p>
                             <p className="text-xs text-gray-500 font-medium">
-                              {item.company || item.institution || item.issuingOrganization || ""}
+                              {display.subtitle}
                             </p>
                           </div>
                         </div>
