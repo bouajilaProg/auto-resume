@@ -1,0 +1,67 @@
+{
+  "name": "Test User",
+  "description": "Senior Software Engineer",
+  "lastUpdate": "2026-02-14",
+  "personalInfo": {
+    "name": "Test User",
+    "location": "San Francisco, CA",
+    "description": "Experienced developer focused on scalable systems.",
+    "contact": [
+      { "id": 1, "type": "Email", "value": "test@example.com" },
+      { "id": 2, "type": "GitHub", "value": "github.com/testuser" },
+      { "id": 3, "type": "LinkedIn", "value": "linkedin.com/in/testuser" }
+    ]
+  },
+  "sections": [
+    {
+      "type": "education",
+      "body": [
+        {
+          "id": 101,
+          "degreeType": "BS",
+          "degreeName": "Computer Science",
+          "institution": "Stanford University",
+          "startDate": "2015",
+          "endDate": "2019",
+          "notes": ["GPA: 3.9/4.0"],
+          "keySkills": "Algorithms, Data Structures"
+        }
+      ]
+    },
+    {
+      "type": "work_experience",
+      "body": [
+        {
+          "id": 201,
+          "jobTitle": "Staff Engineer",
+          "company": "Tech Corp",
+          "location": "Remote",
+          "startDate": "2019",
+          "endDate": "Present",
+          "summary": "Led development of core infrastructure.",
+          "highlights": [
+            "Improved system performance by 40%",
+            "Managed a team of 5 engineers"
+          ],
+          "keywords": "Distributed Systems, Go, Kubernetes"
+        }
+      ]
+    },
+    {
+      "type": "skills",
+      "body": {
+        "languages": [
+          { "id": 301, "type": "LANG", "name": "TypeScript" },
+          { "id": 302, "type": "LANG", "name": "Rust" }
+        ],
+        "technologies": [
+          { "id": 303, "type": "TECH", "name": "Next.js" },
+          { "id": 304, "type": "TECH", "name": "PostgreSQL" }
+        ],
+        "softSkills": [
+          { "id": 305, "type": "SOFT", "name": "Technical Writing" }
+        ]
+      }
+    }
+  ]
+}

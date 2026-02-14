@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { Resume, SectionTypeValue, SectionType, ResumeConfig, DEFAULT_CONFIG, Skills, ResumeSection } from "@/types/resumeTypes";
+import { ResumeSection, SectionTypeValue, SectionType, ResumeConfig, DEFAULT_CONFIG, Skills } from "@/types/resumeTypes";
 import useResumeSectionData from "./useResumeSectionData";
 
 const CONFIGS_KEY = "resumeConfigsKey";
@@ -36,10 +36,36 @@ function initializeState() {
           skills: {
             ...DEFAULT_CONFIG.selectedItems.skills,
             ...(config.selectedItems?.skills || {})
-          }
+          },
+          personalInfo: config.selectedItems?.personalInfo || []
         };
 
-        return { ...config, sectionOrder: updatedOrder, selectedItems: updatedSelectedItems };
+        const updatedItemOrder = {
+          ...(DEFAULT_CONFIG.itemOrder || {
+            personalInfo: [],
+            education: [],
+            work_experience: [],
+            project: [],
+            certification: [],
+            extracurricular: [],
+            hobbies: [],
+            languages: [],
+            skills: { languages: [], technologies: [], softSkills: [] }
+          }),
+          ...(config.itemOrder || {}),
+          skills: {
+            ...(DEFAULT_CONFIG.itemOrder?.skills || { languages: [], technologies: [], softSkills: [] }),
+            ...(config.itemOrder?.skills || {})
+          },
+          personalInfo: config.itemOrder?.personalInfo || []
+        };
+
+        return {
+          ...config,
+          sectionOrder: updatedOrder,
+          selectedItems: updatedSelectedItems,
+          itemOrder: updatedItemOrder
+        };
       });
     } catch (e) {
       loadedConfigs = [DEFAULT_CONFIG];
@@ -99,13 +125,25 @@ export default function useResumeEditor() {
       if (type === SectionType.Skills && !Array.isArray(section.body)) {
         const body = section.body as Skills;
         const selected = activeConfig.selectedItems.skills || { languages: [], technologies: [], softSkills: [] };
+        const order = activeConfig.itemOrder?.skills || { languages: [], technologies: [], softSkills: [] };
+
+        const sortItems = <T extends { id: number }>(items: T[], itemOrder: number[]) => {
+          return [...items].sort((a, b) => {
+            const indexA = itemOrder.indexOf(a.id);
+            const indexB = itemOrder.indexOf(b.id);
+            if (indexA === -1 && indexB === -1) return 0;
+            if (indexA === -1) return 1;
+            if (indexB === -1) return -1;
+            return indexA - indexB;
+          });
+        };
 
         return {
           ...section,
           body: {
-            languages: body.languages?.filter(i => selected.languages?.includes(i.id)) || [],
-            technologies: body.technologies?.filter(i => selected.technologies?.includes(i.id)) || [],
-            softSkills: body.softSkills?.filter(i => selected.softSkills?.includes(i.id)) || [],
+            languages: sortItems(body.languages?.filter(i => selected.languages?.includes(i.id)) || [], order.languages),
+            technologies: sortItems(body.technologies?.filter(i => selected.technologies?.includes(i.id)) || [], order.technologies),
+            softSkills: sortItems(body.softSkills?.filter(i => selected.softSkills?.includes(i.id)) || [], order.softSkills),
           }
         };
       }
@@ -114,34 +152,65 @@ export default function useResumeEditor() {
       if (Array.isArray(section.body)) {
         const key = type as keyof Omit<ResumeConfig['selectedItems'], 'skills'>;
         const selectedIds = (activeConfig.selectedItems[key] as number[]) || [];
+        const itemOrder = (activeConfig.itemOrder?.[key] as number[]) || [];
 
         // early return if no items selected
         if (selectedIds.length === 0) {
           return { ...section, body: [] };
         }
 
-        // use Set for O(1) lookup instead of O(n) includes - major performance improvement
         const selectedSet = new Set(selectedIds);
+        const filtered = section.body.filter((item: { id: number }) => selectedSet.has(item.id));
+
+        // sort based on itemOrder
+        const sorted = [...filtered].sort((a, b) => {
+          const indexA = itemOrder.indexOf(a.id);
+          const indexB = itemOrder.indexOf(b.id);
+          if (indexA === -1 && indexB === -1) return 0;
+          if (indexA === -1) return 1;
+          if (indexB === -1) return -1;
+          return indexA - indexB;
+        });
+
         return {
           ...section,
-          body: section.body.filter((item: { id: number }) => selectedSet.has(item.id)),
+          body: sorted,
         };
       }
 
       return section;
     }).filter((s): s is Exclude<typeof s, null> => s !== null);
 
+    const sortItems = <T extends { id: number }>(items: T[], itemOrder: number[]) => {
+      return [...items].sort((a, b) => {
+        const indexA = itemOrder.indexOf(a.id);
+        const indexB = itemOrder.indexOf(b.id);
+        if (indexA === -1 && indexB === -1) return 0;
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+      });
+    };
+
+    const assembledPersonalInfo = resumeSectionData.personalInfo ? {
+      ...resumeSectionData.personalInfo,
+      contact: sortItems(
+        resumeSectionData.personalInfo.contact.filter(c => activeConfig.selectedItems.personalInfo.includes(c.id)),
+        activeConfig.itemOrder?.personalInfo || []
+      )
+    } : undefined;
+
     return {
       name: resumeSectionData.name,
       description: resumeSectionData.description,
       lastUpdate: resumeSectionData.lastUpdate,
-      personalInfo: resumeSectionData.personalInfo,
+      personalInfo: assembledPersonalInfo,
       sections: filteredSections as ResumeSection[],
     };
   }, [resumeSectionData, activeConfig]);
 
   // optimized toggleItem - only updates the specific config that changed
-  const toggleItem = useCallback((sectionType: SectionTypeValue, itemId: number, subType?: string) => {
+  const toggleItem = useCallback((sectionType: SectionTypeValue | "personalInfo", itemId: number, subType?: string) => {
     setConfigs(prev => {
       const configIndex = prev.findIndex(c => c.id === activeConfigId);
       if (configIndex === -1) return prev;
@@ -152,31 +221,70 @@ export default function useResumeEditor() {
         skills: { ...config.selectedItems.skills }
       };
 
+      const defaultItemOrder = {
+        personalInfo: [],
+        education: [],
+        work_experience: [],
+        project: [],
+        certification: [],
+        extracurricular: [],
+        hobbies: [],
+        languages: [],
+        skills: { languages: [], technologies: [], softSkills: [] }
+      };
+
+      const newItemOrder = {
+        ...defaultItemOrder,
+        ...(config.itemOrder || {}),
+        skills: {
+          ...defaultItemOrder.skills,
+          ...(config.itemOrder?.skills || {})
+        }
+      };
+      
+      // Ensure personalInfo is initialized
+      if (!newItemOrder.personalInfo) newItemOrder.personalInfo = [];
+
       if (sectionType === SectionType.Skills && subType) {
         const key = subType as keyof ResumeConfig['selectedItems']['skills'];
-        const current = newSelectedItems.skills[key] || [];
-        newSelectedItems.skills[key] = current.includes(itemId)
-          ? current.filter(id => id !== itemId)
-          : [...current, itemId];
+        const currentSelected = newSelectedItems.skills[key] || [];
+        const isSelected = currentSelected.includes(itemId);
+
+        newSelectedItems.skills[key] = isSelected
+          ? currentSelected.filter(id => id !== itemId)
+          : [...currentSelected, itemId];
+
+        const currentOrder = newItemOrder.skills[key] || [];
+        newItemOrder.skills[key] = isSelected
+          ? currentOrder.filter(id => id !== itemId)
+          : [...currentOrder, itemId];
       } else {
         const key = sectionType as keyof Omit<ResumeConfig['selectedItems'], 'skills'>;
-        const current = (newSelectedItems[key] as number[]) || [];
-        const updated = current.includes(itemId)
-          ? current.filter((id: number) => id !== itemId)
-          : [...current, itemId];
-        newSelectedItems[key] = updated as typeof newSelectedItems[typeof key];
+        const currentSelected = (newSelectedItems[key] as number[]) || [];
+        const isSelected = currentSelected.includes(itemId);
+
+        const updatedSelected = isSelected
+          ? currentSelected.filter((id: number) => id !== itemId)
+          : [...currentSelected, itemId];
+        newSelectedItems[key] = updatedSelected as typeof newSelectedItems[typeof key];
+
+        const currentOrder = (newItemOrder[key] as number[]) || [];
+        const updatedOrder = isSelected
+          ? currentOrder.filter((id: number) => id !== itemId)
+          : [...currentOrder, itemId];
+        newItemOrder[key] = updatedOrder as typeof newItemOrder[typeof key];
       }
 
       // only create new array with changed config
       const newConfigs = [...prev];
-      newConfigs[configIndex] = { ...config, selectedItems: newSelectedItems };
+      newConfigs[configIndex] = { ...config, selectedItems: newSelectedItems, itemOrder: newItemOrder };
 
       setIsDirty(true);
       return newConfigs;
     });
   }, [activeConfigId]);
 
-  const toggleAll = useCallback((sectionType: SectionTypeValue, itemIds: number[], subType?: string, forceState?: boolean) => {
+  const toggleAll = useCallback((sectionType: SectionTypeValue | "personalInfo", itemIds: number[], subType?: string, forceState?: boolean) => {
     setConfigs(prev => {
       const configIndex = prev.findIndex(c => c.id === activeConfigId);
       if (configIndex === -1) return prev;
@@ -187,30 +295,65 @@ export default function useResumeEditor() {
         skills: { ...config.selectedItems.skills }
       };
 
+      const defaultItemOrder = {
+        personalInfo: [],
+        education: [],
+        work_experience: [],
+        project: [],
+        certification: [],
+        extracurricular: [],
+        hobbies: [],
+        languages: [],
+        skills: { languages: [], technologies: [], softSkills: [] }
+      };
+
+      const newItemOrder = {
+        ...defaultItemOrder,
+        ...(config.itemOrder || {}),
+        skills: {
+          ...defaultItemOrder.skills,
+          ...(config.itemOrder?.skills || {})
+        }
+      };
+
+      // Ensure personalInfo is initialized
+      if (!newItemOrder.personalInfo) newItemOrder.personalInfo = [];
+
       if (sectionType === SectionType.Skills && subType) {
         const key = subType as keyof ResumeConfig['selectedItems']['skills'];
-        const current = newSelectedItems.skills[key] || [];
-        const allSelected = itemIds.every(id => current.includes(id));
+        const currentSelected = newSelectedItems.skills[key] || [];
+        const allSelected = itemIds.every(id => currentSelected.includes(id));
         const targetState = forceState !== undefined ? forceState : !allSelected;
 
         newSelectedItems.skills[key] = targetState
-          ? Array.from(new Set([...current, ...itemIds]))
-          : current.filter(id => !itemIds.includes(id));
+          ? Array.from(new Set([...currentSelected, ...itemIds]))
+          : currentSelected.filter(id => !itemIds.includes(id));
+
+        const currentOrder = newItemOrder.skills[key] || [];
+        newItemOrder.skills[key] = targetState
+          ? Array.from(new Set([...currentOrder, ...itemIds]))
+          : currentOrder.filter(id => !itemIds.includes(id));
       } else {
         const key = sectionType as keyof Omit<ResumeConfig['selectedItems'], 'skills'>;
-        const current = (newSelectedItems[key] as number[]) || [];
-        const allSelected = itemIds.every(id => current.includes(id));
+        const currentSelected = (newSelectedItems[key] as number[]) || [];
+        const allSelected = itemIds.every(id => currentSelected.includes(id));
         const targetState = forceState !== undefined ? forceState : !allSelected;
 
-        const updated = targetState
-          ? Array.from(new Set([...current, ...itemIds]))
-          : current.filter((id: number) => !itemIds.includes(id));
-        newSelectedItems[key] = updated as typeof newSelectedItems[typeof key];
+        const updatedSelected = targetState
+          ? Array.from(new Set([...currentSelected, ...itemIds]))
+          : currentSelected.filter((id: number) => !itemIds.includes(id));
+        newSelectedItems[key] = updatedSelected as typeof newSelectedItems[typeof key];
+
+        const currentOrder = (newItemOrder[key] as number[]) || [];
+        const updatedOrder = targetState
+          ? Array.from(new Set([...currentOrder, ...itemIds]))
+          : currentOrder.filter((id: number) => !itemIds.includes(id));
+        newItemOrder[key] = updatedOrder as typeof newItemOrder[typeof key];
       }
 
       // only create new array with changed config
       const newConfigs = [...prev];
-      newConfigs[configIndex] = { ...config, selectedItems: newSelectedItems };
+      newConfigs[configIndex] = { ...config, selectedItems: newSelectedItems, itemOrder: newItemOrder };
 
       setIsDirty(true);
       return newConfigs;
@@ -234,6 +377,48 @@ export default function useResumeEditor() {
       const newConfigs = [...prev];
       newConfigs[configIndex] = { ...config, sectionOrder: newOrder };
 
+      setIsDirty(true);
+      return newConfigs;
+    });
+  }, [activeConfigId]);
+
+  const moveItem = useCallback((sectionType: SectionTypeValue | "personalInfo", itemId: number, direction: "up" | "down" | "left" | "right", subType?: string) => {
+    setConfigs(prev => {
+      const configIndex = prev.findIndex(c => c.id === activeConfigId);
+      if (configIndex === -1) return prev;
+
+      const config = prev[configIndex];
+      const newItemOrder = JSON.parse(JSON.stringify(config.itemOrder || DEFAULT_CONFIG.itemOrder));
+
+      // Ensure personalInfo is initialized
+      if (!newItemOrder.personalInfo) newItemOrder.personalInfo = [];
+
+      if (sectionType === SectionType.Skills && subType) {
+        const key = subType as keyof Required<ResumeConfig>['itemOrder']['skills'];
+        const currentOrder = [...(newItemOrder.skills[key] || [])];
+        const index = currentOrder.indexOf(itemId);
+        if (index === -1) return prev;
+
+        const targetIndex = (direction === "up" || direction === "left") ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= currentOrder.length) return prev;
+
+        [currentOrder[index], currentOrder[targetIndex]] = [currentOrder[targetIndex], currentOrder[index]];
+        newItemOrder.skills[key] = currentOrder;
+      } else {
+        const key = sectionType as keyof Omit<Required<ResumeConfig>['itemOrder'], 'skills'>;
+        const currentOrder = [...((newItemOrder[key] as number[]) || [])];
+        const index = currentOrder.indexOf(itemId);
+        if (index === -1) return prev;
+
+        const targetIndex = (direction === "up" || direction === "left") ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= currentOrder.length) return prev;
+
+        [currentOrder[index], currentOrder[targetIndex]] = [currentOrder[targetIndex], currentOrder[index]];
+        newItemOrder[key] = currentOrder as number[];
+      }
+
+      const newConfigs = [...prev];
+      newConfigs[configIndex] = { ...config, itemOrder: newItemOrder };
       setIsDirty(true);
       return newConfigs;
     });
@@ -304,6 +489,7 @@ export default function useResumeEditor() {
     toggleItem,
     toggleAll,
     moveSection,
+    moveItem,
     save,
     cancel,
     setActiveConfigId,

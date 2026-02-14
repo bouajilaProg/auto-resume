@@ -17,6 +17,7 @@ export default function ResumeMainPage() {
     toggleItem,
     toggleAll,
     moveSection,
+    moveItem,
     save,
     cancel,
     setActiveConfigId,
@@ -182,6 +183,7 @@ export default function ResumeMainPage() {
           toggleItem={toggleItem}
           toggleAll={toggleAll}
           moveSection={moveSection}
+          moveItem={moveItem}
         />
       </div>
 
