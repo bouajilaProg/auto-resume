@@ -1,5 +1,5 @@
 export const RESUME_TIPS = [
-  "Keep your resume to one page if you have less than 10 years of experience.",
+  "Keep your resume to one page if you have less than 3 years of experience.",
   "Use action verbs like 'Led', 'Developed', and 'Managed' to describe your achievements.",
   "Quantify your accomplishments with numbers and percentages whenever possible.",
   "Tailor your resume for each job application by using keywords from the job description.",

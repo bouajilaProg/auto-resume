@@ -3,7 +3,7 @@ import { Resume, SectionTypeValue, PersonalInfo, ResumeSection, DEFAULT_RESUME }
 import { useEffect, useState } from "react";
 
 const RESUME_DATA_KEY = 'resumeDataKey';
-const MIN_LOADING_TIME = 300;
+const MIN_LOADING_TIME = 800;
 
 export default function useResumeSectionData() {
   const [resumeSectionData, setResumeSectionData] = useState<Resume | null>(null);
