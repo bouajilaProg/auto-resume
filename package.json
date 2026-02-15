@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@yamlresume/core": "^0.8.1",
-    "bouajila-resume-generator": "^1.2.7",
+    "bouajila-resume-generator": "^1.2.8",
     "cn": "^0.1.1",
     "lucide-react": "^0.562.0",
     "next": "16.0.10",

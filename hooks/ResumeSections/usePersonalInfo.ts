@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useMemo } from "react";
-import { PersonalInfo, Contact, PersonalInfoSchema, Hobby, SectionType } from "@/types/resumeTypes";
+import { PersonalInfo, Contact, PersonalInfoSchema } from "@/types/resumeTypes";
 import useResumeSectionData from "@hooks/useResumeSectionData";
 import { useRouter } from "next/navigation";
 

@@ -3,7 +3,8 @@
 import useResumeEditor from "@/hooks/useResumeEditor";
 import EditorPane from "./components/EditorPane";
 import PreviewPane from "./components/PreviewPane";
-import { Loader2, Settings, Plus, Layout, MoreVertical, Trash2, Edit3, X } from "lucide-react";
+import Loading from "@/app/components/Loading";
+import { Plus, Layout, MoreVertical, Trash2, Edit3, X } from "lucide-react";
 import { useState } from "react";
 
 export default function ResumeMainPage() {
@@ -16,6 +17,7 @@ export default function ResumeMainPage() {
     toggleItem,
     toggleAll,
     moveSection,
+    moveItem,
     save,
     cancel,
     setActiveConfigId,
@@ -30,12 +32,7 @@ export default function ResumeMainPage() {
   const [tempName, setTempName] = useState("");
 
   if (loading || !masterData || !activeConfig) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-        <Loader2 className="w-12 h-12 text-indigo-600 animate-spin mb-4" />
-        <p className="text-gray-500 font-medium animate-pulse">Loading your resume editor...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   const handleRename = () => {
@@ -186,6 +183,7 @@ export default function ResumeMainPage() {
           toggleItem={toggleItem}
           toggleAll={toggleAll}
           moveSection={moveSection}
+          moveItem={moveItem}
         />
       </div>
 

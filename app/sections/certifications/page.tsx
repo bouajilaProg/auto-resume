@@ -62,7 +62,7 @@ export default function CertificationsPage() {
                   handleSave();
                 }
               }}
-              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
+              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <Save size={14} />
               <span>Save Changes</span>
@@ -73,8 +73,8 @@ export default function CertificationsPage() {
         {/* Content Area */}
         <div className="space-y-6">
           {certifications.length === 0 ? (
-            <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-blue-300 transition-colors group">
-              <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+            <div className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-indigo-300 transition-colors group">
+              <div className="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <Award size={32} />
               </div>
               <h3 className="text-lg font-semibold text-gray-900">No certifications added yet</h3>
@@ -83,7 +83,7 @@ export default function CertificationsPage() {
               </p>
               <button
                 onClick={addCertification}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm font-medium"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-sm font-medium"
               >
                 <Plus size={14} />
                 Add Certification
@@ -106,9 +106,9 @@ export default function CertificationsPage() {
               {/* Add New Button (Bottom) */}
               <button
                 onClick={addCertification}
-                className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
+                className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
               >
-                <div className="p-2 bg-gray-100 rounded-full group-hover:bg-blue-100 transition-colors">
+                <div className="p-2 bg-gray-100 rounded-full group-hover:bg-indigo-100 transition-colors">
                   <Plus size={12} />
                 </div>
                 Add Another Certification

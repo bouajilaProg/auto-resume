@@ -7,8 +7,6 @@ export async function POST(req: NextRequest) {
     const assembledResume: Resume = await req.json();
 
 
-
-
     // Compile using bouajila-resume-generator
     const result = await compile(assembledResume as unknown as GeneratorResume);
 
@@ -23,8 +21,12 @@ export async function POST(req: NextRequest) {
         "Content-Disposition": `inline; filename="resume.pdf"`,
       },
     });
-  } catch (error: any) {
-    console.error("Compilation error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Compilation error:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
