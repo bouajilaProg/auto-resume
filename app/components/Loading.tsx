@@ -8,6 +8,7 @@ export default function Loading() {
   const [tip, setTip] = useState<string | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTip(RESUME_TIPS[Math.floor(Math.random() * RESUME_TIPS.length)]);
   }, []);
 
