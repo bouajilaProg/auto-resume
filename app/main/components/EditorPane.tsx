@@ -6,7 +6,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Plus,
+  Pencil,
   CheckCircle2,
   Circle,
   FolderKanban
@@ -85,7 +85,7 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
             href="/sections/personal-info"
             className="p-1.5 hover:bg-gray-200 rounded-md transition-colors text-gray-400 hover:text-indigo-600"
           >
-            <Plus size={18} />
+            <Pencil size={18} />
           </Link>
         </div>
         <div className="p-5 space-y-4">
@@ -200,7 +200,7 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
                   href={`/sections/${path}`}
                   className="p-1.5 hover:bg-gray-200 rounded-md transition-colors text-gray-400 hover:text-indigo-600 mr-2"
                 >
-                  <Plus size={18} />
+                  <Pencil size={18} />
                 </Link>
                 <div className="h-6 w-px bg-gray-200 mx-1" />
                 <button
