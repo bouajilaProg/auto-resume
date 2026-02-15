@@ -1,9 +1,15 @@
-import { useState } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import { RESUME_TIPS } from "@/constants/tips";
 import { Lightbulb } from "lucide-react";
 
 export default function Loading() {
-  const [tip] = useState(() => RESUME_TIPS[Math.floor(Math.random() * RESUME_TIPS.length)]);
+  const [tip, setTip] = useState<string | null>(null);
+
+  useEffect(() => {
+    setTip(RESUME_TIPS[Math.floor(Math.random() * RESUME_TIPS.length)]);
+  }, []);
 
   return (
     <div className="min-h-screen w-full flex flex-col bg-gray-50/50 items-center justify-center p-6 text-center">
