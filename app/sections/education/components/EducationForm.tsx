@@ -28,7 +28,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     let value: string | string[] = e.target.value;
-    if (field === "notes") {
+    if (field === "highlights") {
       value = e.target.value.split("\n");
     }
     updateEducation(edu.id, field, value as EducationItem[typeof field]);
@@ -225,26 +225,48 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
           {errors?.endDate && <p className="text-xs text-red-500 mt-1">{errors.endDate}</p>}
         </div>
 
-        {/* Notes */}
+        {/* Summary */}
         <div className="col-span-1 md:col-span-2">
-          <label htmlFor={`notes-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-            Additional Information / Achievements
+          <label htmlFor={`summary-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            Summary
           </label>
           <div className="relative">
             <div className="absolute top-3 left-3 flex items-center pointer-events-none text-gray-400">
               <Brain size={16} />
             </div>
             <textarea
-              id={`notes-${edu.id}`}
-              value={edu.notes.join("\n")}
-              onChange={handleFieldChange('notes')}
+              id={`summary-${edu.id}`}
+              value={edu.summary || ""}
+              onChange={handleFieldChange('summary')}
+              rows={2}
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none ${errors?.summary ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
+              placeholder="Brief summary of your studies or focus area..."
+            />
+          </div>
+          {errors?.summary && <p className="text-xs text-red-500 mt-1">{errors.summary}</p>}
+        </div>
+
+        {/* Highlights */}
+        <div className="col-span-1 md:col-span-2">
+          <label htmlFor={`highlights-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            Highlights / Achievements
+          </label>
+          <div className="relative">
+            <div className="absolute top-3 left-3 flex items-center pointer-events-none text-gray-400">
+              <Brain size={16} />
+            </div>
+            <textarea
+              id={`highlights-${edu.id}`}
+              value={(edu.highlights || []).join("\n")}
+              onChange={handleFieldChange('highlights')}
               rows={3}
-              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 ${errors?.notes ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 ${errors?.highlights ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="e.g. GPA: 3.8/4.0, Specialized in Distributed Systems..."
             />
           </div>
-          {errors?.notes && <p className="text-xs text-red-500 mt-1">{errors.notes}</p>}
+          {errors?.highlights && <p className="text-xs text-red-500 mt-1">{errors.highlights}</p>}
         </div>
 
         {/* Key Skills */}

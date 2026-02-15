@@ -1,6 +1,6 @@
 import { WorkExperience } from "@/types/resumeTypes";
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Briefcase, Trash, Building, MapPin, Calendar, AlignLeft, Tag } from "lucide-react";
+import { ChevronDown, ChevronUp, Briefcase, Trash, Building, MapPin, Calendar, AlignLeft, Tag, FileText } from "lucide-react";
 
 export default function ExperienceForm({ experience, index, updateExperience, removeExperience, errors }: {
   experience: WorkExperience;
@@ -200,6 +200,27 @@ export default function ExperienceForm({ experience, index, updateExperience, re
           </div>
           {errors?.endDate && <p className="text-xs text-red-500 mt-1">{errors.endDate}</p>}
         </div>
+      </div>
+
+      {/* Summary */}
+      <div>
+        <label htmlFor={`summary-${experience.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+          Summary
+        </label>
+        <div className="relative">
+          <div className="absolute top-3 left-3 pointer-events-none text-gray-400">
+            <FileText size={12} />
+          </div>
+          <textarea
+            id={`summary-${experience.id}`}
+            value={experience.summary || ""}
+            onChange={handleFieldChange('summary')}
+            className={`w-full pl-9 pr-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 min-h-[80px] resize-none ${errors?.summary ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              }`}
+            placeholder="Brief summary of your role and responsibilities..."
+          />
+        </div>
+        {errors?.summary && <p className="text-xs text-red-500 mt-1">{errors.summary}</p>}
       </div>
 
       {/* Highlights */}

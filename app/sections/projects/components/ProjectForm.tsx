@@ -5,10 +5,10 @@ import {
   ChevronUp,
   Trash2,
   Link as LinkIcon,
-  Github,
   Wrench,
   AlignLeft,
-  Lightbulb
+  Lightbulb,
+  FileText
 } from "lucide-react";
 
 export default function ProjectForm({
@@ -30,7 +30,7 @@ export default function ProjectForm({
     (field: keyof Project) =>
       (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         let value: string | string[] = e.target.value;
-        if (field === "notes") {
+        if (field === "highlights") {
           value = e.target.value.split("\n");
         }
         updateProject(project.id, field, value as Project[typeof field]);
@@ -165,79 +165,77 @@ export default function ProjectForm({
           </div>
         </div>
 
-        {/* Description */}
+        {/* Summary */}
         <div>
           <label
-            htmlFor={`description-${project.id}`}
+            htmlFor={`summary-${project.id}`}
             className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5"
           >
-            Description
+            Summary
+          </label>
+          <div className="relative">
+            <div className="absolute top-3 left-3 pointer-events-none text-gray-400">
+              <FileText size={12} />
+            </div>
+            <textarea
+              id={`summary-${project.id}`}
+              value={project.summary || ""}
+              onChange={handleFieldChange("summary")}
+              className={`w-full pl-9 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 min-h-[80px] bg-white ${errors?.summary ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
+              placeholder="Brief overview of the project..."
+            />
+          </div>
+          {errors?.summary && <p className="text-xs text-red-500 mt-1">{errors.summary}</p>}
+        </div>
+
+        {/* Highlights */}
+        <div>
+          <label
+            htmlFor={`highlights-${project.id}`}
+            className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5"
+          >
+            Highlights
           </label>
           <div className="relative">
             <div className="absolute top-3 left-3 pointer-events-none text-gray-400">
               <AlignLeft size={12} />
             </div>
             <textarea
-              id={`notes-${project.id}`}
-              value={project.notes.join("\n")}
-              onChange={handleFieldChange("notes")}
-              className={`w-full pl-9 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 min-h-[100px] bg-white ${errors?.notes ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              id={`highlights-${project.id}`}
+              value={(project.highlights || []).join("\n")}
+              onChange={handleFieldChange("highlights")}
+              className={`w-full pl-9 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 min-h-[100px] bg-white ${errors?.highlights ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
-              placeholder="Describe the problem you solved and the impact of this project..."
+              placeholder="Key achievements or features (one per line)..."
             />
           </div>
-          {errors?.notes && <p className="text-xs text-red-500 mt-1">{errors.notes}</p>}
+          {errors?.highlights && <p className="text-xs text-red-500 mt-1">{errors.highlights}</p>}
         </div>
 
         {/* Links Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label
-              htmlFor={`projectLink-${project.id}`}
-              className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5"
-            >
-              Live Link
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <LinkIcon size={12} />
-              </div>
-              <input
-                id={`projectLink-${project.id}`}
-                type="url"
-                value={project.projectLink || ""}
-                onChange={handleFieldChange("projectLink")}
-                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white ${errors?.projectLink ? "border-red-500 bg-red-50/10" : "border-gray-200"
-                  }`}
-                placeholder="https://my-app.com"
-              />
+        <div>
+          <label
+            htmlFor={`projectLink-${project.id}`}
+            className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5"
+          >
+            Project Link
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <LinkIcon size={12} />
             </div>
-            {errors?.projectLink && <p className="text-xs text-red-500 mt-1">{errors.projectLink}</p>}
+            <input
+              id={`projectLink-${project.id}`}
+              type="url"
+              value={project.projectLink || ""}
+              onChange={handleFieldChange("projectLink")}
+              className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white ${errors?.projectLink ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                }`}
+              placeholder="https://my-app.com"
+            />
           </div>
-
-          <div>
-            <label
-              htmlFor={`repoLink-${project.id}`}
-              className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5"
-            >
-              Repository
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                <Github size={14} />
-              </div>
-              <input
-                id={`repoLink-${project.id}`}
-                type="url"
-                value={project.repoLink || ""}
-                onChange={handleFieldChange("repoLink")}
-                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white ${errors?.repoLink ? "border-red-500 bg-red-50/10" : "border-gray-200"
-                  }`}
-                placeholder="https://github.com/user/repo"
-              />
-            </div>
-            {errors?.repoLink && <p className="text-xs text-red-500 mt-1">{errors.repoLink}</p>}
-          </div>
+          {errors?.projectLink && <p className="text-xs text-red-500 mt-1">{errors.projectLink}</p>}
         </div>
       </div>
     </div>
