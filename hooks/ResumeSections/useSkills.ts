@@ -43,7 +43,7 @@ export function useSkills() {
 
   const addSkill = (type: keyof Skills) => (name: string) => {
     setSkills(prevSkills => {
-      const skillList = prevSkills[type];
+      const skillList = prevSkills[type] || [];
       const newId = skillList.length > 0 ? Math.max(...skillList.map(s => s.id)) + 1 : 1;
 
       return {
@@ -56,14 +56,14 @@ export function useSkills() {
   const removeSkill = (type: keyof Skills) => (id: number) => {
     setSkills(prevSkills => ({
       ...prevSkills,
-      [type]: prevSkills[type].filter(s => s.id !== id)
+      [type]: (prevSkills[type] || []).filter(s => s.id !== id)
     }));
   };
 
   const updateSkill = (type: keyof Skills) => (id: number, name: string) => {
     setSkills(prevSkills => ({
       ...prevSkills,
-      [type]: prevSkills[type].map(s => (s.id === id ? { ...s, name } : s))
+      [type]: (prevSkills[type] || []).map(s => (s.id === id ? { ...s, name } : s))
     }));
   };
 

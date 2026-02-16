@@ -203,6 +203,7 @@ export default function useResumeEditor() {
     return {
       name: resumeSectionData.name,
       description: resumeSectionData.description,
+      template: resumeSectionData.template,
       lastUpdate: resumeSectionData.lastUpdate,
       personalInfo: assembledPersonalInfo,
       sections: filteredSections as ResumeSection[],

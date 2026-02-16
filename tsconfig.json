@@ -21,7 +21,8 @@
     "paths": {
       "@/*": ["./*"],
       "@hooks/*": ["./hooks/*"],
-      "@types/*": ["./temp/types/*"]
+      "@types/*": ["./temp/types/*"],
+      "bouajila-resume-generator/types": ["./node_modules/bouajila-resume-generator/dist/types/index.d.ts"]
     }
   },
   "include": [

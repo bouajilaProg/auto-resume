@@ -1,5 +1,15 @@
 import { z } from "zod";
-import { SectionTypeSchema } from "./resumeItem";
+
+export const SectionTypeSchema = z.enum([
+  "education",
+  "project",
+  "work_experience",
+  "skills",
+  "certification",
+  "extracurricular",
+  "hobbies",
+  "languages",
+]);
 
 export const ResumeConfigSchema = z.object({
   id: z.string(),

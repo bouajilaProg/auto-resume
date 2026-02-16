@@ -56,7 +56,7 @@ export default function useResumeSectionData() {
     if (index > -1) {
       sections[index] = { ...sections[index], body } as ResumeSection;
     } else {
-      sections.push({ type, body, enabled: true } as ResumeSection);
+      sections.push({ type, body } as ResumeSection);
     }
 
     const updated = { ...resumeSectionData, sections };

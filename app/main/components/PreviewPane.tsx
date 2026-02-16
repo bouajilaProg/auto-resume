@@ -52,7 +52,7 @@ export default function PreviewPane({
         const url = URL.createObjectURL(blob);
         setPdfUrl(url);
       } else {
-        console.error("Failed to compile PDF");
+        console.error("Returned error from compile API:", await response.text());
       }
     } catch (error) {
       console.error("Error compiling PDF:", error);

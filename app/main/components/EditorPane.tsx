@@ -14,8 +14,7 @@ import {
 
 import { useMemo } from "react";
 import { SECTION_ICONS, SECTION_LABELS, SECTION_PATHS, ALL_SECTIONS } from "@/constants/sections";
-import { Resume, ResumeConfig, SectionType, SectionTypeValue, Skills } from "@/types/resumeTypes";
-import { contactIcons } from "@/types/resumeTypes/personalInfo";
+import { Resume, ResumeConfig, SectionType, SectionTypeValue, Skills, contactIcons } from "@/types/resumeTypes";
 import { getSectionItemDisplay, SectionItem } from "@/utils/sectionDisplay";
 
 interface EditorPaneProps {
@@ -173,7 +172,7 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
         });
 
         const isEmpty = sectionType === SectionType.Skills
-          ? (Object.values(section.body as Skills).every(arr => arr.length === 0))
+          ? (Object.values(section.body as Skills).every(arr => !arr || arr.length === 0))
           : Array.isArray(section.body) && section.body.length === 0;
 
         return (
@@ -236,7 +235,7 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
                       const skillsBody = section.body as Skills;
                       const order = activeConfig.itemOrder?.skills?.[subType] || [];
                       const selectedIds = activeConfig.selectedItems.skills[subType];
-                      const items = groupAndSortItems(skillsBody[subType], selectedIds, order);
+                      const items = groupAndSortItems(skillsBody[subType] || [], selectedIds, order);
                       if (items.length === 0) return null;
 
                       const itemIds = items.map((i) => i.id);

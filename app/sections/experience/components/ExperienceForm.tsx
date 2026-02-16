@@ -234,7 +234,7 @@ export default function ExperienceForm({ experience, index, updateExperience, re
           </div>
           <textarea
             id={`highlights-${experience.id}`}
-            value={experience.highlights.join("\n")}
+            value={(experience.highlights || []).join("\n")}
             onChange={handleFieldChange('highlights')}
             className={`w-full pl-9 pr-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 min-h-[120px] ${errors?.highlights ? "border-red-500 bg-red-50/10" : "border-gray-200"
               }`}

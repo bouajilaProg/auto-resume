@@ -1,9 +1,10 @@
-import { ContactType, Resume, SectionType } from "@/types/resumeTypes";
+import { Resume, SectionType } from "@/types/resumeTypes";
 
 // --- Mock Data (Personalized) ---
 export const myResume: Resume = {
   name: "Bouajila",
   description: "Full-Stack Developer (React & NestJS)",
+  template: "default",
   lastUpdate: "2025",
 
   personalInfo: {
@@ -28,12 +29,12 @@ export const myResume: Resume = {
       body: [
         {
           id: 1,
-          degreeType: "BS",
+          degreeType: "BS" as const,
           degreeName: "Computer Science",
           institution: "ISIMM",
           startDate: "2021",
           endDate: "2024",
-          notes: [],
+          highlights: [],
           keySkills: "",
         },
       ],
@@ -63,24 +64,22 @@ export const myResume: Resume = {
         {
           id: 1,
           title: "Invoicing & Stock Management App",
-          notes: [
+          highlights: [
             "A web application for small businesses to manage invoices, products, and stock with a simple UI."
           ],
-          description: "A web application for small businesses to manage invoices, products, and stock with a simple UI.",
+          summary: "A web application for small businesses to manage invoices, products, and stock with a simple UI.",
           tools: "React, NestJS, PostgreSQL, Docker",
           projectLink: "",
-          repoLink: "",
         },
         {
           id: 2,
           title: "Reusable Full-Stack Starter",
-          notes: [
+          highlights: [
             "A plug-and-play project template to avoid repetitive setup and speed up new client projects."
           ],
-          description: "A plug-and-play project template to avoid repetitive setup and speed up new client projects.",
+          summary: "A plug-and-play project template to avoid repetitive setup and speed up new client projects.",
           tools: "Next.js, NestJS, pnpm",
           projectLink: "",
-          repoLink: "",
         },
       ],
     },

@@ -1,17 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { compile, Resume as GeneratorResume } from "bouajila-resume-generator";
-import { Resume } from "@/types/resumeTypes";
+import { compile, type Resume } from "bouajila-resume-generator";
 
 export async function POST(req: NextRequest) {
   try {
     const assembledResume: Resume = await req.json();
 
+    const result = await compile(assembledResume);
 
-    // Compile using bouajila-resume-generator
-    const result = await compile(assembledResume as unknown as GeneratorResume);
+    if (!result.success) {
+      return NextResponse.json(
+        { error: result.error.message },
+        { status: 422 }
+      );
+    }
 
-    if (!result.success || !result.data?.buffer) {
-      throw new Error(result.error?.message || "Failed to generate PDF buffer");
+    if (!result.data.buffer) {
+      return NextResponse.json(
+        { error: "Failed to generate PDF buffer" },
+        { status: 500 }
+      );
     }
 
     return new NextResponse(new Uint8Array(result.data.buffer), {
@@ -22,11 +29,8 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Compilation error:", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json({ error: error }, { status: 500 });
+    console.error("Compilation error:", error);
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

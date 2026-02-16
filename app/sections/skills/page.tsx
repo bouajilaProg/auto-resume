@@ -76,7 +76,7 @@ export default function SkillsPage() {
             title="Programming Languages"
             description="Languages you speak fluently (e.g., Python, JavaScript, C++)"
             icon={<Code className="text-white" />}
-            skills={skills.languages}
+            skills={skills.languages || []}
             onAdd={addSkill(skillType.LANG)}
             onRemove={removeSkill(skillType.LANG)}
             onUpdate={updateSkill(skillType.LANG)}
@@ -87,7 +87,7 @@ export default function SkillsPage() {
             title="Technologies & Tools"
             description="Frameworks, libraries, and dev tools (e.g., React, AWS, Docker)"
             icon={<Layers className="text-white" />}
-            skills={skills.technologies}
+            skills={skills.technologies || []}
             onAdd={addSkill(skillType.TECH)}
             onRemove={removeSkill(skillType.TECH)}
             onUpdate={updateSkill(skillType.TECH)}
@@ -98,7 +98,7 @@ export default function SkillsPage() {
             title="Soft Skills"
             description="Interpersonal abilities and leadership (e.g., Communication, Agile)"
             icon={<Users className="text-white" />}
-            skills={skills.softSkills}
+            skills={skills.softSkills || []}
             onAdd={addSkill(skillType.SOFT)}
             onRemove={removeSkill(skillType.SOFT)}
             onUpdate={updateSkill(skillType.SOFT)}
