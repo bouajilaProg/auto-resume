@@ -12,8 +12,8 @@ importers:
         specifier: ^0.8.1
         version: 0.8.1
       bouajila-resume-generator:
-        specifier: ^1.2.9
-        version: 1.2.9
+        specifier: ^1.3.0
+        version: 1.3.0
       cn:
         specifier: ^0.1.1
         version: 0.1.1
@@ -821,8 +821,8 @@ packages:
     engines: {node: '>=0.8.0'}
     deprecated: This version has been deprecated in accordance with the hapi support policy (hapi.im/support). Please upgrade to the latest version to get the best features, bug fixes, and security patches. If you are unable to upgrade at this time, paid support is available for older versions (hapi.im/commercial).
 
-  bouajila-resume-generator@1.2.9:
-    resolution: {integrity: sha512-BIwzOWTYdrjFojlHCCcxkwNyParIU371k5zIYg5zbF0Wb070RR+Tilr4xpLRjRnJqLZDffEocKawtpmO3jlFcA==}
+  bouajila-resume-generator@1.3.0:
+    resolution: {integrity: sha512-/0vvBJd0Fo2cKNEru84zQP6pTtvUj47a4Ff8Ag6UTEm/xEvgCCBqeM0xm/Wzn+/Uw+wtSzIEuYNtsAz9cv7fIQ==}
     engines: {node: '>=18'}
 
   brace-expansion@1.1.12:
@@ -2970,9 +2970,10 @@ snapshots:
     dependencies:
       hoek: 0.9.1
 
-  bouajila-resume-generator@1.2.9:
+  bouajila-resume-generator@1.3.0:
     dependencies:
       execa: 9.6.1
+      zod: 4.3.6
 
   brace-expansion@1.1.12:
     dependencies:
