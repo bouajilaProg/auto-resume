@@ -4,13 +4,20 @@ This document provides operational and style guidance for agentic tools working 
 
 ## Commands
 
-- Dev server: `npm run dev`
-- Build: `npm run build`
-- Start (prod): `npm run start`
-- Lint: `npm run lint`
-- Typecheck: `npm run lint` (Next.js + ESLint handles TS rules here)
-- Tests: none configured (no test script in `package.json`)
-- Single test: not available (set up a test runner first)
+Primary (pnpm):
+- Dev server: `pnpm dev`
+- Build: `pnpm build`
+- Start (prod): `pnpm start`
+- Lint: `pnpm lint`
+- Typecheck: `pnpm exec tsc --noEmit` (Manual check; not in scripts)
+
+Tests:
+- Tests: none configured
+- Single test: not available
+
+Docker:
+- Build image: `pnpm docker:build`
+- Run image: `pnpm docker:run`
 
 ## Repository Layout
 
@@ -40,6 +47,7 @@ This document provides operational and style guidance for agentic tools working 
   - `@hooks/` for `hooks/`.
   - `@types/` points to `./temp/types/*` (legacy; avoid unless required).
 - Keep import blocks compact and deterministic.
+- Avoid mixing type and value imports unless the file already does.
 
 ### Formatting
 
@@ -47,6 +55,7 @@ This document provides operational and style guidance for agentic tools working 
 - 2-space indentation (match existing files).
 - Use trailing commas where the file already uses them.
 - Keep lines reasonably short; avoid overly long JSX props lines.
+- Prefer single responsibility per line for JSX props when they get long.
 
 ### Naming
 
@@ -54,6 +63,7 @@ This document provides operational and style guidance for agentic tools working 
 - Hooks: camelCase, `useX` (`useProjects.ts`).
 - Types: PascalCase, schemas end with `Schema`.
 - Constants: SCREAMING_SNAKE_CASE (`SECTION_LABELS`).
+- Files: match component or hook name (`EducationForm.tsx`, `useProjects.ts`).
 
 ### Types and Data Modeling
 
@@ -61,24 +71,34 @@ This document provides operational and style guidance for agentic tools working 
 - Derive TS types via `z.infer`.
 - Avoid `any`. If unavoidable, contain it and add a note.
 - Use `SectionType`/`SectionTypeValue` from `types/resumeTypes`.
+- Keep section defaults in sync with schemas and config.
 
 ### Error Handling
 
 - API routes: wrap in `try/catch`, return `NextResponse.json` with status.
 - UI: handle missing data with optional chaining or default empty states.
 - Avoid throwing in render paths.
+- Log unexpected errors in API routes with enough context to debug.
 
 ### State Management
 
 - Use hooks in `hooks/ResumeSections/` for CRUD logic.
 - Persist edits through `useResumeSectionData` and `useResumeEditor`.
 - When updating nested state, avoid direct mutation; use copies.
+- Keep derived state in selectors or memoized helpers, not in local state.
 
 ### UI/UX
 
 - Keep section editors consistent in layout and controls.
 - Use existing design patterns (cards, dashed empty states, indigo accents).
 - Avoid introducing new design systems without agreement.
+- Prefer existing Tailwind utility patterns before inventing new tokens.
+
+### Accessibility
+
+- Use semantic HTML elements where possible.
+- Ensure form controls have labels and accessible names.
+- Keep color contrast readable for text in previews.
 
 ## PDF / Resume Generation
 
@@ -110,8 +130,17 @@ This document provides operational and style guidance for agentic tools working 
   - add to `SectionType` and schema in `types/resumeTypes/resumeItem.ts`.
   - add defaults in `types/resumeTypes/defaults.ts` and config.
   - add UI in `app/sections/<section>`.
+- Do not introduce new dependencies without calling it out.
+- Favor small, focused edits over broad refactors.
 
 ## Known Gaps
 
 - No automated tests. If you add a test runner, update this file.
 - README mentions MongoDB, but current persistence is localStorage.
+
+## Working Agreements
+
+- Keep changes consistent with existing patterns in `app/sections/` editors.
+- Avoid reorganizing folder structure without request.
+- If a change touches API routes, verify expected response shape.
+- If you add a new script or test runner, update this file.
