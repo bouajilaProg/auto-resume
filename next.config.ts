@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
+  outputFileTracingIncludes: {
+    '/api/compile': ['./node_modules/bouajila-resume-generator/**/*'],
+  },
   turbopack: {
     resolveAlias: {
       // Map "bouajila-resume-generator/types" to a local proxy that

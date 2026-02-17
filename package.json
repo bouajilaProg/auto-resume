@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "docker:build": "docker build -t auto-resume .",
+    "docker:run": "docker run -p 3000:3000 auto-resume"
   },
   "dependencies": {
     "@yamlresume/core": "^0.8.1",
