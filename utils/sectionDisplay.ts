@@ -29,31 +29,31 @@ export function getSectionItemDisplay(
   switch (sectionType) {
     case SectionType.Education: {
       const edu = item as EducationItem;
-      return { title: edu.degreeName, subtitle: edu.institution };
+      return { title: edu.degreeName || "", subtitle: edu.institution || "" };
     }
     case SectionType.WorkExperience: {
       const exp = item as WorkExperience;
-      return { title: exp.jobTitle, subtitle: exp.company };
+      return { title: exp.jobTitle || "", subtitle: exp.company || "" };
     }
     case SectionType.Project: {
       const proj = item as Project;
-      return { title: proj.title, subtitle: proj.tools };
+      return { title: proj.title || "", subtitle: proj.tools || "" };
     }
     case SectionType.Certification: {
       const cert = item as Certification;
-      return { title: cert.name, subtitle: cert.issuingOrganization };
+      return { title: cert.name || "", subtitle: cert.issuingOrganization || "" };
     }
     case SectionType.ExtraCurricular: {
       const extra = item as ExtraCurricularActivity;
-      return { title: extra.activityName, subtitle: "" };
+      return { title: extra.activityName || "", subtitle: "" };
     }
     case SectionType.Hobbies: {
       const hobby = item as Hobby;
-      return { title: hobby.name, subtitle: hobby.description || "" };
+      return { title: hobby.name || "", subtitle: hobby.description || "" };
     }
     case SectionType.Languages: {
       const lang = item as Language;
-      return { title: lang.name, subtitle: lang.proficiency || "" };
+      return { title: lang.name || "", subtitle: lang.proficiency || "" };
     }
     default:
       return {

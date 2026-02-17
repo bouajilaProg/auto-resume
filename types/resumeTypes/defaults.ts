@@ -103,7 +103,6 @@ export const SECTION_DEFAULTS: Record<SectionTypeValue, object> = {
 export const DEFAULT_RESUME: Resume = {
   name: "My Resume",
   description: "New Resume",
-  template: "default",
   lastUpdate: new Date().toLocaleDateString(),
   personalInfo: { name: "", location: "", description: "", contact: [] },
   sections: [

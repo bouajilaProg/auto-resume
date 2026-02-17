@@ -79,16 +79,16 @@ export default function ResumeMainPage() {
             </button>
           ))}
 
-          <button
-            onClick={() => {
-              const name = prompt("Enter resume name:");
-              if (name) createNewConfig(name);
-            }}
-            className="w-10 h-10 rounded-lg flex items-center justify-center bg-white text-gray-400 hover:bg-indigo-50 hover:text-indigo-600 border border-gray-200 border-dashed transition-all"
-            title="Create New Resume"
-          >
-            <Plus size={20} />
-          </button>
+          {/* <button */}
+          {/*   onClick={() => { */}
+          {/*     const name = prompt("Enter resume name:"); */}
+          {/*     if (name) createNewConfig(name); */}
+          {/*   }} */}
+          {/*   className="w-10 h-10 rounded-lg flex items-center justify-center bg-white text-gray-400 hover:bg-indigo-50 hover:text-indigo-600 border border-gray-200 border-dashed transition-all" */}
+          {/*   title="Create New Resume" */}
+          {/* > */}
+          {/*   <Plus size={20} /> */}
+          {/* </button> */}
         </div>
 
       </div>
@@ -117,7 +117,7 @@ export default function ResumeMainPage() {
             </div>
           ) : (
             <>
-              <div 
+              <div
                 className="flex flex-col cursor-pointer group"
                 onClick={() => {
                   setTempName(activeConfig.name);

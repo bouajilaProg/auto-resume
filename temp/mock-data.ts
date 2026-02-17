@@ -4,7 +4,6 @@ import { Resume, SectionType } from "@/types/resumeTypes";
 export const myResume: Resume = {
   name: "Bouajila",
   description: "Full-Stack Developer (React & NestJS)",
-  template: "default",
   lastUpdate: "2025",
 
   personalInfo: {

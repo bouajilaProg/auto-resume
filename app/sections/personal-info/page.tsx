@@ -146,7 +146,7 @@ export default function PersonalInfoPage() {
 
           {/* Contact Methods */}
           <ContactForm
-            contacts={personalInfo.contact}
+            contacts={personalInfo.contact || []}
             setContactsAction={updateContacts}
           />
         </div>

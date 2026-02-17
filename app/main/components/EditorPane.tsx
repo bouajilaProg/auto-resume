@@ -72,10 +72,10 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
               <h2 className="font-bold text-gray-800 text-lg leading-tight">Personal Information</h2>
               {masterData.personalInfo?.contact && masterData.personalInfo.contact.length > 0 && (
                 <button
-                  onClick={() => toggleAll("personalInfo", masterData.personalInfo!.contact.map(c => c.id))}
+                  onClick={() => toggleAll("personalInfo", (masterData.personalInfo?.contact || []).map(c => c.id))}
                   className="text-[10px] font-bold uppercase tracking-wider text-indigo-500 hover:text-indigo-700 text-left mt-0.5"
                 >
-                  {(activeConfig.selectedItems.personalInfo || []).length === masterData.personalInfo.contact.length ? "Deselect All" : "Select All"}
+                  {(activeConfig.selectedItems.personalInfo || []).length === (masterData.personalInfo?.contact || []).length ? "Deselect All" : "Select All"}
                 </button>
               )}
             </div>
@@ -151,7 +151,7 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
 
       {/* Dynamic Sections */}
       {sectionOrder.map((sectionType, index) => {
-        const section = masterData.sections.find(s => s.type === sectionType) || {
+        const section = (masterData.sections || []).find(s => s.type === sectionType) || {
           type: sectionType,
           body: sectionType === SectionType.Skills ? { languages: [], technologies: [], softSkills: [] } : []
         };

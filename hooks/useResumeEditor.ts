@@ -118,7 +118,7 @@ export default function useResumeEditor() {
     if (!resumeSectionData || !activeConfig) return null;
 
     const filteredSections = activeConfig.sectionOrder.map(type => {
-      const section = resumeSectionData.sections.find(s => s.type === type);
+      const section = (resumeSectionData.sections || []).find(s => s.type === type);
       if (!section) return null;
 
       // handle Skills section with subcategories
@@ -195,7 +195,7 @@ export default function useResumeEditor() {
     const assembledPersonalInfo = resumeSectionData.personalInfo ? {
       ...resumeSectionData.personalInfo,
       contact: sortItems(
-        resumeSectionData.personalInfo.contact.filter(c => activeConfig.selectedItems.personalInfo.includes(c.id)),
+        (resumeSectionData.personalInfo.contact || []).filter(c => activeConfig.selectedItems.personalInfo.includes(c.id)),
         activeConfig.itemOrder?.personalInfo || []
       )
     } : undefined;
@@ -203,7 +203,6 @@ export default function useResumeEditor() {
     return {
       name: resumeSectionData.name,
       description: resumeSectionData.description,
-      template: resumeSectionData.template,
       lastUpdate: resumeSectionData.lastUpdate,
       personalInfo: assembledPersonalInfo,
       sections: filteredSections as ResumeSection[],

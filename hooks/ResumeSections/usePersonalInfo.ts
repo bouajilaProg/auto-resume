@@ -63,7 +63,7 @@ export function usePersonalInfo() {
   };
 
   const handleSave = () => {
-    const cleanedContacts = personalInfo.contact
+    const cleanedContacts = (personalInfo.contact || [])
       .filter((contact) => contact.value.trim() !== "")
       .map((contact) => ({
         ...contact,
