@@ -3,7 +3,7 @@
 import React from "react";
 import { Resume } from "@/types/resumeTypes";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Save, X, Download, Loader2, FileText, Eye } from "lucide-react";
+import { Save, X, Download, Loader2, FileText, Eye, AlertTriangle, RefreshCw } from "lucide-react";
 
 interface PreviewPaneProps {
   resume: Resume | null;
@@ -20,6 +20,7 @@ function PreviewPane({
 }: PreviewPaneProps) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
   const pdfUrlRef = useRef<string | null>(null);
 
@@ -48,6 +49,7 @@ function PreviewPane({
       return;
     }
     setLoading(true);
+    setError(null);
     try {
       const response = await fetch("/api/compile", {
         method: "POST",
@@ -62,10 +64,18 @@ function PreviewPane({
         pdfUrlRef.current = url;
         setPdfUrl(url);
       } else {
-        console.error("Returned error from compile API:", await response.text());
+        const errorText = await response.text();
+        console.error("Returned error from compile API:", errorText);
+        try {
+          const parsed = JSON.parse(errorText);
+          setError(parsed.error || "Failed to compile PDF");
+        } catch {
+          setError(errorText || "Failed to compile PDF");
+        }
       }
     } catch (error) {
       console.error("Error compiling PDF:", error);
+      setError("An unexpected error occurred during PDF compilation");
     } finally {
       setLoading(false);
     }
@@ -142,7 +152,24 @@ function PreviewPane({
 
       {/* Viewer */}
       <div className="flex-1 p-8 overflow-hidden flex flex-col items-center justify-start">
-        {pdfUrl ? (
+        {error ? (
+          <div className="w-full h-full flex flex-col items-center justify-center bg-red-50 rounded-lg border-2 border-dashed border-red-200 p-12 text-center animate-in fade-in duration-500">
+            <div className="p-4 bg-red-100 text-red-600 rounded-full mb-6">
+              <AlertTriangle size={48} />
+            </div>
+            <h3 className="text-xl font-bold text-red-900 mb-2 uppercase tracking-tight">Compilation Error</h3>
+            <p className="text-red-700 font-medium max-w-md mb-8 whitespace-pre-wrap leading-relaxed bg-white/50 p-4 rounded-xl border border-red-100 shadow-sm">
+              {error}
+            </p>
+            <button 
+              onClick={() => compilePdf()}
+              className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200 active:scale-95"
+            >
+              <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
+              Retry Compilation
+            </button>
+          </div>
+        ) : pdfUrl ? (
           <div className="w-full h-full bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-300 relative group">
             <iframe
               src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
