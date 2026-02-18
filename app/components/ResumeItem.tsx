@@ -1,5 +1,5 @@
-import { FaTrash, FaCopy, FaExternalLinkAlt } from 'react-icons/fa';
-import Link from 'next/link';
+import { FaTrash, FaCopy, FaExternalLinkAlt } from "react-icons/fa";
+import Link from "next/link";
 
 interface ResumeItemProps {
   id: string;
@@ -16,26 +16,26 @@ function ResumeItem({ id, name, description, lastUpdate, onDelete, onCopy }: Res
       <div className="flex justify-between items-start mb-2">
         <h3 className="text-xl font-bold text-gray-900 truncate">{name}</h3>
         <Link 
-          href={`/main?id=${id}`}
+          href={`/main?resumeId=${id}`}
           className="text-gray-400 hover:text-indigo-600 transition-colors"
         >
           <FaExternalLinkAlt size={14} />
         </Link>
       </div>
-      
+
       {lastUpdate && (
         <p className="text-gray-400 text-[10px] font-bold uppercase tracking-wider mb-4">
           Last updated: {lastUpdate}
         </p>
       )}
-      
+
       <p className="text-gray-600 text-sm mb-6 line-clamp-2 flex-grow font-medium">
         {description || "No description provided for this resume version."}
       </p>
 
       <div className="flex items-center gap-2 w-full pt-4 border-t border-gray-50">
         <Link 
-          href={`/main?id=${id}`}
+          href={`/main?resumeId=${id}`}
           className="flex-[0.7] py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all font-bold text-sm active:scale-95 flex items-center justify-center gap-2"
         >
           Open Editor
@@ -57,4 +57,6 @@ function ResumeItem({ id, name, description, lastUpdate, onDelete, onCopy }: Res
       </div>
     </div>
   );
-} export default ResumeItem;
+}
+
+export default ResumeItem;

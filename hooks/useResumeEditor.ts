@@ -1,113 +1,246 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { ResumeSection, SectionTypeValue, SectionType, ResumeConfig, DEFAULT_CONFIG, Skills } from "@/types/resumeTypes";
 import useResumeSectionData from "./useResumeSectionData";
 
-const CONFIGS_KEY = "resumeConfigsKey";
+const CONFIGS_BY_RESUME_KEY = "resumeConfigsById";
+const ACTIVE_CONFIG_BY_RESUME_KEY = "activeConfigByResumeId";
+const LEGACY_CONFIGS_KEY = "resumeConfigsKey";
 
-// helper function to initialize state from localStorage
-function initializeState() {
-  // check if we're in the browser (not SSR)
-  if (typeof window === 'undefined') {
-    return { configs: [DEFAULT_CONFIG], activeConfigId: DEFAULT_CONFIG.id };
-  }
+type ConfigsByResume = Record<string, ResumeConfig[]>;
+type ActiveConfigByResume = Record<string, string>;
 
-  const raw = localStorage.getItem(CONFIGS_KEY);
-  let loadedConfigs: ResumeConfig[] = [DEFAULT_CONFIG];
-
-  if (raw) {
-    try {
-      const parsed = JSON.parse(raw);
-      const configsToMigrate = Array.isArray(parsed) ? parsed : [parsed];
-
-      // migration: Ensure all default sections are present in each config's sectionOrder and selectedItems
-      loadedConfigs = configsToMigrate.map((config: ResumeConfig) => {
-        const updatedOrder = Array.isArray(config.sectionOrder) ? [...config.sectionOrder] : [];
-        DEFAULT_CONFIG.sectionOrder.forEach(type => {
-          if (!updatedOrder.includes(type)) {
-            updatedOrder.push(type);
-          }
-        });
-
-        const updatedSelectedItems = {
-          ...DEFAULT_CONFIG.selectedItems,
-          ...config.selectedItems,
-          skills: {
-            ...DEFAULT_CONFIG.selectedItems.skills,
-            ...(config.selectedItems?.skills || {})
-          },
-          personalInfo: config.selectedItems?.personalInfo || []
-        };
-
-        const updatedItemOrder = {
-          ...(DEFAULT_CONFIG.itemOrder || {
-            personalInfo: [],
-            education: [],
-            work_experience: [],
-            project: [],
-            certification: [],
-            extracurricular: [],
-            hobbies: [],
-            languages: [],
-            skills: { languages: [], technologies: [], softSkills: [] }
-          }),
-          ...(config.itemOrder || {}),
-          skills: {
-            ...(DEFAULT_CONFIG.itemOrder?.skills || { languages: [], technologies: [], softSkills: [] }),
-            ...(config.itemOrder?.skills || {})
-          },
-          personalInfo: config.itemOrder?.personalInfo || []
-        };
-
-        return {
-          ...config,
-          sectionOrder: updatedOrder,
-          selectedItems: updatedSelectedItems,
-          itemOrder: updatedItemOrder
-        };
-      });
-    } catch (e) {
-      loadedConfigs = [DEFAULT_CONFIG];
+const normalizeConfig = (config: ResumeConfig) => {
+  const updatedOrder = Array.isArray(config.sectionOrder) ? [...config.sectionOrder] : [];
+  DEFAULT_CONFIG.sectionOrder.forEach(type => {
+    if (!updatedOrder.includes(type)) {
+      updatedOrder.push(type);
     }
-  }
+  });
 
-  let initialActiveId = loadedConfigs[0]?.id || "default";
-  const params = new URLSearchParams(window.location.search);
-  const idParam = params.get("id");
-  if (idParam && loadedConfigs.find(c => c.id === idParam)) {
-    initialActiveId = idParam;
-  }
+  const updatedSelectedItems = {
+    ...DEFAULT_CONFIG.selectedItems,
+    ...config.selectedItems,
+    skills: {
+      ...DEFAULT_CONFIG.selectedItems.skills,
+      ...(config.selectedItems?.skills || {})
+    },
+    personalInfo: config.selectedItems?.personalInfo || []
+  };
 
-  return { configs: loadedConfigs, activeConfigId: initialActiveId };
-}
+  const updatedItemOrder = {
+    ...(DEFAULT_CONFIG.itemOrder || {
+      personalInfo: [],
+      education: [],
+      work_experience: [],
+      project: [],
+      certification: [],
+      extracurricular: [],
+      hobbies: [],
+      languages: [],
+      skills: { languages: [], technologies: [], softSkills: [] }
+    }),
+    ...(config.itemOrder || {}),
+    skills: {
+      ...(DEFAULT_CONFIG.itemOrder?.skills || { languages: [], technologies: [], softSkills: [] }),
+      ...(config.itemOrder?.skills || {})
+    },
+    personalInfo: config.itemOrder?.personalInfo || []
+  };
+
+  return {
+    ...config,
+    sectionOrder: updatedOrder,
+    selectedItems: updatedSelectedItems,
+    itemOrder: updatedItemOrder
+  };
+};
+
+const normalizeConfigs = (configs: ResumeConfig[]) => {
+  return configs.map(normalizeConfig);
+};
 
 export default function useResumeEditor() {
-  const { resumeSectionData, loading: globalLoading } = useResumeSectionData();
+  const {
+    resumeSectionData,
+    loading: globalLoading,
+    resumes,
+    activeResumeId,
+    createResume,
+    duplicateResume,
+  } = useResumeSectionData();
 
-  // initialize both configs and activeConfigId together to avoid calling initializeState twice
-  const [state, setState] = useState(() => {
-    if (typeof window === 'undefined') {
-      return { configs: [DEFAULT_CONFIG], activeConfigId: DEFAULT_CONFIG.id };
+  const [configsByResume, setConfigsByResume] = useState<ConfigsByResume>(() => {
+    if (typeof window === "undefined") {
+      return {};
     }
-    return initializeState();
+    const raw = localStorage.getItem(CONFIGS_BY_RESUME_KEY);
+    if (!raw) return {};
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        const normalized: ConfigsByResume = {};
+        Object.entries(parsed as ConfigsByResume).forEach(([resumeId, configs]) => {
+          normalized[resumeId] = normalizeConfigs(configs);
+        });
+        return normalized;
+      }
+      return {};
+    } catch (e) {
+      return {};
+    }
+  });
+
+  const [activeConfigByResume, setActiveConfigByResume] = useState<ActiveConfigByResume>(() => {
+    if (typeof window === "undefined") {
+      return {};
+    }
+    const raw = localStorage.getItem(ACTIVE_CONFIG_BY_RESUME_KEY);
+    if (!raw) return {};
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed as ActiveConfigByResume : {};
+    } catch (e) {
+      return {};
+    }
   });
 
   const [isDirty, setIsDirty] = useState(false);
 
-  const configs = state.configs;
-  const activeConfigId = state.activeConfigId;
+  const persistConfigs = useCallback((nextConfigs: ConfigsByResume, nextActiveConfig: ActiveConfigByResume) => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem(CONFIGS_BY_RESUME_KEY, JSON.stringify(nextConfigs));
+    localStorage.setItem(ACTIVE_CONFIG_BY_RESUME_KEY, JSON.stringify(nextActiveConfig));
+  }, []);
+
+  // Initialize configs for the active resume (only when activeResumeId changes)
+  useEffect(() => {
+    if (!activeResumeId) return;
+
+    setConfigsByResume(prevConfigs => {
+      let nextConfigsByResume = prevConfigs;
+      let didUpdate = false;
+
+      if (!nextConfigsByResume[activeResumeId]) {
+        let configsToSeed: ResumeConfig[] | null = null;
+        const legacyRaw = typeof window !== "undefined" ? localStorage.getItem(LEGACY_CONFIGS_KEY) : null;
+        if (legacyRaw) {
+          try {
+            const parsed = JSON.parse(legacyRaw);
+            const configs = Array.isArray(parsed) ? parsed : [parsed];
+            configsToSeed = normalizeConfigs(configs as ResumeConfig[]);
+          } catch (e) {
+            configsToSeed = null;
+          }
+          if (typeof window !== "undefined") {
+            localStorage.removeItem(LEGACY_CONFIGS_KEY);
+          }
+        }
+
+        if (!configsToSeed || configsToSeed.length === 0) {
+          configsToSeed = [normalizeConfig(DEFAULT_CONFIG)];
+        }
+
+        nextConfigsByResume = {
+          ...nextConfigsByResume,
+          [activeResumeId]: configsToSeed,
+        };
+        didUpdate = true;
+      }
+
+      if (didUpdate) {
+        // Persist the seeded configs immediately (structural change, not user edit)
+        setActiveConfigByResume(prevActive => {
+          const currentConfigs = nextConfigsByResume[activeResumeId] || [normalizeConfig(DEFAULT_CONFIG)];
+          const currentActiveId = prevActive[activeResumeId];
+          const validActiveId = currentConfigs.find(c => c.id === currentActiveId)?.id || currentConfigs[0]?.id || DEFAULT_CONFIG.id;
+          const nextActive = currentActiveId !== validActiveId
+            ? { ...prevActive, [activeResumeId]: validActiveId }
+            : prevActive;
+          persistConfigs(nextConfigsByResume, nextActive);
+          return nextActive;
+        });
+        return nextConfigsByResume;
+      }
+
+      // Even if we didn't seed, ensure activeConfigByResume has a valid entry
+      setActiveConfigByResume(prevActive => {
+        const currentConfigs = nextConfigsByResume[activeResumeId] || [normalizeConfig(DEFAULT_CONFIG)];
+        const currentActiveId = prevActive[activeResumeId];
+        const validActiveId = currentConfigs.find(c => c.id === currentActiveId)?.id || currentConfigs[0]?.id || DEFAULT_CONFIG.id;
+        if (currentActiveId !== validActiveId) {
+          const nextActive = { ...prevActive, [activeResumeId]: validActiveId };
+          persistConfigs(nextConfigsByResume, nextActive);
+          return nextActive;
+        }
+        return prevActive;
+      });
+
+      return prevConfigs;
+    });
+
+    setIsDirty(false);
+  }, [activeResumeId, persistConfigs]);
+
+  // Clean up stale config entries for deleted resumes
+  useEffect(() => {
+    if (resumes.length === 0) return;
+    const validIds = new Set(resumes.map(resume => resume.id));
+
+    setConfigsByResume(prevConfigs => {
+      const staleConfigIds = Object.keys(prevConfigs).filter(id => !validIds.has(id));
+      if (staleConfigIds.length === 0) return prevConfigs;
+
+      const nextConfigs = { ...prevConfigs };
+      staleConfigIds.forEach(id => {
+        delete nextConfigs[id];
+      });
+
+      setActiveConfigByResume(prevActive => {
+        const staleActiveIds = Object.keys(prevActive).filter(id => !validIds.has(id));
+        if (staleActiveIds.length === 0) {
+          persistConfigs(nextConfigs, prevActive);
+          return prevActive;
+        }
+        const nextActive = { ...prevActive };
+        staleActiveIds.forEach(id => {
+          delete nextActive[id];
+        });
+        persistConfigs(nextConfigs, nextActive);
+        return nextActive;
+      });
+
+      return nextConfigs;
+    });
+  }, [resumes, persistConfigs]);
+
+  const configs = useMemo(() => {
+    if (!activeResumeId) return [DEFAULT_CONFIG];
+    return configsByResume[activeResumeId] || [DEFAULT_CONFIG];
+  }, [activeResumeId, configsByResume]);
+
+  const activeConfigId = useMemo(() => {
+    if (!activeResumeId) return DEFAULT_CONFIG.id;
+    return activeConfigByResume[activeResumeId] || configs[0]?.id || DEFAULT_CONFIG.id;
+  }, [activeResumeId, activeConfigByResume, configs]);
 
   const setConfigs = useCallback((updater: ResumeConfig[] | ((prev: ResumeConfig[]) => ResumeConfig[])) => {
-    setState(prev => ({
-      ...prev,
-      configs: typeof updater === 'function' ? updater(prev.configs) : updater
-    }));
-  }, []);
+    if (!activeResumeId) return;
+    setConfigsByResume(prev => {
+      const current = prev[activeResumeId] || [DEFAULT_CONFIG];
+      const nextConfigs = typeof updater === "function" ? updater(current) : updater;
+      const normalized = normalizeConfigs(nextConfigs);
+      return { ...prev, [activeResumeId]: normalized };
+    });
+  }, [activeResumeId]);
 
   const setActiveConfigId = useCallback((id: string) => {
-    setState(prev => ({ ...prev, activeConfigId: id }));
-  }, []);
+    if (!activeResumeId) return;
+    setActiveConfigByResume(prev => {
+      return { ...prev, [activeResumeId]: id };
+    });
+  }, [activeResumeId]);
 
   const activeConfig = useMemo(() =>
     configs.find(c => c.id === activeConfigId) || configs[0] || DEFAULT_CONFIG,
@@ -241,7 +374,7 @@ export default function useResumeEditor() {
           ...(config.itemOrder?.skills || {})
         }
       };
-      
+
       // Ensure personalInfo is initialized
       if (!newItemOrder.personalInfo) newItemOrder.personalInfo = [];
 
@@ -425,23 +558,54 @@ export default function useResumeEditor() {
   }, [activeConfigId]);
 
   const save = useCallback(() => {
-    const updatedConfigs = configs.map(c =>
-      c.id === activeConfigId
-        ? { ...c, lastUpdate: new Date().toLocaleDateString() }
-        : c
-    );
-    localStorage.setItem(CONFIGS_KEY, JSON.stringify(updatedConfigs));
-    setConfigs(updatedConfigs);
+    if (!activeResumeId) return;
+    setConfigsByResume(prev => {
+      const current = prev[activeResumeId] || [DEFAULT_CONFIG];
+      const updatedConfigs = current.map(c =>
+        c.id === activeConfigId
+          ? { ...c, lastUpdate: new Date().toLocaleDateString() }
+          : c
+      );
+      const next = { ...prev, [activeResumeId]: updatedConfigs };
+      setActiveConfigByResume(prevActive => {
+        persistConfigs(next, prevActive);
+        return prevActive;
+      });
+      return next;
+    });
     setIsDirty(false);
-  }, [configs, activeConfigId]);
+  }, [activeResumeId, activeConfigId, persistConfigs]);
 
   const cancel = useCallback(() => {
-    const raw = localStorage.getItem(CONFIGS_KEY);
-    if (raw) {
-      setConfigs(JSON.parse(raw));
+    if (typeof window === "undefined" || !activeResumeId) {
+      setIsDirty(false);
+      return;
+    }
+    // Reload configs from localStorage, discarding in-memory changes
+    const rawConfigs = localStorage.getItem(CONFIGS_BY_RESUME_KEY);
+    if (rawConfigs) {
+      try {
+        const parsed = JSON.parse(rawConfigs) as ConfigsByResume;
+        const normalized: ConfigsByResume = {};
+        Object.entries(parsed).forEach(([resumeId, configs]) => {
+          normalized[resumeId] = normalizeConfigs(configs);
+        });
+        setConfigsByResume(normalized);
+      } catch (e) {
+        // If parsing fails, keep current state
+      }
+    }
+    const rawActive = localStorage.getItem(ACTIVE_CONFIG_BY_RESUME_KEY);
+    if (rawActive) {
+      try {
+        const parsed = JSON.parse(rawActive) as ActiveConfigByResume;
+        setActiveConfigByResume(parsed);
+      } catch (e) {
+        // If parsing fails, keep current state
+      }
     }
     setIsDirty(false);
-  }, []);
+  }, [activeResumeId]);
 
   const createNewConfig = useCallback((name: string) => {
     const newConfig: ResumeConfig = {
@@ -454,7 +618,7 @@ export default function useResumeEditor() {
     setConfigs(prev => [...prev, newConfig]);
     setActiveConfigId(newConfig.id);
     setIsDirty(true);
-  }, []);
+  }, [setActiveConfigId, setConfigs]);
 
   const deleteConfig = useCallback((id: string) => {
     setConfigs(prev => {
@@ -466,7 +630,7 @@ export default function useResumeEditor() {
       return filtered;
     });
     setIsDirty(true);
-  }, [activeConfigId]);
+  }, [activeConfigId, setActiveConfigId, setConfigs]);
 
   const renameConfig = useCallback((id: string, name: string) => {
     setConfigs(prev => {
@@ -478,7 +642,7 @@ export default function useResumeEditor() {
       return newConfigs;
     });
     setIsDirty(true);
-  }, []);
+  }, [setConfigs]);
 
   return {
     masterData: resumeSectionData,
@@ -486,6 +650,10 @@ export default function useResumeEditor() {
     configs,
     assembledResume,
     isDirty,
+    resumes,
+    activeResumeId,
+    createResume,
+    duplicateResume,
     toggleItem,
     toggleAll,
     moveSection,
@@ -496,6 +664,6 @@ export default function useResumeEditor() {
     createNewConfig,
     deleteConfig,
     renameConfig,
-    loading: globalLoading || !resumeSectionData || configs.length === 0,
+    loading: globalLoading || !resumeSectionData || !activeResumeId || configs.length === 0,
   };
 }
