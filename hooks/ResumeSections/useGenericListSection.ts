@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import useResumeSectionData from "@hooks/useResumeSectionData";
 import { SectionTypeValue, SECTION_DEFAULTS } from "@/types/resumeTypes";
@@ -15,18 +15,26 @@ export function useGenericListSection<T extends { id: number }>(
   const [errors, setErrors] = useState<Record<number, Record<string, string>>>({});
   const router = useRouter();
 
+  // Fix #4: Guard with isInitialized ref to prevent overwriting local edits
+  const isInitialized = useRef(false);
+
   // Handle initialization from resumeSectionData
   useEffect(() => {
-    if (!loading && resumeSectionData) {
+    if (!loading && resumeSectionData && !isInitialized.current) {
       const section = resumeSectionData.sections?.find((s) => s.type === sectionType);
       const data = (section?.body as unknown as T[]) ?? [];
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setItems(data);
       setInitialItems(JSON.parse(JSON.stringify(data)));
+      isInitialized.current = true;
     }
   }, [resumeSectionData, sectionType, loading]);
 
-  const hasChanges = JSON.stringify(items) !== JSON.stringify(initialItems);
+  // Fix #3: Wrap hasChanges in useMemo instead of computing on every render
+  const hasChanges = useMemo(
+    () => JSON.stringify(items) !== JSON.stringify(initialItems),
+    [items, initialItems]
+  );
 
   const addItem = () => {
     const defaultItem = SECTION_DEFAULTS[sectionType];
@@ -53,8 +61,13 @@ export function useGenericListSection<T extends { id: number }>(
     setInitialItems(JSON.parse(JSON.stringify(nextItems)));
   };
 
+  // Fix #15: Early return if value hasn't changed
   const updateItem = <K extends keyof T>(id: number, field: K, value: T[K]) => {
-    setItems(items.map((i) => (i.id === id ? { ...i, [field]: value } : i)));
+    setItems(prev => {
+      const item = prev.find(i => i.id === id);
+      if (item && item[field] === value) return prev; // no change
+      return prev.map(i => (i.id === id ? { ...i, [field]: value } : i));
+    });
     // Clear error for this field when user starts typing
     if (errors[id]?.[field as string]) {
       setErrors({
