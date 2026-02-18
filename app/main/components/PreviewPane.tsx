@@ -3,7 +3,7 @@
 import React from "react";
 import { Resume } from "@/types/resumeTypes";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Save, X, Download, Loader2, FileText, Eye, AlertTriangle, RefreshCw } from "lucide-react";
+import { Save, X, Download, Loader2, FileText, Eye, Info, RefreshCw } from "lucide-react";
 
 interface PreviewPaneProps {
   resume: Resume | null;
@@ -153,20 +153,20 @@ function PreviewPane({
       {/* Viewer */}
       <div className="flex-1 p-8 overflow-hidden flex flex-col items-center justify-start">
         {error ? (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-red-50 rounded-lg border-2 border-dashed border-red-200 p-12 text-center animate-in fade-in duration-500">
-            <div className="p-4 bg-red-100 text-red-600 rounded-full mb-6">
-              <AlertTriangle size={48} />
+          <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200 p-12 text-center animate-in fade-in zoom-in duration-500">
+            <div className="p-4 bg-primary-100 text-primary-600 rounded-full mb-6">
+              <Info size={48} />
             </div>
-            <h3 className="text-xl font-bold text-red-900 mb-2 uppercase tracking-tight">Compilation Error</h3>
-            <p className="text-red-700 font-medium max-w-md mb-8 whitespace-pre-wrap leading-relaxed bg-white/50 p-4 rounded-xl border border-red-100 shadow-sm">
-              {error}
+            <h3 className="text-xl font-bold text-gray-900 mb-2 uppercase tracking-tight">Almost there!</h3>
+            <p className="text-gray-600 font-medium max-w-md mb-8 whitespace-pre-wrap leading-relaxed bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+              We just need a little more info before we can generate your PDF preview. Please check your data sections for any missing details or small errors.
             </p>
             <button 
               onClick={() => compilePdf()}
-              className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-200 active:scale-95"
+              className="flex items-center gap-2 px-8 py-3.5 bg-primary-600 text-white rounded-2xl font-bold hover:bg-primary-700 transition-all shadow-xl shadow-primary-200 active:scale-95"
             >
               <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
-              Retry Compilation
+              Try Again
             </button>
           </div>
         ) : pdfUrl ? (
