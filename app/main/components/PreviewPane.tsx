@@ -1,7 +1,7 @@
 "use client";
 
 import { Resume } from "@/types/resumeTypes";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Save, X, Download, Loader2, FileText, Eye } from "lucide-react";
 
 interface PreviewPaneProps {
@@ -33,7 +33,7 @@ export default function PreviewPane({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isDirty, onSave]);
 
-  const compilePdf = async () => {
+  const compilePdf = useCallback(async () => {
     if (!resume) {
       console.warn("No resume data available for PDF compilation");
       return
@@ -59,7 +59,7 @@ export default function PreviewPane({
     } finally {
       setLoading(false);
     }
-  };
+  }, [resume, pdfUrl]);
 
   useEffect(() => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
@@ -70,7 +70,7 @@ export default function PreviewPane({
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
-  }, [resume]);
+  }, [resume, compilePdf]);
 
   const handleDownload = () => {
     if (pdfUrl) {

@@ -15,6 +15,7 @@ export default function PersonalInfoPage() {
     updateLocation,
     updateDescription,
     updateContacts,
+    removeContact,
     handleSave,
     hasChanges,
     loading
@@ -148,6 +149,7 @@ export default function PersonalInfoPage() {
           <ContactForm
             contacts={personalInfo.contact || []}
             setContactsAction={updateContacts}
+            removeContactAction={removeContact}
           />
         </div>
       </div>

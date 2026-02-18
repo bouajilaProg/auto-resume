@@ -68,7 +68,7 @@ export default function useResumeEditor() {
     resumes,
     activeResumeId,
     createResume,
-    duplicateResume,
+    duplicateResume: baseDuplicateResume,
   } = useResumeSectionData();
 
   const [configsByResume, setConfigsByResume] = useState<ConfigsByResume>(() => {
@@ -87,7 +87,7 @@ export default function useResumeEditor() {
         return normalized;
       }
       return {};
-    } catch (e) {
+    } catch {
       return {};
     }
   });
@@ -101,7 +101,7 @@ export default function useResumeEditor() {
     try {
       const parsed = JSON.parse(raw);
       return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed as ActiveConfigByResume : {};
-    } catch (e) {
+    } catch {
       return {};
     }
   });
@@ -114,10 +114,32 @@ export default function useResumeEditor() {
     localStorage.setItem(ACTIVE_CONFIG_BY_RESUME_KEY, JSON.stringify(nextActiveConfig));
   }, []);
 
+  const duplicateResume = useCallback((sourceId: string, name?: string) => {
+    const newId = baseDuplicateResume(sourceId, name);
+    if (!newId) return null;
+
+    setConfigsByResume(prev => {
+      const sourceConfigs = prev[sourceId] || [normalizeConfig(DEFAULT_CONFIG)];
+      const nextConfigs = { ...prev, [newId]: JSON.parse(JSON.stringify(sourceConfigs)) };
+      
+      setActiveConfigByResume(prevActive => {
+        const sourceActiveId = prevActive[sourceId];
+        const nextActive = { ...prevActive, [newId]: sourceActiveId };
+        persistConfigs(nextConfigs, nextActive);
+        return nextActive;
+      });
+      
+      return nextConfigs;
+    });
+
+    return newId;
+  }, [baseDuplicateResume, persistConfigs]);
+
   // Initialize configs for the active resume (only when activeResumeId changes)
   useEffect(() => {
     if (!activeResumeId) return;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setConfigsByResume(prevConfigs => {
       let nextConfigsByResume = prevConfigs;
       let didUpdate = false;
@@ -130,7 +152,7 @@ export default function useResumeEditor() {
             const parsed = JSON.parse(legacyRaw);
             const configs = Array.isArray(parsed) ? parsed : [parsed];
             configsToSeed = normalizeConfigs(configs as ResumeConfig[]);
-          } catch (e) {
+          } catch {
             configsToSeed = null;
           }
           if (typeof window !== "undefined") {
@@ -188,6 +210,7 @@ export default function useResumeEditor() {
     if (resumes.length === 0) return;
     const validIds = new Set(resumes.map(resume => resume.id));
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setConfigsByResume(prevConfigs => {
       const staleConfigIds = Object.keys(prevConfigs).filter(id => !validIds.has(id));
       if (staleConfigIds.length === 0) return prevConfigs;
@@ -374,7 +397,7 @@ export default function useResumeEditor() {
           ...(config.itemOrder?.skills || {})
         }
       };
-
+      
       // Ensure personalInfo is initialized
       if (!newItemOrder.personalInfo) newItemOrder.personalInfo = [];
 
@@ -415,7 +438,7 @@ export default function useResumeEditor() {
       setIsDirty(true);
       return newConfigs;
     });
-  }, [activeConfigId]);
+  }, [activeConfigId, setConfigs]);
 
   const toggleAll = useCallback((sectionType: SectionTypeValue | "personalInfo", itemIds: number[], subType?: string, forceState?: boolean) => {
     setConfigs(prev => {
@@ -491,7 +514,7 @@ export default function useResumeEditor() {
       setIsDirty(true);
       return newConfigs;
     });
-  }, [activeConfigId]);
+  }, [activeConfigId, setConfigs]);
 
   const moveSection = useCallback((index: number, direction: "up" | "down") => {
     setConfigs(prev => {
@@ -513,7 +536,7 @@ export default function useResumeEditor() {
       setIsDirty(true);
       return newConfigs;
     });
-  }, [activeConfigId]);
+  }, [activeConfigId, setConfigs]);
 
   const moveItem = useCallback((sectionType: SectionTypeValue | "personalInfo", itemId: number, direction: "up" | "down" | "left" | "right", subType?: string) => {
     setConfigs(prev => {
@@ -555,7 +578,7 @@ export default function useResumeEditor() {
       setIsDirty(true);
       return newConfigs;
     });
-  }, [activeConfigId]);
+  }, [activeConfigId, setConfigs]);
 
   const save = useCallback(() => {
     if (!activeResumeId) return;
@@ -591,7 +614,7 @@ export default function useResumeEditor() {
           normalized[resumeId] = normalizeConfigs(configs);
         });
         setConfigsByResume(normalized);
-      } catch (e) {
+      } catch {
         // If parsing fails, keep current state
       }
     }
@@ -600,7 +623,7 @@ export default function useResumeEditor() {
       try {
         const parsed = JSON.parse(rawActive) as ActiveConfigByResume;
         setActiveConfigByResume(parsed);
-      } catch (e) {
+      } catch {
         // If parsing fails, keep current state
       }
     }
@@ -621,16 +644,30 @@ export default function useResumeEditor() {
   }, [setActiveConfigId, setConfigs]);
 
   const deleteConfig = useCallback((id: string) => {
-    setConfigs(prev => {
-      if (prev.length <= 1) return prev; // don't delete last config
-      const filtered = prev.filter(c => c.id !== id);
-      if (activeConfigId === id) {
-        setActiveConfigId(filtered[0].id);
-      }
-      return filtered;
+    if (!activeResumeId) return;
+    setConfigsByResume(prevConfigs => {
+      const current = prevConfigs[activeResumeId] || [DEFAULT_CONFIG];
+      if (current.length <= 1) return prevConfigs;
+
+      const filtered = normalizeConfigs(current.filter(c => c.id !== id));
+      const nextConfigs = { ...prevConfigs, [activeResumeId]: filtered };
+
+      setActiveConfigByResume(prevActive => {
+        let nextActiveId = prevActive[activeResumeId];
+        let switched = false;
+        if (nextActiveId === id) {
+          nextActiveId = filtered[0].id;
+          switched = true;
+        }
+        const nextActive = { ...prevActive, [activeResumeId]: nextActiveId };
+        persistConfigs(nextConfigs, nextActive);
+        if (switched) setIsDirty(false);
+        return nextActive;
+      });
+
+      return nextConfigs;
     });
-    setIsDirty(true);
-  }, [activeConfigId, setActiveConfigId, setConfigs]);
+  }, [activeResumeId, persistConfigs]);
 
   const renameConfig = useCallback((id: string, name: string) => {
     setConfigs(prev => {

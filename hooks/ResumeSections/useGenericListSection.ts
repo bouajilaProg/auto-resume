@@ -22,7 +22,6 @@ export function useGenericListSection<T extends { id: number }>(
       const data = (section?.body as unknown as T[]) ?? [];
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setItems(data);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInitialItems(JSON.parse(JSON.stringify(data)));
     }
   }, [resumeSectionData, sectionType, loading]);
@@ -37,11 +36,21 @@ export function useGenericListSection<T extends { id: number }>(
   };
 
   const removeItem = (id: number) => {
-    setItems(items.filter((i) => i.id !== id));
+    if (typeof window !== "undefined" && !confirm("Delete this entry?")) return;
+
+    const nextItems = items.filter((i) => i.id !== id);
+    setItems(nextItems);
+    
     // Clear errors for this item
     const newErrors = { ...errors };
     delete newErrors[id];
     setErrors(newErrors);
+
+    // Persist immediately as per user request
+    updateSection(sectionType, nextItems);
+    
+    // Update initial items so we don't show "unsaved changes" for this deletion
+    setInitialItems(JSON.parse(JSON.stringify(nextItems)));
   };
 
   const updateItem = <K extends keyof T>(id: number, field: K, value: T[K]) => {

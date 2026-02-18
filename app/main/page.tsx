@@ -14,7 +14,6 @@ export default function ResumeMainPage() {
     configs,
     assembledResume,
     isDirty,
-    activeResumeId,
     toggleItem,
     toggleAll,
     moveSection,
@@ -49,13 +48,6 @@ export default function ResumeMainPage() {
       setShowConfigMenu(false);
     }
   };
-
-  const handleDuplicateVersion = () => {
-    if (activeResumeId) {
-      createNewConfig(`Copy of ${activeConfig.name}`);
-    }
-  };
-
 
   return (
     <div className="flex h-screen overflow-hidden bg-white">
@@ -170,25 +162,15 @@ export default function ResumeMainPage() {
                     <Edit3 size={16} className="text-gray-400" />
                     Rename Version
                   </button>
-                  {/* <button */}
-                  {/*   onClick={() => { */}
-                  {/*     handleDuplicateVersion(); */}
-                  {/*     setShowConfigMenu(false); */}
-                  {/*   }} */}
-                  {/*   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" */}
-                  {/* > */}
-                  {/*   <Plus size={16} className="text-gray-400" /> */}
-                  {/*   Duplicate Version */}
-                  {/* </button> */}
-                  {/* <div className="h-px bg-gray-100 my-1" /> */}
-                  {/* <button */}
-                  {/*   onClick={handleDelete} */}
-                  {/*   disabled={configs.length <= 1} */}
-                  {/*   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:hover:bg-transparent" */}
-                  {/* > */}
-                  {/*   <Trash2 size={16} /> */}
-                  {/*   Delete Version */}
-                  {/* </button> */}
+                  <div className="h-px bg-gray-100 my-1" />
+                  <button
+                    onClick={handleDelete}
+                    disabled={configs.length <= 1}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:hover:bg-transparent"
+                  >
+                    <Trash2 size={16} />
+                    Delete Version
+                  </button>
                 </div>
               )}
             </>

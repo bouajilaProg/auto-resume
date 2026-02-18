@@ -44,7 +44,7 @@ export default function useResumeSectionData() {
     localStorage.setItem(ACTIVE_RESUME_ID_KEY, data.activeId);
   }, []);
 
-  const readResumeData = async () => {
+  const readResumeData = useCallback(async () => {
     setLoading(true);
     const start = Date.now();
 
@@ -131,7 +131,7 @@ export default function useResumeSectionData() {
 
     setLoading(false);
     return { resumes, order, activeId };
-  };
+  }, [persistResumes]);
 
   const syncResumeSectionData = useCallback((updated: Resume) => {
     if (typeof window === "undefined" || !activeResumeId) return;
@@ -252,7 +252,7 @@ export default function useResumeSectionData() {
       }
     };
     fetchData();
-  }, []);
+  }, [readResumeData]);
 
   const resumes = useMemo(() => {
     return resumeOrder

@@ -22,10 +22,8 @@ export function useSkills() {
         const skillsData = section.body as Skills;
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setSkills(skillsData);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setInitialSkills(JSON.parse(JSON.stringify(skillsData)));
       } else {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setInitialSkills({
           languages: [],
           technologies: [],
@@ -34,7 +32,7 @@ export function useSkills() {
       }
       isInitialized.current = true;
     }
-  }, [resumeSectionData, loading]);
+  }, [resumeSectionData, loading, skills]);
 
   const hasChanges = useMemo(() => 
     JSON.stringify(skills) !== JSON.stringify(initialSkills),
@@ -54,10 +52,16 @@ export function useSkills() {
   };
 
   const removeSkill = (type: keyof Skills) => (id: number) => {
-    setSkills(prevSkills => ({
-      ...prevSkills,
-      [type]: (prevSkills[type] || []).filter(s => s.id !== id)
-    }));
+    if (typeof window !== "undefined" && !confirm("Delete this skill?")) return;
+
+    const nextSkills = {
+      ...skills,
+      [type]: (skills[type] || []).filter(s => s.id !== id)
+    };
+    
+    setSkills(nextSkills);
+    updateSection(SectionType.Skills, nextSkills);
+    setInitialSkills(JSON.parse(JSON.stringify(nextSkills)));
   };
 
   const updateSkill = (type: keyof Skills) => (id: number, name: string) => {

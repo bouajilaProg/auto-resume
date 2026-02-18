@@ -30,12 +30,11 @@ export function usePersonalInfo() {
       const initData = {
         personalInfo: JSON.parse(JSON.stringify(currentPersonalInfo)),
       };
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInitialData(initData);
       
       isInitialized.current = true;
     }
-  }, [resumeSectionData, loading]);
+  }, [resumeSectionData, loading, personalInfo]);
 
   const hasChangesValue = useMemo(() => {
     if (!initialData) return false;
@@ -87,12 +86,24 @@ export function usePersonalInfo() {
     router.push("/sections");
   };
 
+  const removeContact = (id: number) => {
+    if (typeof window !== "undefined" && !confirm("Delete this contact method?")) return;
+    
+    const nextContacts = (personalInfo.contact || []).filter(c => c.id !== id);
+    const nextPersonalInfo = { ...personalInfo, contact: nextContacts };
+    
+    setPersonalInfo(nextPersonalInfo);
+    savePersonalInfo(nextPersonalInfo);
+    setInitialData({ personalInfo: JSON.parse(JSON.stringify(nextPersonalInfo)) });
+  };
+
   return {
     personalInfo,
     updateName,
     updateLocation,
     updateDescription,
     updateContacts,
+    removeContact,
     handleSave,
     hasChanges: hasChangesValue,
     loading,
