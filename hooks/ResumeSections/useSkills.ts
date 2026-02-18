@@ -40,7 +40,7 @@ export function useSkills() {
   );
 
   // Fix #10: Uncurried useCallback versions to avoid new function references every render
-  const addSkill = useCallback((type: keyof Skills) => (name: string) => {
+  const addSkill = useCallback((type: keyof Skills, name: string) => {
     setSkills(prevSkills => {
       const skillList = prevSkills[type] || [];
       const newId = skillList.length > 0 ? Math.max(...skillList.map(s => s.id)) + 1 : 1;
@@ -52,7 +52,7 @@ export function useSkills() {
     });
   }, []);
 
-  const removeSkill = useCallback((type: keyof Skills) => (id: number) => {
+  const removeSkill = useCallback((type: keyof Skills, id: number) => {
     if (typeof window !== "undefined" && !confirm("Delete this skill?")) return;
 
     setSkills(prevSkills => {
@@ -66,7 +66,7 @@ export function useSkills() {
     });
   }, [updateSection]);
 
-  const updateSkill = useCallback((type: keyof Skills) => (id: number, name: string) => {
+  const updateSkill = useCallback((type: keyof Skills, id: number, name: string) => {
     setSkills(prevSkills => ({
       ...prevSkills,
       [type]: (prevSkills[type] || []).map(s => (s.id === id ? { ...s, name } : s))

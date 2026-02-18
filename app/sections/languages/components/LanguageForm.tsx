@@ -28,6 +28,13 @@ function LanguageForm({
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
+  // Fix: Ensure proficiency is valid on mount/change
+  React.useEffect(() => {
+    if (!language.proficiency || !(PROFICIENCY_LEVELS as readonly string[]).includes(language.proficiency)) {
+      updateLanguage(language.id, "proficiency", "Intermediate");
+    }
+  }, [language.id, language.proficiency, updateLanguage]);
+
   const handleFieldChange =
     <K extends keyof Language>(field: K) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

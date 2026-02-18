@@ -22,6 +22,26 @@ export default function SkillsPage() {
   } = useSkills();
 
   const { openModal, closeModal } = useModal();
+
+  // Memoize bound skill actions to maintain stable references for SkillSection components
+  const langActions = useMemo(() => ({
+    add: (name: string) => addSkill(skillType.LANG, name),
+    remove: (id: number) => removeSkill(skillType.LANG, id),
+    update: (id: number, name: string) => updateSkill(skillType.LANG, id, name),
+  }), [addSkill, removeSkill, updateSkill]);
+
+  const techActions = useMemo(() => ({
+    add: (name: string) => addSkill(skillType.TECH, name),
+    remove: (id: number) => removeSkill(skillType.TECH, id),
+    update: (id: number, name: string) => updateSkill(skillType.TECH, id, name),
+  }), [addSkill, removeSkill, updateSkill]);
+
+  const softActions = useMemo(() => ({
+    add: (name: string) => addSkill(skillType.SOFT, name),
+    remove: (id: number) => removeSkill(skillType.SOFT, id),
+    update: (id: number, name: string) => updateSkill(skillType.SOFT, id, name),
+  }), [addSkill, removeSkill, updateSkill]);
+
   const ConfirmModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
   }), [closeModal, handleSave]);
@@ -78,9 +98,9 @@ export default function SkillsPage() {
             description="Languages you speak fluently (e.g., Python, JavaScript, C++)"
             icon={<Code className="text-white" />}
             skills={skills.languages || []}
-            onAdd={addSkill(skillType.LANG)}
-            onRemove={removeSkill(skillType.LANG)}
-            onUpdate={updateSkill(skillType.LANG)}
+            onAdd={langActions.add}
+            onRemove={langActions.remove}
+            onUpdate={langActions.update}
             colorTheme="blue"
           />
 
@@ -89,9 +109,9 @@ export default function SkillsPage() {
             description="Frameworks, libraries, and dev tools (e.g., React, AWS, Docker)"
             icon={<Layers className="text-white" />}
             skills={skills.technologies || []}
-            onAdd={addSkill(skillType.TECH)}
-            onRemove={removeSkill(skillType.TECH)}
-            onUpdate={updateSkill(skillType.TECH)}
+            onAdd={techActions.add}
+            onRemove={techActions.remove}
+            onUpdate={techActions.update}
             colorTheme="emerald"
           />
 
@@ -100,9 +120,9 @@ export default function SkillsPage() {
             description="Interpersonal abilities and leadership (e.g., Communication, Agile)"
             icon={<Users className="text-white" />}
             skills={skills.softSkills || []}
-            onAdd={addSkill(skillType.SOFT)}
-            onRemove={removeSkill(skillType.SOFT)}
-            onUpdate={updateSkill(skillType.SOFT)}
+            onAdd={softActions.add}
+            onRemove={softActions.remove}
+            onUpdate={softActions.update}
             colorTheme="purple"
           />
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo, useRef } from "react";
-import { ResumeSection, SectionTypeValue, SectionType, ResumeConfig, DEFAULT_CONFIG, Skills } from "@/types/resumeTypes";
+import { ResumeSection, SectionTypeValue, SectionType, ResumeConfig, DEFAULT_CONFIG, Skills, PROFICIENCY_LEVELS } from "@/types/resumeTypes";
 import useResumeSectionData from "./useResumeSectionData";
 
 const CONFIGS_BY_RESUME_KEY = "resumeConfigsById";
@@ -359,12 +359,29 @@ export default function useResumeEditor() {
       )
     } : undefined;
 
+    // Sanitize language proficiency values before sending to the API.
+    // The generator requires proficiency to be one of the PROFICIENCY_LEVELS enum values.
+    const sanitizedSections = filteredSections.map(section => {
+      if (section.type === SectionType.Languages && Array.isArray(section.body)) {
+        return {
+          ...section,
+          body: (section.body as Array<{ id: number; name: string; proficiency?: string }>).map(lang => ({
+            ...lang,
+            proficiency: lang.proficiency && (PROFICIENCY_LEVELS as readonly string[]).includes(lang.proficiency)
+              ? lang.proficiency
+              : "Intermediate",
+          })),
+        };
+      }
+      return section;
+    });
+
     return {
       name: resumeSectionData.name,
       description: resumeSectionData.description,
       lastUpdate: resumeSectionData.lastUpdate,
       personalInfo: assembledPersonalInfo,
-      sections: filteredSections as ResumeSection[],
+      sections: sanitizedSections as ResumeSection[],
     };
   }, [resumeSectionData, activeConfig]);
 
