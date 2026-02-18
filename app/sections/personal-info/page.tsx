@@ -63,7 +63,7 @@ export default function PersonalInfoPage() {
                   handleSave();
                 }
               }}
-              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
+              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
             >
               <Save size={14} />
               <span>Save Changes</span>
@@ -73,11 +73,11 @@ export default function PersonalInfoPage() {
 
         {/* Content Area */}
         <div className="space-y-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-indigo-50 overflow-hidden">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-primary-50 overflow-hidden">
             {/* Header */}
             <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-lg bg-indigo-600 text-white shadow-sm">
+                <div className="p-2.5 rounded-lg bg-primary-600 text-white shadow-sm">
                   <User size={16} />
                 </div>
                 <h3 className="font-semibold text-gray-800">Basic Details</h3>
@@ -99,7 +99,7 @@ export default function PersonalInfoPage() {
                       type="text"
                       value={personalInfo.name}
                       onChange={(e) => updateName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700"
+                      className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 text-gray-700"
                       placeholder="Your full name"
                     />
                   </div>
@@ -118,7 +118,7 @@ export default function PersonalInfoPage() {
                       type="text"
                       value={personalInfo.location}
                       onChange={(e) => updateLocation(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700"
+                      className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 text-gray-700"
                       placeholder="City, Country"
                     />
                   </div>
@@ -132,7 +132,7 @@ export default function PersonalInfoPage() {
                   <textarea
                     value={personalInfo.description}
                     onChange={(e) => updateDescription(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none"
+                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none"
                     placeholder="A brief description about yourself..."
                     rows={4}
                   />

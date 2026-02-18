@@ -21,9 +21,9 @@ interface SkillSectionProps {
 const themeClasses = {
   blue: {
     badge:
-      "bg-indigo-50 text-indigo-700 border-indigo-100 hover:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500",
-    button: "bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-200",
-    icon: "bg-indigo-600",
+      "bg-primary-50 text-primary-700 border-primary-100 hover:border-primary-300 focus-within:ring-2 focus-within:ring-primary-500/20 focus-within:border-primary-500",
+    button: "bg-primary-600 hover:bg-primary-700 focus:ring-primary-200",
+    icon: "bg-primary-600",
   },
   emerald: {
     badge:
@@ -130,7 +130,7 @@ function SkillSection({
             onChange={e => setNewSkillName(e.target.value)}
             onKeyDown={e => e.key === "Enter" && handleAdd()}
             placeholder={`Add a new ${title.toLowerCase().split(" ").pop()}...`}
-            className="w-full pl-5 pr-32 py-4 bg-gray-50/50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 font-medium"
+            className="w-full pl-5 pr-32 py-4 bg-gray-50/50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 font-medium"
           />
           <button
             onClick={handleAdd}

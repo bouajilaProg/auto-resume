@@ -55,7 +55,7 @@ const Modal: FC = () => {
                   onClick={() => handleButtonClick(button.onClick)}
                   className={`px-4 py-2 rounded-lg font-medium transition-colors 
                               ${index === buttons.length - 1
-                      ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                      ? 'bg-primary-600 text-white hover:bg-primary-700'
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                     }`}
                 >

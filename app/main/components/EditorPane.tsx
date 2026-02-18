@@ -66,7 +66,7 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
       <section className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
+            <div className="p-2 bg-primary-100 text-primary-600 rounded-lg">
               <UserIcon size={18} />
             </div>
             <div className="flex flex-col">
@@ -74,7 +74,7 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
               {masterData.personalInfo?.contact && masterData.personalInfo.contact.length > 0 && (
                 <button
                   onClick={() => toggleAll("personalInfo", (masterData.personalInfo?.contact || []).map(c => c.id))}
-                  className="text-[10px] font-bold uppercase tracking-wider text-indigo-500 hover:text-indigo-700 text-left mt-0.5"
+                  className="text-[10px] font-bold uppercase tracking-wider text-primary-500 hover:text-primary-700 text-left mt-0.5"
                 >
                   {(activeConfig.selectedItems.personalInfo || []).length === (masterData.personalInfo?.contact || []).length ? "Deselect All" : "Select All"}
                 </button>
@@ -83,7 +83,7 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
           </div>
           <Link
             href="/sections/personal-info"
-            className="p-1.5 hover:bg-gray-200 rounded-md transition-colors text-gray-400 hover:text-indigo-600"
+            className="p-1.5 hover:bg-gray-200 rounded-md transition-colors text-gray-400 hover:text-primary-600"
           >
             <Pencil size={18} />
           </Link>
@@ -108,18 +108,18 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                 <div
                   key={c.id}
                   className={`flex items-center gap-3 p-2 rounded-lg border transition-all group/item ${isSelected
-                    ? "bg-indigo-50/30 border-indigo-100 hover:border-indigo-200"
+                    ? "bg-primary-50/30 border-primary-100 hover:border-primary-200"
                     : "bg-white border-gray-100 opacity-60 grayscale hover:opacity-100 hover:grayscale-0"
                     }`}
                 >
                   <button
                     onClick={() => toggleItem("personalInfo", c.id)}
-                    className={`shrink-0 ${isSelected ? "text-indigo-600" : "text-gray-300"}`}
+                    className={`shrink-0 ${isSelected ? "text-primary-600" : "text-gray-300"}`}
                   >
                     {isSelected ? <CheckCircle2 size={16} /> : <Circle size={16} />}
                   </button>
                   <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <Icon size={14} className={isSelected ? "text-indigo-400" : "text-gray-400"} />
+                    <Icon size={14} className={isSelected ? "text-primary-400" : "text-gray-400"} />
                     <span className={`text-xs font-medium truncate ${isSelected ? "text-gray-700" : "text-gray-500"}`}>
                       {c.value}
                     </span>
@@ -130,14 +130,14 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                       <button
                         onClick={() => moveItem("personalInfo", c.id, "up")}
                         disabled={idx === 0}
-                        className="p-1 hover:bg-indigo-100 text-indigo-400 hover:text-indigo-600 rounded disabled:opacity-10"
+                        className="p-1 hover:bg-primary-100 text-primary-400 hover:text-primary-600 rounded disabled:opacity-10"
                       >
                         <ChevronUp size={14} />
                       </button>
                       <button
                         onClick={() => moveItem("personalInfo", c.id, "down")}
                         disabled={idx === selectedCount - 1}
-                        className="p-1 hover:bg-indigo-100 text-indigo-400 hover:text-indigo-600 rounded disabled:opacity-10"
+                        className="p-1 hover:bg-primary-100 text-primary-400 hover:text-primary-600 rounded disabled:opacity-10"
                       >
                         <ChevronDown size={14} />
                       </button>
@@ -180,7 +180,7 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
           <section key={sectionType} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
             <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
+                <div className="p-2 bg-primary-100 text-primary-600 rounded-lg">
                   <Icon size={18} />
                 </div>
                 <div className="flex flex-col">
@@ -188,7 +188,7 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                   {sectionType !== SectionType.Skills && Array.isArray(section.body) && section.body.length > 0 && (
                     <button
                       onClick={() => toggleAll(sectionType, allIds)}
-                      className="text-[10px] font-bold uppercase tracking-wider text-indigo-500 hover:text-indigo-700 text-left mt-0.5"
+                      className="text-[10px] font-bold uppercase tracking-wider text-primary-500 hover:text-primary-700 text-left mt-0.5"
                     >
                       {isAllSelected ? "Deselect All" : "Select All"}
                     </button>
@@ -198,7 +198,7 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
               <div className="flex items-center gap-1">
                 <Link
                   href={`/sections/${path}`}
-                  className="p-1.5 hover:bg-gray-200 rounded-md transition-colors text-gray-400 hover:text-indigo-600 mr-2"
+                  className="p-1.5 hover:bg-gray-200 rounded-md transition-colors text-gray-400 hover:text-primary-600 mr-2"
                 >
                   <Pencil size={18} />
                 </Link>
@@ -225,9 +225,9 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                 isEmpty ? (
                   <Link
                     href={`/sections/${path}`}
-                    className="flex flex-col items-center justify-center py-6 px-4 border-2 border-dashed border-gray-100 rounded-xl hover:bg-gray-50 hover:border-indigo-200 transition-all group/empty"
+                    className="flex flex-col items-center justify-center py-6 px-4 border-2 border-dashed border-gray-100 rounded-xl hover:bg-gray-50 hover:border-primary-200 transition-all group/empty"
                   >
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 group-hover/empty:text-indigo-400">No skills added</p>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 group-hover/empty:text-primary-400">No skills added</p>
                     <p className="text-[10px] text-gray-300">Click to add skills to your profile</p>
                   </Link>
                 ) : (
@@ -248,7 +248,7 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                             <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.15em]">{subType}</h3>
                             <button
                               onClick={() => toggleAll(sectionType, itemIds, subType)}
-                              className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 hover:text-indigo-600"
+                              className="text-[10px] font-bold uppercase tracking-wider text-primary-400 hover:text-primary-600"
                             >
                               {allSubSelected ? "Clear" : "Select All"}
                             </button>
@@ -261,7 +261,7 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                                 <div
                                   key={item.id}
                                   className={`pl-3 pr-2 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 border group/skill ${isSelected
-                                    ? "bg-indigo-50 border-indigo-200 text-indigo-700 shadow-sm"
+                                    ? "bg-primary-50 border-primary-200 text-primary-700 shadow-sm"
                                     : "bg-white border-gray-200 text-gray-400 hover:border-gray-300"
                                     }`}
                                 >
@@ -274,18 +274,18 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                                   </button>
 
                                   {isSelected && (
-                                    <div className="flex items-center ml-1 pl-1 border-l border-indigo-200 gap-0.5 opacity-0 group-hover/skill:opacity-100 transition-opacity">
+                                    <div className="flex items-center ml-1 pl-1 border-l border-primary-200 gap-0.5 opacity-0 group-hover/skill:opacity-100 transition-opacity">
                                       <button
                                         onClick={(e) => { e.stopPropagation(); moveItem(sectionType, item.id, "left", subType); }}
                                         disabled={itemIdx === 0}
-                                        className="p-0.5 hover:bg-indigo-100 rounded disabled:opacity-20"
+                                        className="p-0.5 hover:bg-primary-100 rounded disabled:opacity-20"
                                       >
                                         <ChevronLeft size={12} />
                                       </button>
                                       <button
                                         onClick={(e) => { e.stopPropagation(); moveItem(sectionType, item.id, "right", subType); }}
                                         disabled={itemIdx === selectedCount - 1}
-                                        className="p-0.5 hover:bg-indigo-100 rounded disabled:opacity-20"
+                                        className="p-0.5 hover:bg-primary-100 rounded disabled:opacity-20"
                                       >
                                         <ChevronRight size={12} />
                                       </button>
@@ -304,9 +304,9 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                 section.body.length === 0 ? (
                   <Link
                     href={`/sections/${path}`}
-                    className="flex flex-col items-center justify-center py-8 px-4 border-2 border-dashed border-gray-100 rounded-xl hover:bg-gray-50 hover:border-indigo-200 transition-all group/empty"
+                    className="flex flex-col items-center justify-center py-8 px-4 border-2 border-dashed border-gray-100 rounded-xl hover:bg-gray-50 hover:border-primary-200 transition-all group/empty"
                   >
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 group-hover/empty:text-indigo-400">Section Empty</p>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 group-hover/empty:text-primary-400">Section Empty</p>
                     <p className="text-[10px] text-gray-300">Click to add {label.toLowerCase()} entries</p>
                   </Link>
                 ) : (
@@ -326,12 +326,12 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                         <div
                           key={item.id}
                           className={`flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer group/item ${isSelected
-                            ? "bg-indigo-50/30 border-indigo-100 hover:border-indigo-200"
+                            ? "bg-primary-50/30 border-primary-100 hover:border-primary-200"
                             : "bg-white border-gray-100 opacity-60 grayscale hover:opacity-100 hover:grayscale-0"
                             }`}
                         >
                           <div
-                            className={`mt-0.5 ${isSelected ? "text-indigo-600" : "text-gray-300"}`}
+                            className={`mt-0.5 ${isSelected ? "text-primary-600" : "text-gray-300"}`}
                             onClick={() => toggleItem(sectionType, item.id)}
                           >
                             {isSelected ? <CheckCircle2 size={18} /> : <Circle size={18} />}
@@ -353,14 +353,14 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                               <button
                                 onClick={(e) => { e.stopPropagation(); moveItem(sectionType, item.id, "up"); }}
                                 disabled={itemIdx === 0}
-                                className="p-1 hover:bg-indigo-100 text-indigo-400 hover:text-indigo-600 rounded disabled:opacity-10"
+                                className="p-1 hover:bg-primary-100 text-primary-400 hover:text-primary-600 rounded disabled:opacity-10"
                               >
                                 <ChevronUp size={14} />
                               </button>
                               <button
                                 onClick={(e) => { e.stopPropagation(); moveItem(sectionType, item.id, "down"); }}
                                 disabled={itemIdx === selectedCount - 1}
-                                className="p-1 hover:bg-indigo-100 text-indigo-400 hover:text-indigo-600 rounded disabled:opacity-10"
+                                className="p-1 hover:bg-primary-100 text-primary-400 hover:text-primary-600 rounded disabled:opacity-10"
                               >
                                 <ChevronDown size={14} />
                               </button>

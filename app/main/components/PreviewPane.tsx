@@ -99,9 +99,9 @@ function PreviewPane({
       <div className="h-16 bg-white border-b border-gray-300 px-6 flex items-center justify-between shadow-sm z-10">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2 text-gray-700">
-            <FileText size={20} className="text-indigo-600" />
+            <FileText size={20} className="text-primary-600" />
             <span className="font-bold">Live Preview</span>
-            {loading && <Loader2 size={16} className="animate-spin text-indigo-500 ml-2" />}
+            {loading && <Loader2 size={16} className="animate-spin text-primary-500 ml-2" />}
           </div>
         </div>
 
@@ -119,7 +119,7 @@ function PreviewPane({
             onClick={onSave}
             disabled={!isDirty}
             className={`flex items-center gap-2 px-5 py-2 text-sm font-bold rounded-lg transition-all shadow-md ${isDirty
-              ? "bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200"
+              ? "bg-primary-600 text-white hover:bg-primary-700 shadow-primary-200"
               : "bg-gray-100 text-gray-400 grayscale cursor-not-allowed"
               }`}
           >
@@ -132,7 +132,7 @@ function PreviewPane({
           <button
             onClick={handleDownload}
             disabled={!pdfUrl}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-indigo-600 border border-indigo-200 hover:bg-indigo-50 rounded-lg font-bold text-sm transition-all shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-white text-primary-600 border border-primary-200 hover:bg-primary-50 rounded-lg font-bold text-sm transition-all shadow-sm"
           >
             <Download size={16} />
             <span>Download</span>
@@ -152,7 +152,7 @@ function PreviewPane({
             {loading && (
               <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] flex items-center justify-center">
                 <div className="bg-white p-4 rounded-full shadow-xl">
-                  <Loader2 size={32} className="animate-spin text-indigo-600" />
+                  <Loader2 size={32} className="animate-spin text-primary-600" />
                 </div>
               </div>
             )}

@@ -42,7 +42,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
             className="flex items-center gap-4 flex-1 cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
-          <div className="p-3 rounded-lg bg-indigo-600 text-white shadow-sm">
+          <div className="p-3 rounded-lg bg-primary-600 text-white shadow-sm">
             <GraduationCap size={20} />
           </div>
             <div>
@@ -82,11 +82,11 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-indigo-50">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-primary-50">
       {/* Header */}
       <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-lg bg-indigo-600 text-white shadow-sm">
+          <div className="p-2.5 rounded-lg bg-primary-600 text-white shadow-sm">
             <GraduationCap size={16} />
           </div>
           <h3 className="font-semibold text-gray-800">
@@ -123,7 +123,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
               id={`degreeType-${edu.id}`}
               value={edu.degreeType}
               onChange={handleFieldChange('degreeType')}
-              className={`w-full px-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none text-gray-700 ${errors?.degreeType ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full px-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all appearance-none text-gray-700 ${errors?.degreeType ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
             >
               {Object.entries(DEGREES).map(([key, value]) => (
@@ -153,7 +153,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
               type="text"
               value={edu.degreeName}
               onChange={handleFieldChange('degreeName')}
-              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 ${errors?.degreeName ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 ${errors?.degreeName ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="e.g. Computer Science"
             />
@@ -175,7 +175,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
               type="text"
               value={edu.institution}
               onChange={handleFieldChange('institution')}
-              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 ${errors?.institution ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 ${errors?.institution ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="e.g. Stanford University"
             />
@@ -197,7 +197,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
               type="month"
               value={edu.startDate}
               onChange={handleFieldChange('startDate')}
-              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700 ${errors?.startDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all text-gray-700 ${errors?.startDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
             />
           </div>
@@ -218,7 +218,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
               type="month"
               value={edu.endDate}
               onChange={handleFieldChange('endDate')}
-              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700 ${errors?.endDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all text-gray-700 ${errors?.endDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
             />
           </div>
@@ -239,7 +239,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
               value={edu.summary || ""}
               onChange={handleFieldChange('summary')}
               rows={2}
-              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none ${errors?.summary ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none ${errors?.summary ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="Brief summary of your studies or focus area..."
             />
@@ -261,7 +261,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
               value={(edu.highlights || []).join("\n")}
               onChange={handleFieldChange('highlights')}
               rows={3}
-              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 ${errors?.highlights ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 ${errors?.highlights ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="e.g. GPA: 3.8/4.0, Specialized in Distributed Systems..."
             />
@@ -283,7 +283,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
               value={edu.keySkills}
               onChange={handleFieldChange('keySkills')}
               rows={3}
-              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none ${errors?.keySkills ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-10 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 resize-none ${errors?.keySkills ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="e.g. Data Structures, Algorithms, Neural Networks, Research Methodology..."
             />
