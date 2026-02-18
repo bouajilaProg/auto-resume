@@ -3,7 +3,7 @@
 import React from "react";
 import { Resume } from "@/types/resumeTypes";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Save, X, Download, Loader2, FileText, Eye, AlertTriangle, RefreshCw } from "lucide-react";
+import { Save, X, Download, Loader2, FileText, Eye, Info, RefreshCw } from "lucide-react";
 
 interface PreviewPaneProps {
   resume: Resume | null;
@@ -155,23 +155,18 @@ function PreviewPane({
         {error ? (
           <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200 p-12 text-center animate-in fade-in zoom-in duration-500">
             <div className="p-4 bg-primary-100 text-primary-600 rounded-full mb-6">
-              <AlertTriangle size={48} />
+              <Info size={48} />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2 uppercase tracking-tight">Data validation required</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2 uppercase tracking-tight">Almost there!</h3>
             <p className="text-gray-600 font-medium max-w-md mb-8 whitespace-pre-wrap leading-relaxed bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-              We can't generate your resume with the current data. Please check your sections for missing or incorrect information.
-              {error && (
-                <span className="block mt-4 pt-4 border-t border-gray-50 text-xs font-mono text-gray-400 text-left overflow-auto max-h-40">
-                  {error}
-                </span>
-              )}
+              We just need a little more info before we can generate your PDF preview. Please check your data sections for any missing details or small errors.
             </p>
             <button 
               onClick={() => compilePdf()}
               className="flex items-center gap-2 px-8 py-3.5 bg-primary-600 text-white rounded-2xl font-bold hover:bg-primary-700 transition-all shadow-xl shadow-primary-200 active:scale-95"
             >
               <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
-              Retry Compilation
+              Try Again
             </button>
           </div>
         ) : pdfUrl ? (
