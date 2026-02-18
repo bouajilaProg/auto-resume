@@ -54,14 +54,14 @@ This project ships with a Docker setup for production-like runs.
 # Build the image
 pnpm docker:build
 
-# Run the container (exposes port 6000)
+# Run the container (exposes port 16000)
 pnpm docker:run
 ```
 
-Then open [http://localhost:6000](http://localhost:6000).
+Then open [http://localhost:16000](http://localhost:16000).
 
 Notes:
-- The container listens on `PORT=6000` and binds `0.0.0.0` for external access.
+- The container listens on `PORT=16000` (updated from 6000 because that port can be reserved by some systems like macOS AirPlay Receiver) and binds `0.0.0.0` for external access.
 - You can change the port mapping by editing `package.json`'s `docker:run` script or passing `-p <host>:<container>` to `docker run`.
 
 ## 📂 Project Structure

@@ -68,9 +68,9 @@ RUN mkdir -p node_modules/.pnpm/bouajila-resume-generator@1.3.2/node_modules \
 
 USER nextjs
 
-EXPOSE 6000
+EXPOSE 16000
 
-ENV PORT=6000
+ENV PORT=16000
 ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]
