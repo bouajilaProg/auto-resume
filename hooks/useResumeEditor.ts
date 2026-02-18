@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { ResumeSection, SectionTypeValue, SectionType, ResumeConfig, DEFAULT_CONFIG, Skills } from "@/types/resumeTypes";
 import useResumeSectionData from "./useResumeSectionData";
 
@@ -248,13 +248,14 @@ export default function useResumeEditor() {
     return activeConfigByResume[activeResumeId] || configs[0]?.id || DEFAULT_CONFIG.id;
   }, [activeResumeId, activeConfigByResume, configs]);
 
-  const setConfigs = useCallback((updater: ResumeConfig[] | ((prev: ResumeConfig[]) => ResumeConfig[])) => {
+  // Fix #12: skip normalization on in-place mutations (toggleItem, moveSection, etc.)
+  const setConfigs = useCallback((updater: ResumeConfig[] | ((prev: ResumeConfig[]) => ResumeConfig[]), skipNormalize = false) => {
     if (!activeResumeId) return;
     setConfigsByResume(prev => {
       const current = prev[activeResumeId] || [DEFAULT_CONFIG];
       const nextConfigs = typeof updater === "function" ? updater(current) : updater;
-      const normalized = normalizeConfigs(nextConfigs);
-      return { ...prev, [activeResumeId]: normalized };
+      const result = skipNormalize ? nextConfigs : normalizeConfigs(nextConfigs);
+      return { ...prev, [activeResumeId]: result };
     });
   }, [activeResumeId]);
 
@@ -270,7 +271,11 @@ export default function useResumeEditor() {
     [configs, activeConfigId]
   );
 
-  const assembledResume = useMemo(() => {
+  // Fix #2: Deep-equality check to avoid returning new object references
+  const prevAssembledRef = useRef<string | null>(null);
+  const prevAssembledObjRef = useRef<ReturnType<typeof computeAssembledResume> | null>(null);
+
+  const computeAssembledResume = useCallback(() => {
     if (!resumeSectionData || !activeConfig) return null;
 
     const filteredSections = activeConfig.sectionOrder.map(type => {
@@ -365,6 +370,17 @@ export default function useResumeEditor() {
     };
   }, [resumeSectionData, activeConfig]);
 
+  const assembledResume = useMemo(() => {
+    const result = computeAssembledResume();
+    const serialized = JSON.stringify(result);
+    if (serialized === prevAssembledRef.current) {
+      return prevAssembledObjRef.current;
+    }
+    prevAssembledRef.current = serialized;
+    prevAssembledObjRef.current = result;
+    return result;
+  }, [computeAssembledResume]);
+
   // optimized toggleItem - only updates the specific config that changed
   const toggleItem = useCallback((sectionType: SectionTypeValue | "personalInfo", itemId: number, subType?: string) => {
     setConfigs(prev => {
@@ -437,7 +453,7 @@ export default function useResumeEditor() {
 
       setIsDirty(true);
       return newConfigs;
-    });
+    }, true);
   }, [activeConfigId, setConfigs]);
 
   const toggleAll = useCallback((sectionType: SectionTypeValue | "personalInfo", itemIds: number[], subType?: string, forceState?: boolean) => {
@@ -513,7 +529,7 @@ export default function useResumeEditor() {
 
       setIsDirty(true);
       return newConfigs;
-    });
+    }, true);
   }, [activeConfigId, setConfigs]);
 
   const moveSection = useCallback((index: number, direction: "up" | "down") => {
@@ -535,7 +551,7 @@ export default function useResumeEditor() {
 
       setIsDirty(true);
       return newConfigs;
-    });
+    }, true);
   }, [activeConfigId, setConfigs]);
 
   const moveItem = useCallback((sectionType: SectionTypeValue | "personalInfo", itemId: number, direction: "up" | "down" | "left" | "right", subType?: string) => {
@@ -577,7 +593,7 @@ export default function useResumeEditor() {
       newConfigs[configIndex] = { ...config, itemOrder: newItemOrder };
       setIsDirty(true);
       return newConfigs;
-    });
+    }, true);
   }, [activeConfigId, setConfigs]);
 
   const save = useCallback(() => {

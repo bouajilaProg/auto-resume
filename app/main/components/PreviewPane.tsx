@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Resume } from "@/types/resumeTypes";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Save, X, Download, Loader2, FileText, Eye } from "lucide-react";
@@ -11,7 +12,7 @@ interface PreviewPaneProps {
   onCancel: () => void;
 }
 
-export default function PreviewPane({
+function PreviewPane({
   resume,
   isDirty,
   onSave,
@@ -20,24 +21,32 @@ export default function PreviewPane({
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const pdfUrlRef = useRef<string | null>(null);
+
+  // Fix #9: Use refs for isDirty/onSave so the listener only mounts once
+  const isDirtyRef = useRef(isDirty);
+  const onSaveRef = useRef(onSave);
+  isDirtyRef.current = isDirty;
+  onSaveRef.current = onSave;
 
   // Shortcut for Save (Ctrl/Cmd + S)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "s") {
         e.preventDefault();
-        if (isDirty) onSave();
+        if (isDirtyRef.current) onSaveRef.current();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isDirty, onSave]);
+  }, []); // runs once
 
+  // Fix #1: Use ref for pdfUrl so compilePdf identity stays stable
   const compilePdf = useCallback(async () => {
     if (!resume) {
       console.warn("No resume data available for PDF compilation");
-      return
-    };
+      return;
+    }
     setLoading(true);
     try {
       const response = await fetch("/api/compile", {
@@ -48,8 +57,9 @@ export default function PreviewPane({
 
       if (response.ok) {
         const blob = await response.blob();
-        if (pdfUrl) URL.revokeObjectURL(pdfUrl);
+        if (pdfUrlRef.current) URL.revokeObjectURL(pdfUrlRef.current);
         const url = URL.createObjectURL(blob);
+        pdfUrlRef.current = url;
         setPdfUrl(url);
       } else {
         console.error("Returned error from compile API:", await response.text());
@@ -59,7 +69,7 @@ export default function PreviewPane({
     } finally {
       setLoading(false);
     }
-  }, [resume, pdfUrl]);
+  }, [resume]); // pdfUrl removed -- use ref instead
 
   useEffect(() => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
@@ -70,7 +80,7 @@ export default function PreviewPane({
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
-  }, [resume, compilePdf]);
+  }, [compilePdf]); // only compilePdf (stable unless resume changes)
 
   const handleDownload = () => {
     if (pdfUrl) {
@@ -157,3 +167,5 @@ export default function PreviewPane({
     </div>
   );
 }
+
+export default React.memo(PreviewPane);
