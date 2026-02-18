@@ -75,7 +75,7 @@ export function useSkills() {
 
   const handleSave = () => {
     updateSection(SectionType.Skills, skills);
-    router.push("/sections");
+    router.push("/main");
   };
 
   return {

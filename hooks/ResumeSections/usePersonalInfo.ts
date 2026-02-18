@@ -84,7 +84,7 @@ export function usePersonalInfo() {
     setPersonalInfo(updatedPersonalInfo);
     savePersonalInfo(updatedPersonalInfo);
     
-    router.push("/sections");
+    router.push("/main");
   };
 
   const removeContact = (id: number) => {

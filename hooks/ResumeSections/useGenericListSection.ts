@@ -111,7 +111,7 @@ export function useGenericListSection<T extends { id: number }>(
 
     setItems(cleanedAndTrimmed);
     updateSection(sectionType, cleanedAndTrimmed);
-    router.push("/sections");
+    router.push("/main");
   };
 
   return { items, addItem, removeItem, updateItem, handleSave, hasChanges, loading, errors };
