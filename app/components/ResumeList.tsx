@@ -5,11 +5,11 @@ import ResumeItem from "./ResumeItem";
 import { Loader2, Plus } from "lucide-react";
 
 function ResumeList() {
-  const { 
-    configs, 
-    loading, 
-    createNewConfig, 
-    deleteConfig 
+  const {
+    resumes,
+    loading,
+    createResume,
+    duplicateResume,
   } = useResumeEditor();
 
   if (loading) {
@@ -25,10 +25,10 @@ function ResumeList() {
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Create New Card */}
-        <button 
+        <button
           onClick={() => {
             const name = prompt("Enter resume name:");
-            if (name) createNewConfig(name);
+            if (name) createResume(name);
           }}
           className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-6 flex flex-col items-center justify-center gap-4 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all group min-h-[200px]"
         >
@@ -41,19 +41,15 @@ function ResumeList() {
           </div>
         </button>
 
-        {configs.map((config) => (
+        {resumes.map((resume) => (
           <ResumeItem
-            key={config.id}
-            id={config.id}
-            name={config.name}
-            description={config.description}
-            lastUpdate={config.lastUpdate}
-            onDelete={deleteConfig}
+            key={resume.id}
+            id={resume.id}
+            name={resume.name}
+            description={resume.description}
+            lastUpdate={resume.lastUpdate}
             onCopy={(id) => {
-              const original = configs.find(c => c.id === id);
-              if (original) {
-                createNewConfig(`Copy of ${original.name}`);
-              }
+              duplicateResume(id);
             }}
           />
         ))}

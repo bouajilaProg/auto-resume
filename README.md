@@ -46,6 +46,24 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Docker Image
+
+This project ships with a Docker setup for production-like runs.
+
+```bash
+# Build the image
+pnpm docker:build
+
+# Run the container (exposes port 6000)
+pnpm docker:run
+```
+
+Then open [http://localhost:6000](http://localhost:6000).
+
+Notes:
+- The container listens on `PORT=6000` and binds `0.0.0.0` for external access.
+- You can change the port mapping by editing `package.json`'s `docker:run` script or passing `-p <host>:<container>` to `docker run`.
+
 ## 📂 Project Structure
 
 - \`app/\`: Next.js pages and API routes.

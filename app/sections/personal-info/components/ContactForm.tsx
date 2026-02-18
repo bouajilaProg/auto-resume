@@ -1,14 +1,17 @@
 "use client";
 
+import React from "react";
 import { Contact, CONTACT_TYPES, contactIcons, ContactType } from "@/types/resumeTypes";
 import { Mail, Plus, Trash2, ChevronDown, Contact as ContactIcon } from "lucide-react";
 
-export default function ContactForm({
+function ContactForm({
   contacts,
-  setContactsAction: setContacts
+  setContactsAction: setContacts,
+  removeContactAction
 }: {
   contacts: Contact[];
   setContactsAction: (contacts: Contact[]) => void;
+  removeContactAction?: (id: number) => void;
 }) {
 
   function addContactMethod() {
@@ -37,7 +40,11 @@ export default function ContactForm({
   }
 
   function removeContactMethod(id: number) {
-    setContacts(contacts.filter((contact) => contact.id !== id));
+    if (removeContactAction) {
+      removeContactAction(id);
+    } else {
+      setContacts(contacts.filter((contact) => contact.id !== id));
+    }
   }
 
   return (
@@ -174,3 +181,5 @@ export default function ContactForm({
     </div>
   );
 }
+
+export default React.memo(ContactForm);

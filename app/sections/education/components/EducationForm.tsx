@@ -1,7 +1,7 @@
 "use client"
 
 import { DEGREES, EducationItem } from "@/types/resumeTypes"
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   GraduationCap,
   Trash2,
@@ -295,4 +295,4 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
   );
 }
 
-export default EducationForm;
+export default React.memo(EducationForm);

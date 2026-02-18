@@ -1,10 +1,10 @@
 import { SkillItem } from "@/types/resumeTypes";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
   X,
-  Plus
+  Plus,
 } from "lucide-react";
 
 interface SkillSectionProps {
@@ -39,7 +39,7 @@ const themeClasses = {
   },
 };
 
-export default function SkillSection({
+function SkillSection({
   title,
   description,
   icon,
@@ -114,7 +114,7 @@ export default function SkillSection({
             )}
           </div>
         </div>
-        <button 
+        <button
           onClick={() => setIsOpen(false)}
           className="p-2 rounded-full hover:bg-gray-100 transition-colors"
         >
@@ -129,7 +129,7 @@ export default function SkillSection({
             value={newSkillName}
             onChange={e => setNewSkillName(e.target.value)}
             onKeyDown={e => e.key === "Enter" && handleAdd()}
-            placeholder={`Add a new ${title.toLowerCase().split(' ').pop()}...`}
+            placeholder={`Add a new ${title.toLowerCase().split(" ").pop()}...`}
             className="w-full pl-5 pr-32 py-4 bg-gray-50/50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 font-medium"
           />
           <button
@@ -161,7 +161,7 @@ export default function SkillSection({
                   className="bg-transparent text-sm font-bold outline-none min-w-[60px] max-w-[200px]"
                   style={{ width: `${Math.max(skill.name.length, 6)}ch` }}
                 />
-                <button 
+                <button
                   onClick={() => onRemove(skill.id)}
                   className="hover:text-red-500 transition-colors p-0.5"
                 >
@@ -175,3 +175,5 @@ export default function SkillSection({
     </div>
   );
 }
+
+export default React.memo(SkillSection);

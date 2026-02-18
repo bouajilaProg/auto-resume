@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { Skills, SectionType } from "@/types/resumeTypes";
 import useResumeSectionData from "@hooks/useResumeSectionData";
 import { useRouter } from "next/navigation";
@@ -22,10 +22,8 @@ export function useSkills() {
         const skillsData = section.body as Skills;
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setSkills(skillsData);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setInitialSkills(JSON.parse(JSON.stringify(skillsData)));
       } else {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setInitialSkills({
           languages: [],
           technologies: [],
@@ -34,14 +32,15 @@ export function useSkills() {
       }
       isInitialized.current = true;
     }
-  }, [resumeSectionData, loading]);
+  }, [resumeSectionData, loading, skills]);
 
   const hasChanges = useMemo(() => 
     JSON.stringify(skills) !== JSON.stringify(initialSkills),
     [skills, initialSkills]
   );
 
-  const addSkill = (type: keyof Skills) => (name: string) => {
+  // Fix #10: Uncurried useCallback versions to avoid new function references every render
+  const addSkill = useCallback((type: keyof Skills, name: string) => {
     setSkills(prevSkills => {
       const skillList = prevSkills[type] || [];
       const newId = skillList.length > 0 ? Math.max(...skillList.map(s => s.id)) + 1 : 1;
@@ -51,25 +50,32 @@ export function useSkills() {
         [type]: [...skillList, { id: newId, type: type === 'languages' ? 'LANG' : type === 'technologies' ? 'TECH' : 'SOFT', name }]
       };
     });
-  };
+  }, []);
 
-  const removeSkill = (type: keyof Skills) => (id: number) => {
-    setSkills(prevSkills => ({
-      ...prevSkills,
-      [type]: (prevSkills[type] || []).filter(s => s.id !== id)
-    }));
-  };
+  const removeSkill = useCallback((type: keyof Skills, id: number) => {
+    if (typeof window !== "undefined" && !confirm("Delete this skill?")) return;
 
-  const updateSkill = (type: keyof Skills) => (id: number, name: string) => {
+    setSkills(prevSkills => {
+      const nextSkills = {
+        ...prevSkills,
+        [type]: (prevSkills[type] || []).filter(s => s.id !== id)
+      };
+      updateSection(SectionType.Skills, nextSkills);
+      setInitialSkills(JSON.parse(JSON.stringify(nextSkills)));
+      return nextSkills;
+    });
+  }, [updateSection]);
+
+  const updateSkill = useCallback((type: keyof Skills, id: number, name: string) => {
     setSkills(prevSkills => ({
       ...prevSkills,
       [type]: (prevSkills[type] || []).map(s => (s.id === id ? { ...s, name } : s))
     }));
-  };
+  }, []);
 
   const handleSave = () => {
     updateSection(SectionType.Skills, skills);
-    router.push("/sections");
+    router.push("/main");
   };
 
   return {

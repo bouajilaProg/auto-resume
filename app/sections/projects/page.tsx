@@ -7,6 +7,7 @@ import { useProjects } from "@hooks/ResumeSections/useProjects";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";
+import { useMemo } from "react";
 
 export default function ProjectsPage() {
   const {
@@ -21,9 +22,9 @@ export default function ProjectsPage() {
   } = useProjects();
 
   const { openModal, closeModal } = useModal();
-  const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
+  const ConfirmModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
-  });
+  }), [closeModal, handleSave]);
 
   if (loading) {
     return <Loading />;
@@ -47,7 +48,7 @@ export default function ProjectsPage() {
           {/* Action Buttons */}
           <div className="flex items-center gap-3 w-full sm:w-auto">
             <Link
-              href="/sections"
+              href="/main"
               className="flex-1 sm:flex-none justify-center px-4 py-2.5 border border-gray-200 text-gray-600 bg-white rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all flex items-center gap-2 font-medium shadow-sm"
             >
               <X size={14} />

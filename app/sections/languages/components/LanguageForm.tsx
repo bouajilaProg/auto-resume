@@ -1,5 +1,5 @@
 import { Language, PROFICIENCY_LEVELS } from "@/types/resumeTypes";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -9,7 +9,7 @@ import {
   Award,
 } from "lucide-react";
 
-export default function LanguageForm({
+function LanguageForm({
   language,
   index,
   updateLanguage,
@@ -27,6 +27,13 @@ export default function LanguageForm({
   errors?: Record<string, string>;
 }) {
   const [isOpen, setIsOpen] = useState(true);
+
+  // Fix: Ensure proficiency is valid on mount/change
+  React.useEffect(() => {
+    if (!language.proficiency || !(PROFICIENCY_LEVELS as readonly string[]).includes(language.proficiency)) {
+      updateLanguage(language.id, "proficiency", "Intermediate");
+    }
+  }, [language.id, language.proficiency, updateLanguage]);
 
   const handleFieldChange =
     <K extends keyof Language>(field: K) =>
@@ -160,3 +167,5 @@ export default function LanguageForm({
     </div>
   );
 }
+
+export default React.memo(LanguageForm);

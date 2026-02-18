@@ -12,9 +12,7 @@ import { ALL_SECTIONS, SECTION_ICONS, SECTION_LABELS, SECTION_PATHS } from "@/co
 export default function Sidebar() {
   const pathname = usePathname();
 
-  const isMainPage = pathname === "/";
   const isEditorPage = pathname === "/main";
-  const isSectionsBase = pathname === "/sections";
   
   const navItems = [
     { label: "Editor", href: "/main", icon: FileText, active: isEditorPage },

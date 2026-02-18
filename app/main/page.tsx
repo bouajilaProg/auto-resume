@@ -79,16 +79,16 @@ export default function ResumeMainPage() {
             </button>
           ))}
 
-          {/* <button */}
-          {/*   onClick={() => { */}
-          {/*     const name = prompt("Enter resume name:"); */}
-          {/*     if (name) createNewConfig(name); */}
-          {/*   }} */}
-          {/*   className="w-10 h-10 rounded-lg flex items-center justify-center bg-white text-gray-400 hover:bg-indigo-50 hover:text-indigo-600 border border-gray-200 border-dashed transition-all" */}
-          {/*   title="Create New Resume" */}
-          {/* > */}
-          {/*   <Plus size={20} /> */}
-          {/* </button> */}
+          <button
+            onClick={() => {
+              const name = prompt("Enter resume name:");
+              if (name) createNewConfig(name);
+            }}
+            className="w-10 h-10 rounded-lg flex items-center justify-center bg-white text-gray-400 hover:bg-indigo-50 hover:text-indigo-600 border border-gray-200 border-dashed transition-all"
+            title="Create New Resume"
+          >
+            <Plus size={20} />
+          </button>
         </div>
 
       </div>
@@ -150,7 +150,7 @@ export default function ResumeMainPage() {
               </div>
 
               {showConfigMenu && (
-                <div className="absolute top-14 right-6 w-48 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-10 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-14 right-6 w-56 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-10 animate-in fade-in slide-in-from-top-2 duration-200">
                   <button
                     onClick={() => {
                       setTempName(activeConfig.name);
@@ -160,7 +160,7 @@ export default function ResumeMainPage() {
                     className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     <Edit3 size={16} className="text-gray-400" />
-                    Rename Resume
+                    Rename Version
                   </button>
                   <div className="h-px bg-gray-100 my-1" />
                   <button
@@ -169,7 +169,7 @@ export default function ResumeMainPage() {
                     className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:hover:bg-transparent"
                   >
                     <Trash2 size={16} />
-                    Delete Resume
+                    Delete Version
                   </button>
                 </div>
               )}
