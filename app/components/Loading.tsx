@@ -15,11 +15,7 @@ export default function Loading() {
   return (
     <div className="min-h-screen w-full flex flex-col bg-gray-50/50 items-center justify-center p-6 text-center">
       <div className="flex flex-col items-center justify-center gap-12 max-w-2xl w-full">
-        
-        <div className="relative w-48 h-48">
-          <div className="absolute top-0 left-0 w-full h-full border-[10px] border-gray-100 rounded-full shadow-inner"></div>
-          <div className="absolute top-0 left-0 w-full h-full border-[10px] border-primary-600 rounded-full border-t-transparent animate-spin shadow-primary-200"></div>
-        </div>
+
 
         <div className="space-y-4">
           <h2 className="text-gray-900 font-black text-5xl tracking-tight animate-pulse">
@@ -28,6 +24,10 @@ export default function Loading() {
           <p className="text-gray-400 text-2xl font-medium tracking-wide">
             Getting your section ready...
           </p>
+        </div>
+        <div className="relative w-48 h-48">
+          <div className="absolute top-0 left-0 w-full h-full border-[10px] border-gray-100 rounded-full shadow-inner"></div>
+          <div className="absolute top-0 left-0 w-full h-full border-[10px] border-primary-600 rounded-full border-t-transparent animate-spin shadow-primary-200"></div>
         </div>
 
         {tip && (
