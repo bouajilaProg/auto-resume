@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { PersonalInfo, Contact, PersonalInfoSchema } from "@/types/resumeTypes";
 import useResumeSectionData from "@hooks/useResumeSectionData";
 import { useRouter } from "next/navigation";
@@ -45,21 +45,22 @@ export function usePersonalInfo() {
     return currentPersonalInfo !== initialPersonalInfo;
   }, [personalInfo, initialData]);
 
-  const updateName = (name: string) => {
-    setPersonalInfo({ ...personalInfo, name });
-  };
+  // Fix #13: Use functional state updates so callbacks don't depend on personalInfo
+  const updateName = useCallback((name: string) => {
+    setPersonalInfo(prev => ({ ...prev, name }));
+  }, []);
 
-  const updateLocation = (location: string) => {
-    setPersonalInfo({ ...personalInfo, location });
-  };
+  const updateLocation = useCallback((location: string) => {
+    setPersonalInfo(prev => ({ ...prev, location }));
+  }, []);
 
-  const updateDescription = (description: string) => {
-    setPersonalInfo({ ...personalInfo, description });
-  };
+  const updateDescription = useCallback((description: string) => {
+    setPersonalInfo(prev => ({ ...prev, description }));
+  }, []);
 
-  const updateContacts = (contacts: Contact[]) => {
-    setPersonalInfo({ ...personalInfo, contact: contacts });
-  };
+  const updateContacts = useCallback((contacts: Contact[]) => {
+    setPersonalInfo(prev => ({ ...prev, contact: contacts }));
+  }, []);
 
   const handleSave = () => {
     const cleanedContacts = (personalInfo.contact || [])

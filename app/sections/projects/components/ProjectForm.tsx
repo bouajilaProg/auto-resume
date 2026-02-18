@@ -1,5 +1,5 @@
 import { Project } from "@/types/resumeTypes";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -11,7 +11,7 @@ import {
   FileText
 } from "lucide-react";
 
-export default function ProjectForm({
+function ProjectForm({
   project,
   index,
   updateProject,
@@ -241,3 +241,5 @@ export default function ProjectForm({
     </div>
   );
 }
+
+export default React.memo(ProjectForm);

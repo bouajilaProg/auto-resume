@@ -1,8 +1,8 @@
 import { WorkExperience } from "@/types/resumeTypes";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ChevronDown, ChevronUp, Briefcase, Trash, Building, MapPin, Calendar, AlignLeft, Tag, FileText } from "lucide-react";
 
-export default function ExperienceForm({ experience, index, updateExperience, removeExperience, errors }: {
+function ExperienceForm({ experience, index, updateExperience, removeExperience, errors }: {
   experience: WorkExperience;
   index: number;
   updateExperience: <K extends keyof WorkExperience>(id: number, field: K, value: WorkExperience[K]) => void;
@@ -269,3 +269,5 @@ export default function ExperienceForm({ experience, index, updateExperience, re
     </div>
   );
 }
+
+export default React.memo(ExperienceForm);

@@ -139,7 +139,6 @@ export default function useResumeEditor() {
   useEffect(() => {
     if (!activeResumeId) return;
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setConfigsByResume(prevConfigs => {
       let nextConfigsByResume = prevConfigs;
       let didUpdate = false;
@@ -210,7 +209,6 @@ export default function useResumeEditor() {
     if (resumes.length === 0) return;
     const validIds = new Set(resumes.map(resume => resume.id));
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setConfigsByResume(prevConfigs => {
       const staleConfigIds = Object.keys(prevConfigs).filter(id => !validIds.has(id));
       if (staleConfigIds.length === 0) return prevConfigs;
@@ -373,10 +371,14 @@ export default function useResumeEditor() {
   const assembledResume = useMemo(() => {
     const result = computeAssembledResume();
     const serialized = JSON.stringify(result);
+    // eslint-disable-next-line react-hooks/refs -- intentional deep-equality memoization pattern
     if (serialized === prevAssembledRef.current) {
+      // eslint-disable-next-line react-hooks/refs
       return prevAssembledObjRef.current;
     }
+    // eslint-disable-next-line react-hooks/refs
     prevAssembledRef.current = serialized;
+    // eslint-disable-next-line react-hooks/refs
     prevAssembledObjRef.current = result;
     return result;
   }, [computeAssembledResume]);
@@ -697,6 +699,7 @@ export default function useResumeEditor() {
     setIsDirty(true);
   }, [setConfigs]);
 
+  // eslint-disable-next-line react-hooks/refs -- assembledResume uses ref-based deep equality in useMemo (intentional)
   return {
     masterData: resumeSectionData,
     activeConfig,

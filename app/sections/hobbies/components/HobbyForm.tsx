@@ -1,5 +1,5 @@
 import { Hobby } from "@/types/resumeTypes";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -9,7 +9,7 @@ import {
   AlignLeft,
 } from "lucide-react";
 
-export default function HobbyForm({
+function HobbyForm({
   hobby,
   index,
   updateHobby,
@@ -152,3 +152,5 @@ export default function HobbyForm({
     </div>
   );
 }
+
+export default React.memo(HobbyForm);

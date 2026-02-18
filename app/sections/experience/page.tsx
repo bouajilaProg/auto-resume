@@ -7,6 +7,7 @@ import { useExperience } from "@hooks/ResumeSections/useExperience";
 import Loading from "@/app/components/Loading";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 import { useModal } from "@/context/Modal/useModal";
+import { useMemo } from "react";
 
 export default function ExperiencePage() {
   const {
@@ -21,9 +22,9 @@ export default function ExperiencePage() {
   } = useExperience();
 
   const { openModal, closeModal } = useModal();
-  const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
+  const ConfirmModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
-  });
+  }), [closeModal, handleSave]);
 
   if (loading) {
     return <Loading />;

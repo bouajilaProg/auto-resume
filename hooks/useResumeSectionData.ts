@@ -1,6 +1,6 @@
 "use client";
 import { Resume, SectionTypeValue, PersonalInfo, ResumeSection, DEFAULT_RESUME } from "@/types/resumeTypes";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 const LEGACY_RESUME_DATA_KEY = "resumeDataKey";
 const RESUME_DATA_BY_ID_KEY = "resumeDataById";
@@ -30,7 +30,7 @@ const normalizeOrder = (order: string[], ids: string[]) => {
   return normalized;
 };
 
-export default function useResumeSectionData() {
+function useResumeSectionDataInternal() {
   const [resumeSectionData, setResumeSectionData] = useState<Resume | null>(null);
   const [resumesById, setResumesById] = useState<ResumesById>({});
   const [resumeOrder, setResumeOrder] = useState<string[]>([]);
@@ -280,4 +280,22 @@ export default function useResumeSectionData() {
     updatePersonalInfo,
     loading,
   };
+}
+
+// Fix #5: Context provider so all consumers share a single instance
+type ResumeSectionDataContextType = ReturnType<typeof useResumeSectionDataInternal>;
+
+const ResumeSectionDataContext = createContext<ResumeSectionDataContextType | null>(null);
+
+export function ResumeSectionDataProvider({ children }: { children: React.ReactNode }) {
+  const value = useResumeSectionDataInternal();
+  return createElement(ResumeSectionDataContext.Provider, { value }, children);
+}
+
+export default function useResumeSectionData() {
+  const ctx = useContext(ResumeSectionDataContext);
+  if (!ctx) {
+    throw new Error("useResumeSectionData must be used within ResumeSectionDataProvider");
+  }
+  return ctx;
 }

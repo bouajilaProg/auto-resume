@@ -7,6 +7,7 @@ import { usePersonalInfo } from "@hooks/ResumeSections/usePersonalInfo";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";
+import { useMemo } from "react";
 
 export default function PersonalInfoPage() {
   const {
@@ -22,9 +23,9 @@ export default function PersonalInfoPage() {
   } = usePersonalInfo();
 
   const { openModal, closeModal } = useModal();
-  const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
+  const ConfirmModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
-  });
+  }), [closeModal, handleSave]);
 
   if (loading || !personalInfo || Object.keys(personalInfo).length === 0) {
     return <Loading />;

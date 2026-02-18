@@ -1,10 +1,10 @@
 "use client";
 
 import { ExtraCurricularActivity } from "@/types/resumeTypes";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ChevronDown, ChevronUp, Trophy, Trash2, Tag, Calendar } from "lucide-react";
 
-export default function ExtraCurricularForm({
+function ExtraCurricularForm({
   activity,
   index,
   updateActivity,
@@ -177,3 +177,5 @@ export default function ExtraCurricularForm({
     </div>
   );
 }
+
+export default React.memo(ExtraCurricularForm);

@@ -8,6 +8,7 @@ import { useSkills } from "@hooks/ResumeSections/useSkills";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";
+import { useMemo } from "react";
 
 export default function SkillsPage() {
   const {
@@ -21,9 +22,9 @@ export default function SkillsPage() {
   } = useSkills();
 
   const { openModal, closeModal } = useModal();
-  const ConfirmModal = ModalCreator("ConfirmSave", closeModal, () => {
+  const ConfirmModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
-  });
+  }), [closeModal, handleSave]);
 
   if (loading || !skills || Object.keys(skills).length === 0) {
     return <Loading />;

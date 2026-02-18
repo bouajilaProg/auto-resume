@@ -1,5 +1,5 @@
 import { Certification } from "@/types/resumeTypes";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -9,7 +9,7 @@ import {
   Calendar,
 } from "lucide-react";
 
-export default function CertificationForm({
+function CertificationForm({
   certification,
   index,
   updateCertification,
@@ -176,3 +176,5 @@ export default function CertificationForm({
     </div>
   );
 }
+
+export default React.memo(CertificationForm);

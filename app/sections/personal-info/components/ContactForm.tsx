@@ -1,9 +1,10 @@
 "use client";
 
+import React from "react";
 import { Contact, CONTACT_TYPES, contactIcons, ContactType } from "@/types/resumeTypes";
 import { Mail, Plus, Trash2, ChevronDown, Contact as ContactIcon } from "lucide-react";
 
-export default function ContactForm({
+function ContactForm({
   contacts,
   setContactsAction: setContacts,
   removeContactAction
@@ -180,3 +181,5 @@ export default function ContactForm({
     </div>
   );
 }
+
+export default React.memo(ContactForm);

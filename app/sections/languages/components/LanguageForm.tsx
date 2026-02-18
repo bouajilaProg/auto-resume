@@ -1,5 +1,5 @@
 import { Language, PROFICIENCY_LEVELS } from "@/types/resumeTypes";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -9,7 +9,7 @@ import {
   Award,
 } from "lucide-react";
 
-export default function LanguageForm({
+function LanguageForm({
   language,
   index,
   updateLanguage,
@@ -160,3 +160,5 @@ export default function LanguageForm({
     </div>
   );
 }
+
+export default React.memo(LanguageForm);

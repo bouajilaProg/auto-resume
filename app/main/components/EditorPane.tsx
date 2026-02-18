@@ -12,7 +12,7 @@ import {
   FolderKanban
 } from "lucide-react";
 
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { SECTION_ICONS, SECTION_LABELS, SECTION_PATHS, ALL_SECTIONS } from "@/constants/sections";
 import { Resume, ResumeConfig, SectionType, SectionTypeValue, Skills, contactIcons } from "@/types/resumeTypes";
 import { getSectionItemDisplay, SectionItem } from "@/utils/sectionDisplay";
@@ -30,7 +30,24 @@ interface Identifiable {
   id: number;
 }
 
-export default function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSection, moveItem }: EditorPaneProps) {
+// Fix #7: Moved outside component to avoid recreation on every render
+function groupAndSortItems<T extends { id: number }>(items: T[], selectedIds: number[], itemOrder: number[]) {
+  const selected = items.filter(i => selectedIds.includes(i.id));
+  const unselected = items.filter(i => !selectedIds.includes(i.id));
+
+  const sortedSelected = [...selected].sort((a, b) => {
+    const indexA = itemOrder.indexOf(a.id);
+    const indexB = itemOrder.indexOf(b.id);
+    if (indexA === -1 && indexB === -1) return 0;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
+
+  return [...sortedSelected, ...unselected];
+}
+
+function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSection, moveItem }: EditorPaneProps) {
   const sectionOrder = useMemo(() => {
     const order = [...activeConfig.sectionOrder];
     ALL_SECTIONS.forEach(id => {
@@ -42,22 +59,6 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
   }, [activeConfig.sectionOrder]);
 
   const UserIcon = SECTION_ICONS.personalInfo;
-
-  const groupAndSortItems = <T extends { id: number }>(items: T[], selectedIds: number[], itemOrder: number[]) => {
-    const selected = items.filter(i => selectedIds.includes(i.id));
-    const unselected = items.filter(i => !selectedIds.includes(i.id));
-
-    const sortedSelected = [...selected].sort((a, b) => {
-      const indexA = itemOrder.indexOf(a.id);
-      const indexB = itemOrder.indexOf(b.id);
-      if (indexA === -1 && indexB === -1) return 0;
-      if (indexA === -1) return 1;
-      if (indexB === -1) return -1;
-      return indexA - indexB;
-    });
-
-    return [...sortedSelected, ...unselected];
-  };
 
   return (
     <div className="flex-1 overflow-y-auto bg-gray-50/50 p-6 space-y-6 custom-scrollbar">
@@ -380,3 +381,6 @@ export default function EditorPane({ masterData, activeConfig, toggleItem, toggl
     </div>
   );
 }
+
+// Fix #8: React.memo to prevent re-renders when props haven't changed
+export default React.memo(EditorPane);
