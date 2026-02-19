@@ -3,9 +3,7 @@
 
 # AutoResume
 
-Version 1.2.0-stable | License: MIT | Type: Productivity / Web
-
-Owner: `bouajilaprog`
+License: MIT
 
 AutoResume is a data-driven resume manager for professionals who need multiple, tailored CVs from a single source of truth. Toggle nodes (projects, roles, skills) and generate high-quality PDFs with Typst-based rendering — no copy/paste required.
 
@@ -46,7 +44,7 @@ Setup
 
 Requirements
 
-- Node.js v18.0.0 or higher
+- Node.js v18.18.0 or higher
 - Typst (system-level install required for local PDF generation)
 - pnpm (preferred package manager)
 
@@ -55,7 +53,7 @@ Local development
 Run the app locally:
 
 ```bash
-git clone https://github.com/your-repo/auto-resume.git
+git clone https://github.com/bouajilaprog/auto-resume.git
 cd auto-resume
 pnpm install
 pnpm dev
