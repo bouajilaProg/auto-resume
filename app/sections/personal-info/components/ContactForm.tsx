@@ -49,11 +49,11 @@ function ContactForm({
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-indigo-50 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-primary-50 overflow-hidden">
         {/* Header */}
         <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-indigo-600 text-white shadow-sm">
+            <div className="p-2.5 rounded-lg bg-primary-600 text-white shadow-sm">
               <ContactIcon size={16} />
             </div>
             <h3 className="font-semibold text-gray-800">Contact Methods</h3>
@@ -62,8 +62,8 @@ function ContactForm({
 
         <div className="p-6">
           {!contacts || contacts.length === 0 ? (
-            <div className="border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-indigo-300 transition-colors group">
-              <div className="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+            <div className="border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-primary-300 transition-colors group">
+              <div className="w-16 h-16 bg-primary-50 text-primary-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <Mail size={32} />
               </div>
 
@@ -77,7 +77,7 @@ function ContactForm({
 
               <button
                 onClick={addContactMethod}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-sm font-medium"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition shadow-sm font-medium"
               >
                 <Plus size={14} />
                 Add First Contact
@@ -92,7 +92,7 @@ function ContactForm({
                   return (
                     <div
                       key={contact.id}
-                      className="group flex flex-col sm:flex-row gap-3 p-4 bg-gray-50/50 rounded-xl border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all"
+                      className="group flex flex-col sm:flex-row gap-3 p-4 bg-gray-50/50 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-all"
                     >
                       <div className="flex-1 flex flex-col sm:flex-row gap-3">
                         {/* Type Select */}
@@ -110,7 +110,7 @@ function ContactForm({
                                   e.target.value as ContactType
                                 )
                               }
-                              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none text-sm text-gray-700 font-medium"
+                              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all appearance-none text-sm text-gray-700 font-medium"
                             >
                               {CONTACT_TYPES.map((type) => (
                                 <option key={type} value={type}>
@@ -130,7 +130,7 @@ function ContactForm({
                             Value
                           </label>
                           <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-indigo-500">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-primary-500">
                               <ContactTypeIcon size={14} />
                             </div>
                             <input
@@ -144,7 +144,7 @@ function ContactForm({
                                 )
                               }
                               placeholder={contact.type === "Email" ? "your@email.com" : "URL or handle"}
-                              className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm text-gray-700"
+                              className="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all text-sm text-gray-700"
                             />
                           </div>
                         </div>
@@ -167,9 +167,9 @@ function ContactForm({
               {/* Add New Button */}
               <button
                 onClick={addContactMethod}
-                className="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
+                className="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-primary-400 hover:text-primary-600 hover:bg-primary-50/50 transition-all flex items-center justify-center gap-2 font-medium group"
               >
-                <div className="p-1.5 bg-gray-100 rounded-full group-hover:bg-indigo-100 transition-colors">
+                <div className="p-1.5 bg-gray-100 rounded-full group-hover:bg-primary-100 transition-colors">
                   <Plus size={12} />
                 </div>
                 <span>Add Another Contact Method</span>

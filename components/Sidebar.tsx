@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { 
-  Layout, 
-  FileText, 
+import {
+  FileText,
   ChevronRight
 } from "lucide-react";
 import { ALL_SECTIONS, SECTION_ICONS, SECTION_LABELS, SECTION_PATHS } from "@/constants/sections";
@@ -13,7 +13,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const isEditorPage = pathname === "/main";
-  
+
   const navItems = [
     { label: "Editor", href: "/main", icon: FileText, active: isEditorPage },
   ];
@@ -21,11 +21,17 @@ export default function Sidebar() {
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen sticky top-0 shrink-0 z-50">
       {/* Brand */}
-      <Link href="/main" className="h-16 flex items-center gap-3 px-6 border-b border-gray-100 hover:bg-gray-50 transition-colors">
-        <div className="p-2 bg-indigo-600 rounded-lg text-white">
-          <Layout size={20} />
+      <Link href="/main" className="h-20 flex items-center gap-4 px-6 border-b border-gray-100 hover:bg-gray-50 transition-colors">
+        <div className="relative w-12 h-12 bg-primary-600 rounded-xl overflow-hidden shadow-sm flex items-center justify-center">
+          <Image
+            src="/mainLogo.png"
+            alt="AutoResume Logo"
+            width={48}
+            height={48}
+            className="object-cover scale-125"
+          />
         </div>
-        <span className="font-black text-xl tracking-tight text-gray-900">AutoResume</span>
+        <span className="font-black text-xl tracking-tight text-gray-900 uppercase">AutoResume</span>
       </Link>
 
       <div className="flex-1 overflow-y-auto py-6 px-4 space-y-8">
@@ -35,28 +41,26 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-bold transition-all ${
-                item.active 
-                  ? "bg-indigo-50 text-indigo-700" 
-                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-              }`}
+              className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-bold transition-all ${item.active
+                ? "bg-primary-50 text-primary-700"
+                : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                }`}
             >
               <div className="flex items-center gap-3">
-                <item.icon size={18} className={item.active ? "text-indigo-600" : "text-gray-400"} />
+                <item.icon size={18} className={item.active ? "text-primary-600" : "text-gray-400"} />
                 {item.label}
               </div>
-              {item.active && <div className="w-1.5 h-1.5 rounded-full bg-indigo-600" />}
+              {item.active && <div className="w-1.5 h-1.5 rounded-full bg-primary-600" />}
             </Link>
           ))}
         </nav>
 
         {/* Data Library Sub-menu */}
         <div className="space-y-3">
-          <Link 
+          <Link
             href="/sections"
-            className={`flex items-center justify-between px-3 text-[10px] font-black uppercase tracking-widest transition-colors ${
-              pathname.startsWith("/sections") ? "text-indigo-600" : "text-gray-400 hover:text-gray-600"
-            }`}
+            className={`flex items-center justify-between px-3 text-[10px] font-black uppercase tracking-widest transition-colors ${pathname.startsWith("/sections") ? "text-primary-600" : "text-gray-400 hover:text-gray-600"
+              }`}
           >
             Data Sections
             <ChevronRight size={10} />
@@ -66,18 +70,17 @@ export default function Sidebar() {
               const Icon = SECTION_ICONS[sectionId];
               const path = `/sections/${SECTION_PATHS[sectionId]}`;
               const isActive = pathname === path;
-              
+
               return (
                 <Link
                   key={sectionId}
                   href={path}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
-                    isActive 
-                      ? "text-indigo-600 bg-indigo-50/50" 
-                      : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                  }`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold transition-all ${isActive
+                    ? "text-primary-600 bg-primary-50/50"
+                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                    }`}
                 >
-                  <Icon size={14} className={isActive ? "text-indigo-600" : "text-gray-400"} />
+                  <Icon size={14} className={isActive ? "text-primary-600" : "text-gray-400"} />
                   {SECTION_LABELS[sectionId]}
                 </Link>
               );

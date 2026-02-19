@@ -17,7 +17,7 @@ function ResumeItem({ id, name, description, lastUpdate, onDelete, onCopy }: Res
         <h3 className="text-xl font-bold text-gray-900 truncate">{name}</h3>
         <Link 
           href={`/main?resumeId=${id}`}
-          className="text-gray-400 hover:text-indigo-600 transition-colors"
+          className="text-gray-400 hover:text-primary-600 transition-colors"
         >
           <FaExternalLinkAlt size={14} />
         </Link>
@@ -36,13 +36,13 @@ function ResumeItem({ id, name, description, lastUpdate, onDelete, onCopy }: Res
       <div className="flex items-center gap-2 w-full pt-4 border-t border-gray-50">
         <Link 
           href={`/main?resumeId=${id}`}
-          className="flex-[0.7] py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all font-bold text-sm active:scale-95 flex items-center justify-center gap-2"
+          className="flex-[0.7] py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all font-bold text-sm active:scale-95 flex items-center justify-center gap-2"
         >
           Open Editor
         </Link>
         <button 
           onClick={() => onCopy?.(id)}
-          className="flex-[0.15] py-2.5 bg-gray-50 text-gray-500 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-all active:scale-95 flex items-center justify-center border border-transparent hover:border-indigo-100"
+          className="flex-[0.15] py-2.5 bg-gray-50 text-gray-500 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-all active:scale-95 flex items-center justify-center border border-transparent hover:border-primary-100"
           title="Duplicate"
         >
           <FaCopy size={14} />

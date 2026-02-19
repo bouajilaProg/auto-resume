@@ -3,7 +3,7 @@
 import React from "react";
 import { Resume } from "@/types/resumeTypes";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Save, X, Download, Loader2, FileText, Eye } from "lucide-react";
+import { Save, X, Download, Loader2, FileText, Eye, Info, RefreshCw } from "lucide-react";
 
 interface PreviewPaneProps {
   resume: Resume | null;
@@ -20,6 +20,7 @@ function PreviewPane({
 }: PreviewPaneProps) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
   const pdfUrlRef = useRef<string | null>(null);
 
@@ -48,6 +49,7 @@ function PreviewPane({
       return;
     }
     setLoading(true);
+    setError(null);
     try {
       const response = await fetch("/api/compile", {
         method: "POST",
@@ -62,10 +64,18 @@ function PreviewPane({
         pdfUrlRef.current = url;
         setPdfUrl(url);
       } else {
-        console.error("Returned error from compile API:", await response.text());
+        const errorText = await response.text();
+        console.error("Returned error from compile API:", errorText);
+        try {
+          const parsed = JSON.parse(errorText);
+          setError(parsed.error || "Failed to compile PDF");
+        } catch {
+          setError(errorText || "Failed to compile PDF");
+        }
       }
     } catch (error) {
       console.error("Error compiling PDF:", error);
+      setError("An unexpected error occurred during PDF compilation");
     } finally {
       setLoading(false);
     }
@@ -99,9 +109,9 @@ function PreviewPane({
       <div className="h-16 bg-white border-b border-gray-300 px-6 flex items-center justify-between shadow-sm z-10">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2 text-gray-700">
-            <FileText size={20} className="text-indigo-600" />
+            <FileText size={20} className="text-primary-600" />
             <span className="font-bold">Live Preview</span>
-            {loading && <Loader2 size={16} className="animate-spin text-indigo-500 ml-2" />}
+            {loading && <Loader2 size={16} className="animate-spin text-primary-500 ml-2" />}
           </div>
         </div>
 
@@ -119,7 +129,7 @@ function PreviewPane({
             onClick={onSave}
             disabled={!isDirty}
             className={`flex items-center gap-2 px-5 py-2 text-sm font-bold rounded-lg transition-all shadow-md ${isDirty
-              ? "bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200"
+              ? "bg-primary-600 text-white hover:bg-primary-700 shadow-primary-200"
               : "bg-gray-100 text-gray-400 grayscale cursor-not-allowed"
               }`}
           >
@@ -132,7 +142,7 @@ function PreviewPane({
           <button
             onClick={handleDownload}
             disabled={!pdfUrl}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-indigo-600 border border-indigo-200 hover:bg-indigo-50 rounded-lg font-bold text-sm transition-all shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-white text-primary-600 border border-primary-200 hover:bg-primary-50 rounded-lg font-bold text-sm transition-all shadow-sm"
           >
             <Download size={16} />
             <span>Download</span>
@@ -142,7 +152,24 @@ function PreviewPane({
 
       {/* Viewer */}
       <div className="flex-1 p-8 overflow-hidden flex flex-col items-center justify-start">
-        {pdfUrl ? (
+        {error ? (
+          <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200 p-12 text-center animate-in fade-in zoom-in duration-500">
+            <div className="p-4 bg-primary-100 text-primary-600 rounded-full mb-6">
+              <Info size={48} />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2 uppercase tracking-tight">Almost there!</h3>
+            <p className="text-gray-600 font-medium max-w-md mb-8 whitespace-pre-wrap leading-relaxed bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+              We just need a little more info before we can generate your PDF preview. Please check your data sections for any missing details or small errors.
+            </p>
+            <button 
+              onClick={() => compilePdf()}
+              className="flex items-center gap-2 px-8 py-3.5 bg-primary-600 text-white rounded-2xl font-bold hover:bg-primary-700 transition-all shadow-xl shadow-primary-200 active:scale-95"
+            >
+              <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
+              Try Again
+            </button>
+          </div>
+        ) : pdfUrl ? (
           <div className="w-full h-full bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-300 relative group">
             <iframe
               src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
@@ -152,7 +179,7 @@ function PreviewPane({
             {loading && (
               <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] flex items-center justify-center">
                 <div className="bg-white p-4 rounded-full shadow-xl">
-                  <Loader2 size={32} className="animate-spin text-indigo-600" />
+                  <Loader2 size={32} className="animate-spin text-primary-600" />
                 </div>
               </div>
             )}

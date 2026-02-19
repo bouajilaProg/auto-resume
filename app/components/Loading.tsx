@@ -33,11 +33,11 @@ export default function Loading() {
         {tip && (
           <div className="w-full mt-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
             <div className="flex flex-col items-center gap-6">
-              <div className="p-3 bg-indigo-100 text-indigo-600 rounded-2xl shadow-sm">
+              <div className="p-3 bg-primary-100 text-primary-600 rounded-2xl shadow-sm">
                 <Lightbulb size={28} />
               </div>
               <div className="space-y-3 max-w-lg">
-                <p className="text-[12px] font-black uppercase tracking-[0.2em] text-indigo-400">Pro Tip</p>
+                <p className="text-[12px] font-black uppercase tracking-[0.2em] text-primary-400">Pro Tip</p>
                 <p className="text-gray-600 font-semibold text-xl leading-relaxed italic">
                   &ldquo;{tip}&rdquo;
                 </p>

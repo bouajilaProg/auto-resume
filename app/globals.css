@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  /* Updated primary brand color to #B49CE4 (Lavender/Light Purple) */
+  --color-primary-50: #f5f2fd;
+  --color-primary-100: #ece6fb;
+  --color-primary-200: #dcd0f7;
+  --color-primary-300: #c9b4f1;
+  --color-primary-400: #b49ce4;
+  --color-primary-500: #9b7de0;
+  --color-primary-600: #825ed9;
+  --color-primary-700: #6d4bc3;
+  --color-primary-800: #593da1;
+  --color-primary-900: #4a3485;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

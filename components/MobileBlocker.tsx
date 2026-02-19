@@ -3,7 +3,7 @@ import { Monitor, Smartphone } from "lucide-react";
 export default function MobileBlocker() {
   return (
     <div className="flex flex-col items-center gap-6 max-w-sm">
-      <div className="p-4 bg-indigo-500/10 rounded-2xl text-indigo-400 ring-1 ring-indigo-500/20">
+      <div className="p-4 bg-primary-500/10 rounded-2xl text-primary-400 ring-1 ring-primary-500/20">
         <Smartphone size={48} />
       </div>
       <div className="space-y-2">

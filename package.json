@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 6000",
+    "start": "next start -p 16000",
     "lint": "eslint",
     "docker:build": "docker build -t auto-resume .",
-    "docker:run": "docker run -e PORT=6000 -p 6000:6000 auto-resume"
+    "docker:run": "docker run -e PORT=16000 -p 16000:16000 auto-resume"
   },
   "dependencies": {
     "@yamlresume/core": "^0.8.1",

@@ -44,7 +44,7 @@ function ProjectForm({
             className="flex items-center gap-4 flex-1 cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
-            <div className="p-3 rounded-lg bg-indigo-600 text-white shadow-sm">
+            <div className="p-3 rounded-lg bg-primary-600 text-white shadow-sm">
               <Lightbulb size={20} />
             </div>
 
@@ -87,11 +87,11 @@ function ProjectForm({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-indigo-50">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-primary-50">
       {/* Header */}
       <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-lg bg-indigo-600 text-white shadow-sm">
+          <div className="p-2.5 rounded-lg bg-primary-600 text-white shadow-sm">
             <Lightbulb size={16} />
           </div>
           <h3 className="font-semibold text-gray-800">
@@ -133,7 +133,7 @@ function ProjectForm({
               type="text"
               value={project.title}
               onChange={handleFieldChange("title")}
-              className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 bg-white ${errors?.title ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 bg-white ${errors?.title ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="e.g., E-Commerce Platform"
             />
@@ -156,7 +156,7 @@ function ProjectForm({
                 type="text"
                 value={project.tools}
                 onChange={handleFieldChange("tools")}
-                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 bg-white ${errors?.tools ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 bg-white ${errors?.tools ? "border-red-500 bg-red-50/10" : "border-gray-200"
                   }`}
                 placeholder="React, Node.js, AWS..."
               />
@@ -181,7 +181,7 @@ function ProjectForm({
               id={`summary-${project.id}`}
               value={project.summary || ""}
               onChange={handleFieldChange("summary")}
-              className={`w-full pl-9 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 min-h-[80px] bg-white ${errors?.summary ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-9 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 min-h-[80px] bg-white ${errors?.summary ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="Brief overview of the project..."
             />
@@ -205,7 +205,7 @@ function ProjectForm({
               id={`highlights-${project.id}`}
               value={(project.highlights || []).join("\n")}
               onChange={handleFieldChange("highlights")}
-              className={`w-full pl-9 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 min-h-[100px] bg-white ${errors?.highlights ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-9 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 min-h-[100px] bg-white ${errors?.highlights ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="Key achievements or features (one per line)..."
             />
@@ -230,7 +230,7 @@ function ProjectForm({
               type="url"
               value={project.projectLink || ""}
               onChange={handleFieldChange("projectLink")}
-              className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white ${errors?.projectLink ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-300 text-sm bg-white ${errors?.projectLink ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="https://my-app.com"
             />

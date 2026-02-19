@@ -15,7 +15,7 @@ function ResumeList() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <Loader2 className="w-10 h-10 text-indigo-600 animate-spin mb-4" />
+        <Loader2 className="w-10 h-10 text-primary-600 animate-spin mb-4" />
         <p className="text-gray-500 font-medium">Loading your resumes...</p>
       </div>
     );
@@ -30,9 +30,9 @@ function ResumeList() {
             const name = prompt("Enter resume name:");
             if (name) createResume(name);
           }}
-          className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-6 flex flex-col items-center justify-center gap-4 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all group min-h-[200px]"
+          className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-6 flex flex-col items-center justify-center gap-4 hover:border-primary-300 hover:bg-primary-50/30 transition-all group min-h-[200px]"
         >
-          <div className="w-12 h-12 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-indigo-600 group-hover:scale-110 transition-all">
+          <div className="w-12 h-12 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-primary-600 group-hover:scale-110 transition-all">
             <Plus size={24} />
           </div>
           <div className="text-center">

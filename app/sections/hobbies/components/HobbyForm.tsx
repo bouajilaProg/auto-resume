@@ -42,7 +42,7 @@ function HobbyForm({
             className="flex items-center gap-4 flex-1 cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
-            <div className="p-3 rounded-lg bg-indigo-600 text-white shadow-sm">
+            <div className="p-3 rounded-lg bg-primary-600 text-white shadow-sm">
               <Heart size={20} />
             </div>
             <div>
@@ -77,10 +77,10 @@ function HobbyForm({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-indigo-50">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-primary-50">
       <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-lg bg-indigo-600 text-white shadow-sm">
+          <div className="p-2.5 rounded-lg bg-primary-600 text-white shadow-sm">
             <Heart size={16} />
           </div>
           <h3 className="font-semibold text-gray-800">
@@ -119,7 +119,7 @@ function HobbyForm({
                 type="text"
                 value={hobby.name}
                 onChange={handleFieldChange("name")}
-                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 bg-white ${errors?.name ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 bg-white ${errors?.name ? "border-red-500 bg-red-50/10" : "border-gray-200"
                   }`}
                 placeholder="e.g. Photography, Chess, Hiking"
               />
@@ -140,7 +140,7 @@ function HobbyForm({
                 value={hobby.description || ""}
                 onChange={handleFieldChange("description")}
                 rows={3}
-                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 bg-white resize-none ${errors?.description ? "border-red-500 bg-red-50/10" : "border-gray-200"
+                className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 bg-white resize-none ${errors?.description ? "border-red-500 bg-red-50/10" : "border-gray-200"
                   }`}
                 placeholder="Briefly describe your interest or achievements in this hobby..."
               />

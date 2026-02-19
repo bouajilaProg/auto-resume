@@ -29,7 +29,7 @@ export default function Sections() {
                 href={`/sections/${section.id}`}
                 className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-8 flex flex-col items-center justify-center gap-5 group border border-gray-100"
               >
-                <div className="p-4 rounded-2xl bg-blue-50 text-blue-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white shadow-sm">
+                <div className="p-4 rounded-2xl bg-primary-50 text-primary-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary-600 group-hover:text-white shadow-sm">
                   <Icon size={40} />
                 </div>
                 <span className="text-gray-800 font-bold text-center text-lg">

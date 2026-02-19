@@ -29,7 +29,7 @@ function ExperienceForm({ experience, index, updateExperience, removeExperience,
             className="flex items-center gap-4 flex-1 cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
-            <div className="p-3 rounded-lg bg-indigo-600 text-white shadow-sm">
+            <div className="p-3 rounded-lg bg-primary-600 text-white shadow-sm">
               <Briefcase size={20} />
             </div>
             <div>
@@ -68,11 +68,11 @@ function ExperienceForm({ experience, index, updateExperience, removeExperience,
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-indigo-50">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-primary-50">
       {/* Header */}
       <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-lg bg-indigo-600 text-white shadow-sm">
+          <div className="p-2.5 rounded-lg bg-primary-600 text-white shadow-sm">
             <Briefcase size={16} />
           </div>
           <h3 className="font-semibold text-gray-800">
@@ -109,7 +109,7 @@ function ExperienceForm({ experience, index, updateExperience, removeExperience,
             type="text"
             value={experience.jobTitle}
             onChange={handleFieldChange('jobTitle')}
-            className={`w-full px-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 ${errors?.jobTitle ? "border-red-500 bg-red-50/10" : "border-gray-200"
+            className={`w-full px-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 ${errors?.jobTitle ? "border-red-500 bg-red-50/10" : "border-gray-200"
               }`}
             placeholder="e.g. Senior Frontend Developer"
           />
@@ -129,7 +129,7 @@ function ExperienceForm({ experience, index, updateExperience, removeExperience,
               type="text"
               value={experience.company}
               onChange={handleFieldChange('company')}
-              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 ${errors?.company ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 ${errors?.company ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="e.g. Google"
             />
@@ -153,7 +153,7 @@ function ExperienceForm({ experience, index, updateExperience, removeExperience,
               type="text"
               value={experience.location}
               onChange={handleFieldChange('location')}
-              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 ${errors?.location ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 ${errors?.location ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="e.g. New York, NY"
             />
@@ -174,7 +174,7 @@ function ExperienceForm({ experience, index, updateExperience, removeExperience,
               type="month"
               value={experience.startDate}
               onChange={handleFieldChange('startDate')}
-              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700 ${errors?.startDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all text-gray-700 ${errors?.startDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
             />
           </div>
@@ -194,7 +194,7 @@ function ExperienceForm({ experience, index, updateExperience, removeExperience,
               type="month"
               value={experience.endDate}
               onChange={handleFieldChange('endDate')}
-              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-gray-700 ${errors?.endDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all text-gray-700 ${errors?.endDate ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
             />
           </div>
@@ -215,7 +215,7 @@ function ExperienceForm({ experience, index, updateExperience, removeExperience,
             id={`summary-${experience.id}`}
             value={experience.summary || ""}
             onChange={handleFieldChange('summary')}
-            className={`w-full pl-9 pr-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 min-h-[80px] resize-none ${errors?.summary ? "border-red-500 bg-red-50/10" : "border-gray-200"
+            className={`w-full pl-9 pr-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 min-h-[80px] resize-none ${errors?.summary ? "border-red-500 bg-red-50/10" : "border-gray-200"
               }`}
             placeholder="Brief summary of your role and responsibilities..."
           />
@@ -236,7 +236,7 @@ function ExperienceForm({ experience, index, updateExperience, removeExperience,
             id={`highlights-${experience.id}`}
             value={(experience.highlights || []).join("\n")}
             onChange={handleFieldChange('highlights')}
-            className={`w-full pl-9 pr-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 min-h-[120px] ${errors?.highlights ? "border-red-500 bg-red-50/10" : "border-gray-200"
+            className={`w-full pl-9 pr-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 min-h-[120px] ${errors?.highlights ? "border-red-500 bg-red-50/10" : "border-gray-200"
               }`}
             placeholder="• Led a team of 5 developers...&#10;• Increased performance by 20%..."
           />
@@ -258,7 +258,7 @@ function ExperienceForm({ experience, index, updateExperience, removeExperience,
               type="text"
               value={experience.keywords}
               onChange={handleFieldChange('keywords')}
-              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-gray-400 ${errors?.keywords ? "border-red-500 bg-red-50/10" : "border-gray-200"
+              className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 ${errors?.keywords ? "border-red-500 bg-red-50/10" : "border-gray-200"
                 }`}
               placeholder="React, TypeScript, Agile..."
             />
