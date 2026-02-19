@@ -30,9 +30,3 @@ jobs:
         run: pnpm exec tsc --noEmit
       - name: Build
         run: pnpm build
-      - name: Upload coverage to Codecov (if token present)
-        if: ${{ secrets.CODECOV_TOKEN != '' }}
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
