@@ -3,16 +3,18 @@ import { createContext, useState, useCallback, ReactNode } from "react";
 
 export interface ButtonConfig {
   text: string;
-  onClick: () => void;
+  onClick: () => void | boolean;
   variant?: "primary" | "secondary" | "danger";
+  disabled?: boolean;
 }
 
 export interface ModalContextType {
   title: string;
   description: string;
+  content?: ReactNode;
   buttons: ButtonConfig[];
   isOpen: boolean;
-  openModal: (config: { title: string; description: string; buttons?: ButtonConfig[] }) => void;
+  openModal: (config: { title: string; description: string; content?: ReactNode; buttons?: ButtonConfig[] }) => void;
   closeModal: () => void;
 }
 
@@ -24,13 +26,14 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState({
     title: "",
     description: "",
+    content: undefined as ReactNode | undefined,
     buttons: [] as ButtonConfig[],
     isOpen: false,
   });
 
   const openModal = useCallback(
-    ({ title, description, buttons = [] }: { title: string; description: string; buttons?: ButtonConfig[] }) => {
-      setState({ title, description, buttons, isOpen: true });
+    ({ title, description, content, buttons = [] }: { title: string; description: string; content?: ReactNode; buttons?: ButtonConfig[] }) => {
+      setState({ title, description, content, buttons, isOpen: true });
     },
     []
   );

@@ -3,7 +3,10 @@
 import useResumeEditor from "@/hooks/useResumeEditor";
 import EditorPane from "./components/EditorPane";
 import PreviewPane from "./components/PreviewPane";
+import CreateVersionModalContent from "./components/CreateVersionModalContent";
 import Loading from "@/app/components/Loading";
+import type { ButtonConfig } from "@/context/Modal/ModalContext";
+import { useModal } from "@/context/Modal/useModal";
 import { Plus, MoreVertical, Trash2, Edit3, X } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
@@ -31,10 +34,7 @@ export default function ResumeMainPage() {
   const [showConfigMenu, setShowConfigMenu] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
   const [tempName, setTempName] = useState("");
-
-  if (loading || !masterData || !activeConfig) {
-    return <Loading />;
-  }
+  const { openModal, closeModal } = useModal();
 
   const handleRename = () => {
     if (tempName.trim()) {
@@ -44,11 +44,46 @@ export default function ResumeMainPage() {
   };
 
   const handleDelete = () => {
-    if (configs.length > 1 && confirm(`Delete "${activeConfig.name}"?`)) {
-      deleteConfig(activeConfig.id);
-      setShowConfigMenu(false);
-    }
+    if (configs.length <= 1) return;
+
+    openModal({
+      title: "Delete this version?",
+      description: "This action can't be undone. We'll remove this version and keep your other resumes safe.",
+      buttons: [
+        { text: "Cancel", onClick: closeModal, variant: "secondary" },
+        {
+          text: "Delete",
+          onClick: () => {
+            deleteConfig(activeConfig.id);
+            setShowConfigMenu(false);
+            return true;
+          },
+          variant: "danger",
+        },
+      ] as ButtonConfig[],
+    });
   };
+
+  const openCreateVersionModal = () => {
+    openModal({
+      title: "Create a new version",
+      description: "Give this version a short name so you can quickly find it later.",
+      content: (
+        <CreateVersionModalContent
+          onCancel={closeModal}
+          onCreate={(name: string) => {
+            createNewConfig(name);
+            closeModal();
+          }}
+        />
+      ),
+      buttons: [] as ButtonConfig[],
+    });
+  };
+
+  if (loading || !masterData || !activeConfig) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-white">
@@ -87,10 +122,7 @@ export default function ResumeMainPage() {
           ))}
 
           <button
-            onClick={() => {
-              const name = prompt("Enter resume name:");
-              if (name) createNewConfig(name);
-            }}
+            onClick={openCreateVersionModal}
             className="w-10 h-10 rounded-lg flex items-center justify-center bg-white text-gray-400 hover:bg-primary-50 hover:text-primary-600 border border-gray-200 border-dashed transition-all"
             title="Create New Resume"
           >
