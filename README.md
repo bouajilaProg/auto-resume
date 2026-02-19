@@ -1,5 +1,5 @@
 
-[![GitHub stars](https://img.shields.io/github/stars/bouajilaprog/auto-resume?style=flat&logo=github)](https://github.com/bouajilaprog/auto-resume) [![Issues](https://img.shields.io/github/issues/bouajilaprog/auto-resume?style=flat&logo=github)](https://github.com/bouajilaprog/auto-resume/issues) [![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen?style=flat)](LICENSE) [![Build Status](https://img.shields.io/github/actions/workflow/status/bouajilaprog/auto-resume/ci.yml?branch=main&style=flat&logo=github)](https://github.com/bouajilaprog/auto-resume/actions)
+[![GitHub stars](https://img.shields.io/github/stars/bouajilaprog/auto-resume?style=flat&logo=github)](https://github.com/bouajilaprog/auto-resume) [![Issues](https://img.shields.io/github/issues/bouajilaprog/auto-resume?style=flat&logo=github)](https://github.com/bouajilaprog/auto-resume/issues) [![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen?style=flat)](LICENSE) [![Build Status](https://img.shields.io/github/actions/workflow/status/bouajilaprog/auto-resume/ci.yml?branch=main&style=flat&logo=github)](https://github.com/bouajilaprog/auto-resume/actions) [![TypeScript](https://img.shields.io/badge/TypeScript-%234785CC.svg?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
 # AutoResume
 
@@ -39,7 +39,7 @@ Technical stack
 | Framework   | Next.js (App Router)                         |
 | Language    | TypeScript                                   |
 | Styling     | Tailwind CSS v4                              |
-| PDF Engine  | Typst (via bouajila-resume-generator)        |
+| PDF Engine  | bouajila-resume-generator (Typst-based, published package) |
 | Validation  | Zod                                          |
 
 Setup
