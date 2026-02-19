@@ -74,7 +74,7 @@ Repository roadmap
 
 - [x] Dockerized Typst environment
 - [ ] Multi-template support (Academic vs. Industry)
-- [ ] Remote storage sync (Supabase / Firebase)
+- [ ] Remote storage sync
 - [ ] Hosted web version
 - [ ] Resume duplication (clone + variant workflows)
 - [ ] AI-assisted resume creation from existing data
