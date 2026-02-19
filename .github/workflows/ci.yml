@@ -1,27 +1,29 @@
 name: CI
-
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 18
+      - name: Use Node.js 25
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: "pnpm"
-      - name: Enable corepack
-        run: corepack enable
+          node-version: 25
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          run_install: false
+      - name: Enable corepack
+        run: corepack enable
+      - name: Configure pnpm cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 25
+          cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
       - name: Lint
