@@ -44,7 +44,7 @@ Setup
 
 Requirements
 
-- Node.js v18.18.0 or higher
+- Node.js v20.11.0 or higher
 - Typst (system-level install required for local PDF generation)
 - pnpm (preferred package manager)
 
@@ -72,10 +72,12 @@ pnpm docker:run
 
 Repository roadmap
 
-- [x] Tailwind CSS v4 integration
 - [x] Dockerized Typst environment
 - [ ] Multi-template support (Academic vs. Industry)
 - [ ] Remote storage sync (Supabase / Firebase)
+- [ ] Hosted web version
+- [ ] Resume duplication (clone + variant workflows)
+- [ ] AI-assisted resume creation from existing data
 
 Contributing
 
