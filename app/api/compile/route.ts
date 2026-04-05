@@ -5,7 +5,46 @@ export async function POST(req: NextRequest) {
   try {
     const assembledResume: Resume = await req.json();
 
-    const result = await compile(assembledResume);
+    const normalizeUrlValue = (value?: string | null) => {
+      const trimmedValue = value?.trim();
+      if (!trimmedValue) return undefined;
+      if (/^https?:\/\//i.test(trimmedValue)) return trimmedValue;
+      return `https://${trimmedValue}`;
+    };
+
+    const normalizedResume: Resume = {
+      ...assembledResume,
+      personalInfo: assembledResume.personalInfo ? {
+        ...assembledResume.personalInfo,
+        contact: (assembledResume.personalInfo.contact || []).map((contact) => {
+          if (contact.type !== "Website") return contact;
+
+          const normalizedValue = normalizeUrlValue(contact.value);
+          if (!normalizedValue) return contact;
+
+          return { ...contact, value: normalizedValue };
+        }),
+      } : assembledResume.personalInfo,
+      sections: (assembledResume.sections || []).map((section) => {
+        if (section.type !== "project" || !Array.isArray(section.body)) {
+          return section;
+        }
+
+        return {
+          ...section,
+          body: section.body.map((project) => {
+            if (!project || typeof project !== "object") return project;
+
+            const normalizedValue = normalizeUrlValue(project.projectLink);
+            if (!normalizedValue) return { ...project, projectLink: undefined };
+
+            return { ...project, projectLink: normalizedValue };
+          }),
+        };
+      }),
+    };
+
+    const result = await compile(normalizedResume);
 
     if (!result.success) {
       return NextResponse.json(

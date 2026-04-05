@@ -3,6 +3,10 @@ import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
 export function useProjects() {
+  const editorSchema = ProjectSchema.extend({
+    projectLink: z.string().optional().or(z.literal("")),
+  });
+
   const {
     items: projects,
     addItem: addProject,
@@ -14,7 +18,7 @@ export function useProjects() {
     errors,
   } = useGenericListSection<Project>(
     SectionType.Project,
-    z.array(ProjectSchema),
+    z.array(editorSchema),
     (p) => p.title.trim() !== ""
   );
 
