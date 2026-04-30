@@ -3,12 +3,11 @@
 import useResumeEditor from "@/hooks/useResumeEditor";
 import EditorPane from "./components/EditorPane";
 import PreviewPane from "./components/PreviewPane";
-import CreateVersionModalContent from "./components/CreateVersionModalContent";
 import Loading from "@/app/components/Loading";
-import type { ButtonConfig } from "@/context/Modal/ModalContext";
 import { useModal } from "@/context/Modal/useModal";
+import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 import { Plus, MoreVertical, Trash2, Edit3, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
 
 export default function ResumeMainPage() {
@@ -43,42 +42,33 @@ export default function ResumeMainPage() {
     }
   };
 
+  const DeleteVersionModal = useMemo(
+    () =>
+      ModalCreator(
+        "DeleteVersion",
+        closeModal,
+        () => {
+          deleteConfig(activeConfig.id);
+          setShowConfigMenu(false);
+        }
+      ),
+    [closeModal, activeConfig.id, deleteConfig, setShowConfigMenu]
+  );
+
+  const CreateVersionModal = useMemo(
+    () => ModalCreator("CreateVersion", closeModal, undefined, (name: string) => {
+      createNewConfig(name);
+    }),
+    [closeModal, createNewConfig]
+  );
+
   const handleDelete = () => {
     if (configs.length <= 1) return;
-
-    openModal({
-      title: "Delete this version?",
-      description: "This action can't be undone. We'll remove this version and keep your other resumes safe.",
-      buttons: [
-        { text: "Cancel", onClick: closeModal, variant: "secondary" },
-        {
-          text: "Delete",
-          onClick: () => {
-            deleteConfig(activeConfig.id);
-            setShowConfigMenu(false);
-            return true;
-          },
-          variant: "danger",
-        },
-      ] as ButtonConfig[],
-    });
+    openModal(DeleteVersionModal);
   };
 
   const openCreateVersionModal = () => {
-    openModal({
-      title: "Create a new version",
-      description: "Give this version a short name so you can quickly find it later.",
-      content: (
-        <CreateVersionModalContent
-          onCancel={closeModal}
-          onCreate={(name: string) => {
-            createNewConfig(name);
-            closeModal();
-          }}
-        />
-      ),
-      buttons: [] as ButtonConfig[],
-    });
+    openModal(CreateVersionModal);
   };
 
   if (loading || !masterData || !activeConfig) {
