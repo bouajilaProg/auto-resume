@@ -1,7 +1,7 @@
 import { HobbiesSchema, SectionType, Hobby } from "@/types/resumeTypes";
 import { useGenericListSection } from "./useGenericListSection";
 
-export function useHobbies() {
+export function useHobbies(onConfirmRemove?: (id: number) => void | Promise<void>) {
   const {
     items: hobbies,
     addItem: addHobby,
@@ -14,7 +14,8 @@ export function useHobbies() {
   } = useGenericListSection<Hobby>(
     SectionType.Hobbies,
     HobbiesSchema,
-    (h) => h.name.trim() !== ""
+    (h) => h.name.trim() !== "",
+    onConfirmRemove
   );
 
   const updateHobby = <K extends keyof Hobby>(id: number, field: K, value: Hobby[K]) => {

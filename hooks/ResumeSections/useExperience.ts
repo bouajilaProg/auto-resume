@@ -2,7 +2,7 @@ import { WorkExperience, WorkExperienceSchema, SectionType } from "@/types/resum
 import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
-export function useExperience() {
+export function useExperience(onConfirmRemove?: (id: number) => void | Promise<void>) {
   const {
     items: experiences,
     addItem: addExperience,
@@ -15,7 +15,8 @@ export function useExperience() {
   } = useGenericListSection<WorkExperience>(
     SectionType.WorkExperience,
     z.array(WorkExperienceSchema),
-    (e) => e.jobTitle.trim() !== "" || e.company.trim() !== ""
+    (e) => e.jobTitle.trim() !== "" || e.company.trim() !== "",
+    onConfirmRemove
   );
 
   const updateExperience = <K extends keyof WorkExperience>(id: number, field: K, value: WorkExperience[K]) => {

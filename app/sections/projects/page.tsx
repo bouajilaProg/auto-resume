@@ -10,6 +10,10 @@ import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 import { useMemo } from "react";
 
 export default function ProjectsPage() {
+  const { openModal, closeModal } = useModal();
+
+  const ConfirmDeleteModal = useMemo(() => ModalCreator("ConfirmDelete", closeModal), [closeModal]);
+
   const {
     projects,
     addProject,
@@ -19,10 +23,18 @@ export default function ProjectsPage() {
     hasChanges,
     loading,
     errors
-  } = useProjects();
+  } = useProjects((id: number) => {
+    openModal({
+      ...ConfirmDeleteModal,
+      buttons: ConfirmDeleteModal.buttons.map(btn =>
+        btn.text === "Delete"
+          ? { ...btn, onClick: () => { removeProject(id); closeModal(); } }
+          : btn
+      )
+    });
+  });
 
-  const { openModal, closeModal } = useModal();
-  const ConfirmModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
+  const ConfirmSaveModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
   }), [closeModal, handleSave]);
 
@@ -58,7 +70,7 @@ export default function ProjectsPage() {
             <button
               onClick={() => {
                 if (hasChanges) {
-                  openModal(ConfirmModal);
+                  openModal(ConfirmSaveModal);
                 } else {
                   handleSave();
                 }

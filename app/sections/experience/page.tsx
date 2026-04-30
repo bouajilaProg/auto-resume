@@ -10,6 +10,10 @@ import { useModal } from "@/context/Modal/useModal";
 import { useMemo } from "react";
 
 export default function ExperiencePage() {
+  const { openModal, closeModal } = useModal();
+
+  const ConfirmDeleteModal = useMemo(() => ModalCreator("ConfirmDelete", closeModal), [closeModal]);
+
   const {
     experiences,
     addExperience,
@@ -19,10 +23,18 @@ export default function ExperiencePage() {
     hasChanges,
     loading,
     errors
-  } = useExperience();
+  } = useExperience((id: number) => {
+    openModal({
+      ...ConfirmDeleteModal,
+      buttons: ConfirmDeleteModal.buttons.map(btn =>
+        btn.text === "Delete"
+          ? { ...btn, onClick: () => { removeExperience(id); closeModal(); } }
+          : btn
+      )
+    });
+  });
 
-  const { openModal, closeModal } = useModal();
-  const ConfirmModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
+  const ConfirmSaveModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
   }), [closeModal, handleSave]);
 
@@ -55,7 +67,7 @@ export default function ExperiencePage() {
             <button
               onClick={() => {
                 if (hasChanges) {
-                  openModal(ConfirmModal);
+                  openModal(ConfirmSaveModal);
                 } else {
                   handleSave();
                 }

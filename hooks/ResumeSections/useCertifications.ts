@@ -2,7 +2,7 @@ import { Certification, CertificationSchema, SectionType } from "@/types/resumeT
 import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
-export function useCertifications() {
+export function useCertifications(onConfirmRemove?: (id: number) => void | Promise<void>) {
   const {
     items: certifications,
     addItem: addCertification,
@@ -15,7 +15,8 @@ export function useCertifications() {
   } = useGenericListSection<Certification>(
     SectionType.Certification,
     z.array(CertificationSchema),
-    (c) => c.name.trim() !== "" || c.issuingOrganization.trim() !== ""
+    (c) => c.name.trim() !== "" || c.issuingOrganization.trim() !== "",
+    onConfirmRemove
   );
 
   const updateCertification = <K extends keyof Certification>(id: number, field: K, value: Certification[K]) => {
