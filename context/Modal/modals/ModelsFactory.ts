@@ -1,17 +1,17 @@
 import { ModalType } from "../ModalContext";
 import { ConfirmSaveModal } from "./ConfirmSaveModal";
-import { DeleteItemModal } from "./DeleteItemModal";
+import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 import { DeleteVersionModal } from "./DeleteVersionModal";
 import { CreateVersionModal } from "./CreateVersionModal";
 
-export type ModalKind = "ConfirmSave" | "DeleteItem" | "DeleteVersion" | "CreateVersion" | "Logout";
+export type ModalKind = "ConfirmSave" | "ConfirmDelete" | "DeleteVersion" | "CreateVersion" | "Logout";
 
 export default function ModalCreator(kind: ModalKind, closeModal: () => void, onAction?: () => void, onCreate?: (name: string) => void): ModalType {
   switch (kind) {
     case "ConfirmSave":
       return ConfirmSaveModal(closeModal, onAction);
-    case "DeleteItem":
-      return DeleteItemModal(closeModal, onAction);
+    case "ConfirmDelete":
+      return ConfirmDeleteModal(closeModal, onAction);
     case "DeleteVersion":
       return DeleteVersionModal(closeModal, onAction);
     case "CreateVersion":

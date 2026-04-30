@@ -1,6 +1,6 @@
 import { ModalType } from "../ModalContext";
 
-export function DeleteItemModal
+export function ConfirmDeleteModal
   (closeModal: () => void, onAction?: () => void): ModalType {
   return {
     title: 'Delete Item',
