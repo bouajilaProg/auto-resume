@@ -2,7 +2,7 @@ import { Project, ProjectSchema, SectionType } from "@/types/resumeTypes";
 import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
-export function useProjects(onConfirmRemove?: (id: number) => void | Promise<void>) {
+export function useProjects(onConfirmRemove?: (id: number, doRemove: () => void) => void) {
   const editorSchema = ProjectSchema.extend({
     projectLink: z.string().optional().or(z.literal("")),
   });

@@ -23,12 +23,12 @@ export default function ExperiencePage() {
     hasChanges,
     loading,
     errors
-  } = useExperience((id: number) => {
+  } = useExperience((id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
       buttons: ConfirmDeleteModal.buttons.map(btn =>
         btn.text === "Delete"
-          ? { ...btn, onClick: () => { removeExperience(id); closeModal(); } }
+          ? { ...btn, onClick: () => { doRemove(); closeModal(); } }
           : btn
       )
     });

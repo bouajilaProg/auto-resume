@@ -23,12 +23,12 @@ export default function HobbiesPage() {
     hasChanges,
     loading,
     errors
-  } = useHobbies((id: number) => {
+  } = useHobbies((id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
       buttons: ConfirmDeleteModal.buttons.map(btn =>
         btn.text === "Delete"
-          ? { ...btn, onClick: () => { removeHobby(id); closeModal(); } }
+          ? { ...btn, onClick: () => { doRemove(); closeModal(); } }
           : btn
       )
     });

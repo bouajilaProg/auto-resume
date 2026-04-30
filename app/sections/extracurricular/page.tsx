@@ -22,12 +22,12 @@ export default function ExtraCurricularActivitiesPage() {
     handleSave,
     hasChanges,
     loading
-  } = useExtraCurricular((id: number) => {
+  } = useExtraCurricular((id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
       buttons: ConfirmDeleteModal.buttons.map(btn =>
         btn.text === "Delete"
-          ? { ...btn, onClick: () => { removeActivity(id); closeModal(); } }
+          ? { ...btn, onClick: () => { doRemove(); closeModal(); } }
           : btn
       )
     });

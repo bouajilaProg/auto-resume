@@ -15,12 +15,12 @@ export default function SkillsPage() {
 
   const ConfirmDeleteModal = useMemo(() => ModalCreator("ConfirmDelete", closeModal), [closeModal]);
 
-  const handleConfirmRemove = (type: keyof typeof skills, id: number) => {
+  const handleConfirmRemove = (type: keyof typeof skills, id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
       buttons: ConfirmDeleteModal.buttons.map(btn =>
         btn.text === "Delete"
-          ? { ...btn, onClick: () => { removeSkill(type, id); closeModal(); } }
+          ? { ...btn, onClick: () => { doRemove(); closeModal(); } }
           : btn
       )
     });

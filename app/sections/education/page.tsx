@@ -22,12 +22,12 @@ export default function EducationPage() {
     handleSave,
     hasChanges,
     loading,
-  } = useEducation((id: number) => {
+  } = useEducation((id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
       buttons: ConfirmDeleteModal.buttons.map(btn =>
         btn.text === "Delete"
-          ? { ...btn, onClick: () => { removeEducation(id); closeModal(); } }
+          ? { ...btn, onClick: () => { doRemove(); closeModal(); } }
           : btn
       )
     });

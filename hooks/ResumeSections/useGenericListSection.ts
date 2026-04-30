@@ -8,7 +8,7 @@ export function useGenericListSection<T extends { id: number }>(
   sectionType: SectionTypeValue,
   schema: z.ZodSchema<T[]>,
   cleanFilter: (item: T) => boolean,
-  onConfirmRemove?: (id: number) => void | Promise<void>
+  onConfirmRemove?: (id: number, doRemove: () => void) => void
 ) {
   const { resumeSectionData, updateSection, loading } = useResumeSectionData();
   const [items, setItems] = useState<T[]>([]);
@@ -44,7 +44,7 @@ export function useGenericListSection<T extends { id: number }>(
     setItems([...cleaned, { ...defaultItem, id: newId } as T]);
   };
 
-  const removeItem = async (id: number) => {
+  const removeItem = (id: number) => {
     const doRemove = () => {
       const nextItems = items.filter((i) => i.id !== id);
       setItems(nextItems);
@@ -58,7 +58,7 @@ export function useGenericListSection<T extends { id: number }>(
     };
 
     if (onConfirmRemove) {
-      onConfirmRemove(id);
+      onConfirmRemove(id, doRemove);
       return;
     }
 

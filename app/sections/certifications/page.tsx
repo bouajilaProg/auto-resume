@@ -22,12 +22,12 @@ export default function CertificationsPage() {
     handleSave,
     hasChanges,
     loading
-  } = useCertifications((id: number) => {
+  } = useCertifications((id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
       buttons: ConfirmDeleteModal.buttons.map(btn =>
         btn.text === "Delete"
-          ? { ...btn, onClick: () => { removeCertification(id); closeModal(); } }
+          ? { ...btn, onClick: () => { doRemove(); closeModal(); } }
           : btn
       )
     });

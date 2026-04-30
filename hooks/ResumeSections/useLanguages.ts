@@ -2,7 +2,7 @@ import { Language, LanguageSchema, SectionType } from "@/types/resumeTypes";
 import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
-export function useLanguages(onConfirmRemove?: (id: number) => void | Promise<void>) {
+export function useLanguages(onConfirmRemove?: (id: number, doRemove: () => void) => void) {
   const {
     items: languages,
     addItem: addLanguage,

@@ -2,7 +2,7 @@ import { Certification, CertificationSchema, SectionType } from "@/types/resumeT
 import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
-export function useCertifications(onConfirmRemove?: (id: number) => void | Promise<void>) {
+export function useCertifications(onConfirmRemove?: (id: number, doRemove: () => void) => void) {
   const {
     items: certifications,
     addItem: addCertification,

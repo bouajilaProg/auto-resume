@@ -23,12 +23,12 @@ export default function LanguagesPage() {
     hasChanges,
     loading,
     errors
-  } = useLanguages((id: number) => {
+  } = useLanguages((id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
       buttons: ConfirmDeleteModal.buttons.map(btn =>
         btn.text === "Delete"
-          ? { ...btn, onClick: () => { removeLanguage(id); closeModal(); } }
+          ? { ...btn, onClick: () => { doRemove(); closeModal(); } }
           : btn
       )
     });

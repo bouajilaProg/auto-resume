@@ -23,12 +23,12 @@ export default function ProjectsPage() {
     hasChanges,
     loading,
     errors
-  } = useProjects((id: number) => {
+  } = useProjects((id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
       buttons: ConfirmDeleteModal.buttons.map(btn =>
         btn.text === "Delete"
-          ? { ...btn, onClick: () => { removeProject(id); closeModal(); } }
+          ? { ...btn, onClick: () => { doRemove(); closeModal(); } }
           : btn
       )
     });

@@ -2,7 +2,7 @@ import { WorkExperience, WorkExperienceSchema, SectionType } from "@/types/resum
 import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
-export function useExperience(onConfirmRemove?: (id: number) => void | Promise<void>) {
+export function useExperience(onConfirmRemove?: (id: number, doRemove: () => void) => void) {
   const {
     items: experiences,
     addItem: addExperience,

@@ -2,7 +2,7 @@ import { ExtraCurricularActivity, ExtraCurricularActivitySchema, SectionType } f
 import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
-export function useExtraCurricular(onConfirmRemove?: (id: number) => void | Promise<void>) {
+export function useExtraCurricular(onConfirmRemove?: (id: number, doRemove: () => void) => void) {
   const {
     items: activities,
     addItem: addActivity,

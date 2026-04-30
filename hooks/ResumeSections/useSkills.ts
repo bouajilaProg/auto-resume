@@ -3,7 +3,7 @@ import { Skills, SectionType } from "@/types/resumeTypes";
 import useResumeSectionData from "@hooks/useResumeSectionData";
 import { useRouter } from "next/navigation";
 
-export function useSkills(onConfirmRemove?: (type: keyof Skills, id: number) => void | Promise<void>) {
+export function useSkills(onConfirmRemove?: (type: keyof Skills, id: number, doRemove: () => void) => void) {
   const { resumeSectionData, updateSection, loading } = useResumeSectionData();
   const [skills, setSkills] = useState<Skills>({
     languages: [],
@@ -66,7 +66,7 @@ export function useSkills(onConfirmRemove?: (type: keyof Skills, id: number) => 
     };
 
     if (onConfirmRemove) {
-      onConfirmRemove(type, id);
+      onConfirmRemove(type, id, doRemove);
       return;
     }
 

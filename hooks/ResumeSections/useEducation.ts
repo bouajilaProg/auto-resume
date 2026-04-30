@@ -2,7 +2,7 @@ import { EducationItem, EducationItemSchema, SectionType } from "@/types/resumeT
 import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
-export function useEducation(onConfirmRemove?: (id: number) => void | Promise<void>) {
+export function useEducation(onConfirmRemove?: (id: number, doRemove: () => void) => void) {
   const {
     items: educations,
     addItem: addEducation,
