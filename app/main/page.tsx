@@ -6,7 +6,7 @@ import PreviewPane from "./components/PreviewPane";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
 import ModalCreator from "@/context/Modal/modals/ModelsFactory";
-import { Plus, MoreVertical, Trash2, Edit3, X } from "lucide-react";
+import { Plus, MoreVertical, Trash2, Edit3, X, Copy } from "lucide-react";
 import { useState, useMemo } from "react";
 import Image from "next/image";
 
@@ -25,6 +25,7 @@ export default function ResumeMainPage() {
     cancel,
     setActiveConfigId,
     createNewConfig,
+    duplicateConfig,
     deleteConfig,
     renameConfig,
     loading
@@ -190,6 +191,17 @@ export default function ResumeMainPage() {
                   >
                     <Edit3 size={16} className="text-gray-400" />
                     Rename Version
+                  </button>
+                  <div className="h-px bg-gray-100 my-1" />
+                  <button
+                    onClick={() => {
+                      duplicateConfig();
+                      setShowConfigMenu(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Copy size={16} className="text-gray-400" />
+                    Duplicate Version
                   </button>
                   <div className="h-px bg-gray-100 my-1" />
                   <button
