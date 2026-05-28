@@ -2,7 +2,7 @@ import { Project, ProjectSchema, SectionType } from "@/types/resumeTypes";
 import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
-export function useProjects() {
+export function useProjects(onConfirmRemove?: (id: number, doRemove: () => void) => void) {
   const editorSchema = ProjectSchema.extend({
     projectLink: z.string().optional().or(z.literal("")),
   });
@@ -19,7 +19,8 @@ export function useProjects() {
   } = useGenericListSection<Project>(
     SectionType.Project,
     z.array(editorSchema),
-    (p) => p.title.trim() !== ""
+    (p) => p.title.trim() !== "",
+    onConfirmRemove
   );
 
   const updateProject = <K extends keyof Project>(id: number, field: K, value: Project[K]) => {

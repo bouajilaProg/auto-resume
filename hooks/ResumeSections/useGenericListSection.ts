@@ -7,7 +7,8 @@ import { z } from "zod";
 export function useGenericListSection<T extends { id: number }>(
   sectionType: SectionTypeValue,
   schema: z.ZodSchema<T[]>,
-  cleanFilter: (item: T) => boolean
+  cleanFilter: (item: T) => boolean,
+  onConfirmRemove?: (id: number, doRemove: () => void) => void
 ) {
   const { resumeSectionData, updateSection, loading } = useResumeSectionData();
   const [items, setItems] = useState<T[]>([]);
@@ -44,21 +45,26 @@ export function useGenericListSection<T extends { id: number }>(
   };
 
   const removeItem = (id: number) => {
+    const doRemove = () => {
+      const nextItems = items.filter((i) => i.id !== id);
+      setItems(nextItems);
+      
+      const newErrors = { ...errors };
+      delete newErrors[id];
+      setErrors(newErrors);
+
+      updateSection(sectionType, nextItems);
+      setInitialItems(JSON.parse(JSON.stringify(nextItems)));
+    };
+
+    if (onConfirmRemove) {
+      onConfirmRemove(id, doRemove);
+      return;
+    }
+
     if (typeof window !== "undefined" && !confirm("Delete this entry?")) return;
 
-    const nextItems = items.filter((i) => i.id !== id);
-    setItems(nextItems);
-    
-    // Clear errors for this item
-    const newErrors = { ...errors };
-    delete newErrors[id];
-    setErrors(newErrors);
-
-    // Persist immediately as per user request
-    updateSection(sectionType, nextItems);
-    
-    // Update initial items so we don't show "unsaved changes" for this deletion
-    setInitialItems(JSON.parse(JSON.stringify(nextItems)));
+    doRemove();
   };
 
   // Fix #15: Early return if value hasn't changed

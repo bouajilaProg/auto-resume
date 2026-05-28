@@ -69,6 +69,7 @@ export default function useResumeEditor() {
     activeResumeId,
     createResume,
     duplicateResume: baseDuplicateResume,
+    importResumeData,
   } = useResumeSectionData();
 
   const [configsByResume, setConfigsByResume] = useState<ConfigsByResume>(() => {
@@ -678,6 +679,18 @@ export default function useResumeEditor() {
     setIsDirty(true);
   }, [setActiveConfigId, setConfigs]);
 
+  const duplicateConfig = useCallback(() => {
+    const duplicated: ResumeConfig = {
+      ...activeConfig,
+      id: crypto.randomUUID(),
+      name: `${activeConfig.name}-copy`,
+      lastUpdate: new Date().toLocaleDateString(),
+    };
+    setConfigs(prev => [...prev, duplicated]);
+    setActiveConfigId(duplicated.id);
+    setIsDirty(true);
+  }, [activeConfig, setConfigs, setActiveConfigId]);
+
   const deleteConfig = useCallback((id: string) => {
     if (!activeResumeId) return;
     setConfigsByResume(prevConfigs => {
@@ -719,6 +732,7 @@ export default function useResumeEditor() {
   // eslint-disable-next-line react-hooks/refs -- assembledResume uses ref-based deep equality in useMemo (intentional)
   return {
     masterData: resumeSectionData,
+    importResumeData,
     activeConfig,
     configs,
     assembledResume,
@@ -735,6 +749,7 @@ export default function useResumeEditor() {
     cancel,
     setActiveConfigId,
     createNewConfig,
+    duplicateConfig,
     deleteConfig,
     renameConfig,
     loading: globalLoading || !resumeSectionData || !activeResumeId || configs.length === 0,

@@ -2,7 +2,7 @@ import { EducationItem, EducationItemSchema, SectionType } from "@/types/resumeT
 import { useGenericListSection } from "./useGenericListSection";
 import { z } from "zod";
 
-export function useEducation() {
+export function useEducation(onConfirmRemove?: (id: number, doRemove: () => void) => void) {
   const {
     items: educations,
     addItem: addEducation,
@@ -15,7 +15,8 @@ export function useEducation() {
   } = useGenericListSection<EducationItem>(
     SectionType.Education,
     z.array(EducationItemSchema),
-    (edu) => edu.institution.trim() !== "" || edu.degreeName.trim() !== ""
+    (edu) => edu.institution.trim() !== "" || edu.degreeName.trim() !== "",
+    onConfirmRemove
   );
 
   const updateEducation = <K extends keyof EducationItem>(id: number, field: K, value: EducationItem[K]) => {

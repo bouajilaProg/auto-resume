@@ -10,6 +10,10 @@ import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 import { useMemo } from "react";
 
 export default function LanguagesPage() {
+  const { openModal, closeModal } = useModal();
+
+  const ConfirmDeleteModal = useMemo(() => ModalCreator("ConfirmDelete", closeModal), [closeModal]);
+
   const {
     languages,
     addLanguage,
@@ -19,10 +23,18 @@ export default function LanguagesPage() {
     hasChanges,
     loading,
     errors
-  } = useLanguages();
+  } = useLanguages((id: number, doRemove: () => void) => {
+    openModal({
+      ...ConfirmDeleteModal,
+      buttons: ConfirmDeleteModal.buttons.map(btn =>
+        btn.text === "Delete"
+          ? { ...btn, onClick: () => { doRemove(); closeModal(); } }
+          : btn
+      )
+    });
+  });
 
-  const { openModal, closeModal } = useModal();
-  const ConfirmModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
+  const ConfirmSaveModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
   }), [closeModal, handleSave]);
 
@@ -54,7 +66,7 @@ export default function LanguagesPage() {
             <button
               onClick={() => {
                 if (hasChanges) {
-                  openModal(ConfirmModal);
+                  openModal(ConfirmSaveModal);
                 } else {
                   handleSave();
                 }

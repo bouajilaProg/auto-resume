@@ -3,7 +3,7 @@ import { Skills, SectionType } from "@/types/resumeTypes";
 import useResumeSectionData from "@hooks/useResumeSectionData";
 import { useRouter } from "next/navigation";
 
-export function useSkills() {
+export function useSkills(onConfirmRemove?: (type: keyof Skills, id: number, doRemove: () => void) => void) {
   const { resumeSectionData, updateSection, loading } = useResumeSectionData();
   const [skills, setSkills] = useState<Skills>({
     languages: [],
@@ -53,18 +53,27 @@ export function useSkills() {
   }, []);
 
   const removeSkill = useCallback((type: keyof Skills, id: number) => {
+    const doRemove = () => {
+      setSkills(prevSkills => {
+        const nextSkills = {
+          ...prevSkills,
+          [type]: (prevSkills[type] || []).filter(s => s.id !== id)
+        };
+        updateSection(SectionType.Skills, nextSkills);
+        setInitialSkills(JSON.parse(JSON.stringify(nextSkills)));
+        return nextSkills;
+      });
+    };
+
+    if (onConfirmRemove) {
+      onConfirmRemove(type, id, doRemove);
+      return;
+    }
+
     if (typeof window !== "undefined" && !confirm("Delete this skill?")) return;
 
-    setSkills(prevSkills => {
-      const nextSkills = {
-        ...prevSkills,
-        [type]: (prevSkills[type] || []).filter(s => s.id !== id)
-      };
-      updateSection(SectionType.Skills, nextSkills);
-      setInitialSkills(JSON.parse(JSON.stringify(nextSkills)));
-      return nextSkills;
-    });
-  }, [updateSection]);
+    doRemove();
+  }, [updateSection, onConfirmRemove]);
 
   const updateSkill = useCallback((type: keyof Skills, id: number, name: string) => {
     setSkills(prevSkills => ({

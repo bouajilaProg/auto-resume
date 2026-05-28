@@ -11,6 +11,21 @@ import ModalCreator from "@/context/Modal/modals/ModelsFactory";
 import { useMemo } from "react";
 
 export default function SkillsPage() {
+  const { openModal, closeModal } = useModal();
+
+  const ConfirmDeleteModal = useMemo(() => ModalCreator("ConfirmDelete", closeModal), [closeModal]);
+
+  const handleConfirmRemove = (type: keyof typeof skills, id: number, doRemove: () => void) => {
+    openModal({
+      ...ConfirmDeleteModal,
+      buttons: ConfirmDeleteModal.buttons.map(btn =>
+        btn.text === "Delete"
+          ? { ...btn, onClick: () => { doRemove(); closeModal(); } }
+          : btn
+      )
+    });
+  };
+
   const {
     skills,
     addSkill,
@@ -19,9 +34,7 @@ export default function SkillsPage() {
     handleSave,
     hasChanges,
     loading
-  } = useSkills();
-
-  const { openModal, closeModal } = useModal();
+  } = useSkills(handleConfirmRemove);
 
   // Memoize bound skill actions to maintain stable references for SkillSection components
   const langActions = useMemo(() => ({
@@ -42,7 +55,7 @@ export default function SkillsPage() {
     update: (id: number, name: string) => updateSkill(skillType.SOFT, id, name),
   }), [addSkill, removeSkill, updateSkill]);
 
-  const ConfirmModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
+  const ConfirmSaveModal = useMemo(() => ModalCreator("ConfirmSave", closeModal, () => {
     handleSave();
   }), [closeModal, handleSave]);
 
@@ -78,7 +91,7 @@ export default function SkillsPage() {
             <button
               onClick={() => {
                 if (hasChanges) {
-                  openModal(ConfirmModal);
+                  openModal(ConfirmSaveModal);
                 } else {
                   handleSave();
                 }

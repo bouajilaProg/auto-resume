@@ -1,19 +1,20 @@
 "use client";
 
 import useResumeEditor from "@/hooks/useResumeEditor";
+import type { Resume } from "@/types/resumeTypes";
 import EditorPane from "./components/EditorPane";
 import PreviewPane from "./components/PreviewPane";
-import CreateVersionModalContent from "./components/CreateVersionModalContent";
 import Loading from "@/app/components/Loading";
-import type { ButtonConfig } from "@/context/Modal/ModalContext";
 import { useModal } from "@/context/Modal/useModal";
-import { Plus, MoreVertical, Trash2, Edit3, X } from "lucide-react";
-import { useState } from "react";
+import ModalCreator from "@/context/Modal/modals/ModelsFactory";
+import { Plus, MoreVertical, Trash2, Edit3, X, Copy, Download, Upload } from "lucide-react";
+import { useState, useMemo, useRef } from "react";
 import Image from "next/image";
 
 export default function ResumeMainPage() {
   const {
     masterData,
+    importResumeData,
     activeConfig,
     configs,
     assembledResume,
@@ -26,6 +27,7 @@ export default function ResumeMainPage() {
     cancel,
     setActiveConfigId,
     createNewConfig,
+    duplicateConfig,
     deleteConfig,
     renameConfig,
     loading
@@ -43,42 +45,85 @@ export default function ResumeMainPage() {
     }
   };
 
+  const DeleteVersionModal = useMemo(
+    () =>
+      ModalCreator(
+        "DeleteVersion",
+        closeModal,
+        () => {
+          deleteConfig(activeConfig.id);
+          setShowConfigMenu(false);
+        }
+      ),
+    [closeModal, activeConfig.id, deleteConfig, setShowConfigMenu]
+  );
+
+  const CreateVersionModal = useMemo(
+    () => ModalCreator("CreateVersion", closeModal, undefined, (name: string) => {
+      createNewConfig(name);
+    }),
+    [closeModal, createNewConfig]
+  );
+
   const handleDelete = () => {
     if (configs.length <= 1) return;
-
-    openModal({
-      title: "Delete this version?",
-      description: "This action can't be undone. We'll remove this version and keep your other resumes safe.",
-      buttons: [
-        { text: "Cancel", onClick: closeModal, variant: "secondary" },
-        {
-          text: "Delete",
-          onClick: () => {
-            deleteConfig(activeConfig.id);
-            setShowConfigMenu(false);
-            return true;
-          },
-          variant: "danger",
-        },
-      ] as ButtonConfig[],
-    });
+    openModal(DeleteVersionModal);
   };
 
   const openCreateVersionModal = () => {
-    openModal({
-      title: "Create a new version",
-      description: "Give this version a short name so you can quickly find it later.",
-      content: (
-        <CreateVersionModalContent
-          onCancel={closeModal}
-          onCreate={(name: string) => {
-            createNewConfig(name);
-            closeModal();
-          }}
-        />
-      ),
-      buttons: [] as ButtonConfig[],
-    });
+    openModal(CreateVersionModal);
+  };
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleExport = () => {
+    if (!masterData) return;
+    const envelope = {
+      $schema: "https://auto-resume.bouajilaprog.com/resume-export-schema.json",
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      source: { name: masterData.name, description: masterData.description },
+      data: {
+        personalInfo: masterData.personalInfo,
+        sections: masterData.sections,
+      },
+    };
+    const json = JSON.stringify(envelope, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${masterData.name.replace(/\s+/g, "_")}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setShowConfigMenu(false);
+  };
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!masterData) return;
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const parsed = JSON.parse(event.target?.result as string);
+        const payload = parsed.version ? parsed.data : parsed;
+        const updated: Resume = {
+          ...masterData,
+          personalInfo: payload.personalInfo ?? masterData.personalInfo,
+          sections: payload.sections?.map((s: { type: string; body: unknown }) => ({
+            type: s.type,
+            body: s.body,
+          })) ?? masterData.sections,
+        };
+        importResumeData(updated);
+      } catch (err) {
+        console.error("Invalid import file:", err);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+    setShowConfigMenu(false);
   };
 
   if (loading || !masterData || !activeConfig) {
@@ -201,6 +246,39 @@ export default function ResumeMainPage() {
                     <Edit3 size={16} className="text-gray-400" />
                     Rename Version
                   </button>
+                  <div className="h-px bg-gray-100 my-1" />
+                  <button
+                    onClick={() => {
+                      duplicateConfig();
+                      setShowConfigMenu(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Copy size={16} className="text-gray-400" />
+                    Duplicate Version
+                  </button>
+                  <div className="h-px bg-gray-100 my-1" />
+                  <button
+                    onClick={handleExport}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Download size={16} className="text-gray-400" />
+                    Export Data
+                  </button>
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Upload size={16} className="text-gray-400" />
+                    Import Data
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".json"
+                    onChange={handleImport}
+                    className="hidden"
+                  />
                   <div className="h-px bg-gray-100 my-1" />
                   <button
                     onClick={handleDelete}
