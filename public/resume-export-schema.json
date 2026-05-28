@@ -1,0 +1,270 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://auto-resume.bouajilaprog.com/resume-export-schema.json",
+  "title": "AutoResume Export",
+  "description": "Schema for exported resume data files from AutoResume",
+  "type": "object",
+  "required": ["version", "exportedAt", "source", "data"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URI of this schema"
+    },
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Export format version (only v1 exists)"
+    },
+    "exportedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of when the export was created"
+    },
+    "source": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Original resume name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Original resume description"
+        }
+      },
+      "additionalProperties": false
+    },
+    "data": {
+      "type": "object",
+      "description": "The resume content (sections + personal info)",
+      "required": ["sections"],
+      "properties": {
+        "personalInfo": { "$ref": "#/definitions/PersonalInfo" },
+        "sections": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ResumeSection" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "PersonalInfo": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "string" },
+        "contact": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Contact" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "Contact": {
+      "type": "object",
+      "required": ["id", "type", "value"],
+      "properties": {
+        "id": { "type": "integer" },
+        "type": { "type": "string", "enum": ["Email", "Phone", "Website", "GitHub", "LinkedIn"] },
+        "value": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ResumeSection": {
+      "type": "object",
+      "required": ["type", "body"],
+      "oneOf": [
+        { "$ref": "#/definitions/EducationSection" },
+        { "$ref": "#/definitions/WorkExperienceSection" },
+        { "$ref": "#/definitions/ProjectSection" },
+        { "$ref": "#/definitions/SkillsSection" },
+        { "$ref": "#/definitions/CertificationSection" },
+        { "$ref": "#/definitions/ExtraCurricularSection" },
+        { "$ref": "#/definitions/HobbiesSection" },
+        { "$ref": "#/definitions/LanguagesSection" }
+      ]
+    },
+    "EducationSection": {
+      "properties": {
+        "type": { "const": "education" },
+        "body": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/EducationItem" }
+        }
+      }
+    },
+    "EducationItem": {
+      "type": "object",
+      "required": ["id", "degreeType", "degreeName", "institution", "startDate", "endDate"],
+      "properties": {
+        "id": { "type": "integer" },
+        "degreeType": { "type": "string", "enum": ["BS", "MS", "PhD"] },
+        "degreeName": { "type": "string" },
+        "institution": { "type": "string" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "summary": { "type": "string" },
+        "highlights": { "type": "array", "items": { "type": "string" } },
+        "keySkills": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "WorkExperienceSection": {
+      "properties": {
+        "type": { "const": "work_experience" },
+        "body": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/WorkExperienceItem" }
+        }
+      }
+    },
+    "WorkExperienceItem": {
+      "type": "object",
+      "required": ["id", "jobTitle", "company", "location", "startDate", "endDate"],
+      "properties": {
+        "id": { "type": "integer" },
+        "jobTitle": { "type": "string" },
+        "company": { "type": "string" },
+        "location": { "type": "string" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "summary": { "type": "string" },
+        "highlights": { "type": "array", "items": { "type": "string" } },
+        "keywords": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ProjectSection": {
+      "properties": {
+        "type": { "const": "project" },
+        "body": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ProjectItem" }
+        }
+      }
+    },
+    "ProjectItem": {
+      "type": "object",
+      "required": ["id", "title"],
+      "properties": {
+        "id": { "type": "integer" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "highlights": { "type": "array", "items": { "type": "string" } },
+        "tools": { "type": "string" },
+        "projectLink": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "SkillsSection": {
+      "properties": {
+        "type": { "const": "skills" },
+        "body": { "$ref": "#/definitions/SkillsBody" }
+      }
+    },
+    "SkillsBody": {
+      "type": "object",
+      "properties": {
+        "languages": { "type": "array", "items": { "$ref": "#/definitions/SkillItem" } },
+        "technologies": { "type": "array", "items": { "$ref": "#/definitions/SkillItem" } },
+        "softSkills": { "type": "array", "items": { "$ref": "#/definitions/SkillItem" } }
+      },
+      "additionalProperties": false
+    },
+    "SkillItem": {
+      "type": "object",
+      "required": ["id", "type", "name"],
+      "properties": {
+        "id": { "type": "integer" },
+        "type": { "type": "string", "enum": ["LANG", "TECH", "SOFT"] },
+        "name": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "CertificationSection": {
+      "properties": {
+        "type": { "const": "certification" },
+        "body": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/CertificationItem" }
+        }
+      }
+    },
+    "CertificationItem": {
+      "type": "object",
+      "required": ["id", "name", "issuingOrganization", "issueDate"],
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "issuingOrganization": { "type": "string" },
+        "issueDate": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ExtraCurricularSection": {
+      "properties": {
+        "type": { "const": "extracurricular" },
+        "body": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ExtraCurricularItem" }
+        }
+      }
+    },
+    "ExtraCurricularItem": {
+      "type": "object",
+      "required": ["id", "activityName", "startDate"],
+      "properties": {
+        "id": { "type": "integer" },
+        "activityName": { "type": "string" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "HobbiesSection": {
+      "properties": {
+        "type": { "const": "hobbies" },
+        "body": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/HobbyItem" }
+        }
+      }
+    },
+    "HobbyItem": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "LanguagesSection": {
+      "properties": {
+        "type": { "const": "languages" },
+        "body": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/LanguageItem" }
+        }
+      }
+    },
+    "LanguageItem": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "proficiency": {
+          "type": "string",
+          "enum": ["Native", "Fluent", "Advanced", "Intermediate", "Beginner"]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -69,6 +69,7 @@ export default function useResumeEditor() {
     activeResumeId,
     createResume,
     duplicateResume: baseDuplicateResume,
+    importResumeData,
   } = useResumeSectionData();
 
   const [configsByResume, setConfigsByResume] = useState<ConfigsByResume>(() => {
@@ -731,6 +732,7 @@ export default function useResumeEditor() {
   // eslint-disable-next-line react-hooks/refs -- assembledResume uses ref-based deep equality in useMemo (intentional)
   return {
     masterData: resumeSectionData,
+    importResumeData,
     activeConfig,
     configs,
     assembledResume,

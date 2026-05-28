@@ -165,6 +165,11 @@ function useResumeSectionDataInternal() {
     syncResumeSectionData(updated);
   }, [resumeSectionData, syncResumeSectionData]);
 
+  const importResumeData = useCallback((resume: Resume) => {
+    if (!activeResumeId) return;
+    syncResumeSectionData(resume);
+  }, [activeResumeId, syncResumeSectionData]);
+
   const setActiveResumeId = useCallback((id: string) => {
     if (!resumesById[id]) return;
     setActiveResumeIdState(id);
@@ -278,6 +283,7 @@ function useResumeSectionDataInternal() {
     duplicateResume,
     updateSection,
     updatePersonalInfo,
+    importResumeData,
     loading,
   };
 }

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://auto-resume.bouajilaprog.com/resume-export-schema.json",
+  "version": 1,
+  "exportedAt": "2026-05-28T12:00:00.000Z",
+  "source": {
+    "name": "My Resume",
+    "description": "Primary resume for job applications"
+  },
+  "data": {
+    "personalInfo": {
+      "name": "Jane Doe",
+      "location": "San Francisco, CA",
+      "description": "Full-stack engineer with 5+ years of experience",
+      "contact": [
+        { "id": 1, "type": "Email", "value": "jane@example.com" },
+        { "id": 2, "type": "Phone", "value": "+1 555-0123" },
+        { "id": 3, "type": "LinkedIn", "value": "linkedin.com/in/janedoe" }
+      ]
+    },
+    "sections": [
+      {
+        "type": "education",
+        "body": [
+          {
+            "id": 1,
+            "degreeType": "BS",
+            "degreeName": "Computer Science",
+            "institution": "MIT",
+            "startDate": "2016-09",
+            "endDate": "2020-06",
+            "summary": "GPA 3.8, Dean's List",
+            "highlights": ["Teaching assistant for Algorithms"],
+            "keySkills": "Python, Java"
+          }
+        ]
+      },
+      {
+        "type": "work_experience",
+        "body": [
+          {
+            "id": 1,
+            "jobTitle": "Senior Software Engineer",
+            "company": "Acme Corp",
+            "location": "San Francisco, CA",
+            "startDate": "2022-03",
+            "endDate": "Present",
+            "summary": "Led the payments team",
+            "highlights": ["Migrated monolith to microservices", "Reduced P99 latency by 40%"],
+            "keywords": "Go, Kubernetes, Postgres"
+          }
+        ]
+      },
+      {
+        "type": "project",
+        "body": [
+          {
+            "id": 1,
+            "title": "Open Source CLI Tool",
+            "summary": "A CLI for automating dev workflows",
+            "highlights": ["2k GitHub stars", "Used by 3 engineering teams"],
+            "tools": "TypeScript, Node.js",
+            "projectLink": "github.com/janedoe/cli-tool"
+          }
+        ]
+      },
+      {
+        "type": "skills",
+        "body": {
+          "languages": [
+            { "id": 1, "type": "LANG", "name": "TypeScript" },
+            { "id": 2, "type": "LANG", "name": "Go" },
+            { "id": 3, "type": "LANG", "name": "Python" }
+          ],
+          "technologies": [
+            { "id": 4, "type": "TECH", "name": "React" },
+            { "id": 5, "type": "TECH", "name": "Docker" },
+            { "id": 6, "type": "TECH", "name": "PostgreSQL" }
+          ],
+          "softSkills": [
+            { "id": 7, "type": "SOFT", "name": "Mentoring" },
+            { "id": 8, "type": "SOFT", "name": "Technical Writing" }
+          ]
+        }
+      }
+    ]
+  }
+}
