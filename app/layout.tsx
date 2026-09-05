@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
-import MobileBlocker from "@/components/MobileBlocker";
+import MobileView from "@/components/MobileView";
 import Providers from "./Providers";
 
 const geistSans = Geist({
@@ -37,9 +37,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}>
         <Providers>
-          {/* 1. Mobile Blocker: Only shows on screens smaller than 768px (md) */}
-          <div className="flex flex-col items-center justify-center min-h-screen p-6 text-center md:hidden bg-gray-900 text-white">
-            <MobileBlocker />
+          {/* 1. Mobile View: Only shows on screens smaller than 768px (md) */}
+          <div className="flex flex-col items-center justify-start min-h-screen p-6 pt-16 md:hidden bg-gray-50 text-gray-900">
+            <MobileView />
           </div>
 
           {/* 2. Main App: Only renders its layout on screens 768px (md) and up */}
