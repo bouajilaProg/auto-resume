@@ -3,8 +3,33 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Download, ChevronLeft, Loader2, FileText, RefreshCw, Info } from "lucide-react";
 import useResumeSectionData from "@/hooks/useResumeSectionData";
-import { SectionType, PROFICIENCY_LEVELS } from "@/types/resumeTypes";
-import type { Resume } from "@/types/resumeTypes";
+import { DEFAULT_CONFIG, SectionType, PROFICIENCY_LEVELS } from "@/types/resumeTypes";
+import type { Resume, ResumeConfig } from "@/types/resumeTypes";
+
+const CONFIGS_BY_RESUME_KEY = "resumeConfigsById";
+const ACTIVE_CONFIG_BY_RESUME_KEY = "activeConfigByResumeId";
+
+function readVersionNames(): Record<string, string> {
+  try {
+    const configsByResume = JSON.parse(
+      localStorage.getItem(CONFIGS_BY_RESUME_KEY) || "{}",
+    ) as Record<string, ResumeConfig[]>;
+    const activeConfigByResume = JSON.parse(
+      localStorage.getItem(ACTIVE_CONFIG_BY_RESUME_KEY) || "{}",
+    ) as Record<string, string>;
+
+    return Object.fromEntries(
+      Object.entries(configsByResume).map(([resumeId, configs]) => {
+        const activeConfig = configs.find(
+          (config) => config.id === activeConfigByResume[resumeId],
+        ) || configs[0];
+        return [resumeId, activeConfig?.name];
+      }).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
+    );
+  } catch {
+    return {};
+  }
+}
 
 function assembleFullResume(data: Resume): Resume {
   const sections = (data.sections || []).map((section) => {
@@ -33,12 +58,27 @@ function assembleFullResume(data: Resume): Resume {
 }
 
 export default function MobileView() {
-  const { resumes, resumeSectionData, setActiveResumeId, loading } = useResumeSectionData();
+  const { resumes, resumeSectionData, activeResumeId, setActiveResumeId, loading } = useResumeSectionData();
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [versionNames, setVersionNames] = useState<Record<string, string>>({});
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const pdfUrlRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const syncVersionNames = () => setVersionNames(readVersionNames());
+    const mobileBreakpoint = window.matchMedia("(max-width: 767px)");
+    syncVersionNames();
+    window.addEventListener("storage", syncVersionNames);
+    window.addEventListener("focus", syncVersionNames);
+    mobileBreakpoint.addEventListener("change", syncVersionNames);
+    return () => {
+      window.removeEventListener("storage", syncVersionNames);
+      window.removeEventListener("focus", syncVersionNames);
+      mobileBreakpoint.removeEventListener("change", syncVersionNames);
+    };
+  }, []);
 
   const handleSelectResume = useCallback(
     (id: string) => {
@@ -160,9 +200,11 @@ export default function MobileView() {
           <button
             key={resume.id}
             onClick={() => handleSelectResume(resume.id)}
-            className="flex flex-col gap-1 p-4 bg-white rounded-xl border border-gray-200 hover:border-primary-300 hover:bg-gray-50 transition-all text-left"
+            className="flex w-full min-w-0 flex-col gap-1 rounded-xl border border-gray-200 bg-white p-4 text-left transition-colors hover:border-primary-300 hover:bg-gray-50"
           >
-            <span className="text-sm font-bold">{resume.name}</span>
+            <span className="break-words text-sm font-bold text-gray-900">
+              {versionNames[resume.id] || DEFAULT_CONFIG.name}
+            </span>
             {resume.lastUpdate && (
               <span className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
                 Updated {resume.lastUpdate}
@@ -174,23 +216,23 @@ export default function MobileView() {
 
       {isPreviewOpen && (
         <div className="fixed inset-0 z-50 flex flex-col bg-gray-50">
-          <div className="h-14 bg-white border-b border-gray-200 px-4 flex items-center justify-between shrink-0">
+          <div className="flex min-h-14 shrink-0 items-center gap-2 border-b border-gray-200 bg-white px-4 py-2">
             <button
               onClick={handleClosePreview}
-              className="flex items-center gap-1.5 text-gray-600 hover:text-gray-900 transition-colors"
+              className="flex shrink-0 items-center gap-1.5 text-gray-600 transition-colors hover:text-gray-900"
             >
               <ChevronLeft size={20} />
               <span className="text-sm font-medium">Back</span>
             </button>
 
-            <span className="text-sm font-bold text-gray-900 truncate max-w-[140px]">
-              {resumeSectionData?.name || "Resume"}
+            <span className="min-w-0 flex-1 break-words text-center text-sm font-bold text-gray-900">
+              {(activeResumeId && versionNames[activeResumeId]) || DEFAULT_CONFIG.name}
             </span>
 
             <button
               onClick={handleDownload}
               disabled={!pdfUrl || pdfLoading}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-600 text-white rounded-lg text-xs font-bold hover:bg-primary-700 disabled:opacity-30 transition-all"
+              className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-primary-700 disabled:opacity-30"
             >
               <Download size={14} />
               <span>Download</span>
