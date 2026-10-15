@@ -12,6 +12,7 @@ export function usePersonalInfo() {
     contact: [],
   } as PersonalInfo);
   
+  const [errors, setErrors] = useState<string[]>([]);
   const [initialData, setInitialData] = useState<{ personalInfo: PersonalInfo } | null>(null);
   const isInitialized = useRef(false);
   
@@ -72,15 +73,20 @@ export function usePersonalInfo() {
 
     const updatedPersonalInfo = {
       ...personalInfo,
+      name: personalInfo.name.trim(),
+      location: personalInfo.location.trim(),
+      description: personalInfo.description.trim(),
       contact: cleanedContacts,
     };
 
     // Validation
     const result = PersonalInfoSchema.safeParse(updatedPersonalInfo);
     if (!result.success) {
-      console.error("Validation failed for PersonalInfo:", result.error);
+      setErrors(result.error.issues.map(issue => `${issue.path.join(" → ")}: ${issue.message}`));
+      return;
     }
 
+    setErrors([]);
     setPersonalInfo(updatedPersonalInfo);
     savePersonalInfo(updatedPersonalInfo);
     setInitialData({ personalInfo: structuredClone(updatedPersonalInfo) });
@@ -101,6 +107,7 @@ export function usePersonalInfo() {
 
   return {
     personalInfo,
+    errors,
     updateName,
     updateLocation,
     updateDescription,

@@ -21,7 +21,8 @@ export default function CertificationsPage() {
     updateCertification,
     handleSave,
     hasChanges,
-    loading
+    loading,
+    errors,
   } = useCertifications((id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
@@ -106,6 +107,7 @@ export default function CertificationsPage() {
                 {certifications.map((certification, index) => (
                   <CertificationForm
                     key={certification.id}
+                    errors={errors?.[certification.id]}
                     certification={certification}
                     index={index}
                     updateCertification={updateCertification}

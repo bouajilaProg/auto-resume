@@ -17,18 +17,18 @@ export async function POST(req: NextRequest) {
 
     const normalizedResume: Resume = {
       ...assembledResume,
-      personalInfo: assembledResume.personalInfo ? {
+      personalInfo: assembledResume.personalInfo && typeof assembledResume.personalInfo === "object" && !Array.isArray(assembledResume.personalInfo) ? {
         ...assembledResume.personalInfo,
-        contact: (Array.isArray(assembledResume.personalInfo.contact) ? assembledResume.personalInfo.contact : []).map((contact) => {
+        contact: Array.isArray(assembledResume.personalInfo.contact) ? assembledResume.personalInfo.contact.map((contact) => {
           if (!contact || contact.type !== "Website") return contact;
 
           const normalizedValue = normalizeUrlValue(contact.value);
           if (!normalizedValue) return contact;
 
           return { ...contact, value: normalizedValue };
-        }),
+        }) : assembledResume.personalInfo.contact,
       } : assembledResume.personalInfo,
-      sections: (Array.isArray(assembledResume.sections) ? assembledResume.sections : []).map((section) => {
+      sections: Array.isArray(assembledResume.sections) ? assembledResume.sections.map((section) => {
         if (!section || section.type !== "project" || !Array.isArray(section.body)) {
           return section;
         }
@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
           ...section,
           body: section.body.map((project) => {
             if (!project || typeof project !== "object") return project;
+            if (project.projectLink != null && typeof project.projectLink !== "string") return project;
 
             const normalizedValue = normalizeUrlValue(project.projectLink);
             if (!normalizedValue) return { ...project, projectLink: undefined };
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
             return { ...project, projectLink: normalizedValue };
           }),
         };
-      }),
+      }) : assembledResume.sections,
     };
 
     const validation = ResumeSchema.safeParse(normalizedResume);
@@ -53,12 +54,13 @@ export async function POST(req: NextRequest) {
         const path = issue.path.map((part, index) => {
           if (typeof part === "number") {
             if (issue.path[index - 1] === "sections") {
-              return normalizedResume.sections?.[part]?.type?.replaceAll("_", " ") || `section ${part + 1}`;
+              const type = normalizedResume.sections?.[part]?.type;
+              return typeof type === "string" ? type.replaceAll("_", " ") : `section ${part + 1}`;
             }
             return `entry ${part + 1}`;
           }
           if (part === "sections" || part === "body") return "";
-          return String(part).replace(/([a-z])([A-Z])/g, "$1 $2");
+          return String(part).replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase();
         }).filter(Boolean).join(" → ");
         return { field: path, message: issue.message };
       });
@@ -86,6 +88,7 @@ export async function POST(req: NextRequest) {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
+        "Cache-Control": "no-store",
         "Content-Disposition": `inline; filename="resume.pdf"`,
       },
     });

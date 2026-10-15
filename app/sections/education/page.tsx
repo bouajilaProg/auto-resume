@@ -22,6 +22,7 @@ export default function EducationPage() {
     handleSave,
     hasChanges,
     loading,
+    errors,
   } = useEducation((id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
@@ -111,6 +112,7 @@ export default function EducationPage() {
                 {educations.map((edu, index) => (
                   <EducationForm
                     key={edu.id}
+                    errors={errors?.[edu.id]}
                     edu={edu}
                     index={index}
                     updateEducation={updateEducation}

@@ -21,7 +21,8 @@ export default function ExtraCurricularActivitiesPage() {
     updateActivity,
     handleSave,
     hasChanges,
-    loading
+    loading,
+    errors,
   } = useExtraCurricular((id: number, doRemove: () => void) => {
     openModal({
       ...ConfirmDeleteModal,
@@ -102,6 +103,7 @@ export default function ExtraCurricularActivitiesPage() {
                 {activities.map((activity, index) => (
                   <ExtraCurricularForm
                     key={activity.id}
+                    errors={errors?.[activity.id]}
                     activity={activity}
                     index={index}
                     updateActivity={updateActivity}

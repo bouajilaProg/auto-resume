@@ -12,6 +12,7 @@ import { useMemo } from "react";
 export default function PersonalInfoPage() {
   const {
     personalInfo,
+    errors,
     updateName,
     updateLocation,
     updateDescription,
@@ -69,6 +70,15 @@ export default function PersonalInfoPage() {
             </button>
           </div>
         </div>
+
+        {errors.length > 0 && (
+          <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <p className="font-semibold">Complete these details before saving:</p>
+            <ul className="mt-2 list-disc pl-5">
+              {errors.map(error => <li key={error}>{error}</li>)}
+            </ul>
+          </div>
+        )}
 
         {/* Content Area */}
         <div className="space-y-6">
