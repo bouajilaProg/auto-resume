@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useReturnToEditor } from "@/context/SectionEditorContext";
 import useResumeSectionData from "@hooks/useResumeSectionData";
 import { SectionTypeValue, SECTION_DEFAULTS } from "@/types/resumeTypes";
 import { z } from "zod";
@@ -14,7 +14,7 @@ export function useGenericListSection<T extends { id: number }>(
   const [items, setItems] = useState<T[]>([]);
   const [initialItems, setInitialItems] = useState<T[]>([]);
   const [errors, setErrors] = useState<Record<number, Record<string, string>>>({});
-  const router = useRouter();
+  const returnToEditor = useReturnToEditor();
 
   // Fix #4: Guard with isInitialized ref to prevent overwriting local edits
   const isInitialized = useRef(false);
@@ -117,7 +117,8 @@ export function useGenericListSection<T extends { id: number }>(
 
     setItems(cleanedAndTrimmed);
     updateSection(sectionType, cleanedAndTrimmed);
-    router.push("/main");
+    setInitialItems(structuredClone(cleanedAndTrimmed));
+    returnToEditor();
   };
 
   return { items, addItem, removeItem, updateItem, handleSave, hasChanges, loading, errors };

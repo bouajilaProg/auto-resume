@@ -14,6 +14,7 @@ import Image from "next/image";
 export default function ResumeMainPage() {
   const {
     masterData,
+    activeResumeId,
     importResumeData,
     activeConfig,
     configs,
@@ -295,6 +296,7 @@ export default function ResumeMainPage() {
         </header>
 
         <EditorPane
+          key={activeResumeId}
           masterData={masterData}
           activeConfig={activeConfig}
           toggleItem={toggleItem}

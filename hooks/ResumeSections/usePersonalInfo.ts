@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { PersonalInfo, Contact, PersonalInfoSchema } from "@/types/resumeTypes";
 import useResumeSectionData from "@hooks/useResumeSectionData";
-import { useRouter } from "next/navigation";
+import { useReturnToEditor } from "@/context/SectionEditorContext";
 
 export function usePersonalInfo() {
   const { resumeSectionData, updatePersonalInfo: savePersonalInfo, loading } = useResumeSectionData();
@@ -15,7 +15,7 @@ export function usePersonalInfo() {
   const [initialData, setInitialData] = useState<{ personalInfo: PersonalInfo } | null>(null);
   const isInitialized = useRef(false);
   
-  const router = useRouter();
+  const returnToEditor = useReturnToEditor();
 
   useEffect(() => {
     if (!loading && resumeSectionData && !isInitialized.current) {
@@ -83,8 +83,9 @@ export function usePersonalInfo() {
 
     setPersonalInfo(updatedPersonalInfo);
     savePersonalInfo(updatedPersonalInfo);
+    setInitialData({ personalInfo: structuredClone(updatedPersonalInfo) });
     
-    router.push("/main");
+    returnToEditor();
   };
 
   const removeContact = (id: number) => {

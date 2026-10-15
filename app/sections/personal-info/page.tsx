@@ -2,7 +2,7 @@
 
 import { User, MapPin, Save, X } from "lucide-react";
 import ContactForm from "./components/ContactForm";
-import Link from "next/link";
+import { SectionBackLink } from "@/context/SectionEditorContext";
 import { usePersonalInfo } from "@hooks/ResumeSections/usePersonalInfo";
 import Loading from "@/app/components/Loading";
 import { useModal } from "@/context/Modal/useModal";
@@ -48,13 +48,12 @@ export default function PersonalInfoPage() {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <Link
-              href="/main"
+            <SectionBackLink
               className="flex-1 sm:flex-none justify-center px-4 py-2.5 border border-gray-200 text-gray-600 bg-white rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all flex items-center gap-2 font-medium shadow-sm"
             >
               <X size={14} />
               <span>Cancel</span>
-            </Link>
+            </SectionBackLink>
             <button
               onClick={() => {
                 if (hasChanges) {

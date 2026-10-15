@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   ChevronUp,
   ChevronDown,
@@ -12,10 +11,12 @@ import {
   FolderKanban
 } from "lucide-react";
 
-import React, { useMemo } from "react";
-import { SECTION_ICONS, SECTION_LABELS, SECTION_PATHS, ALL_SECTIONS } from "@/constants/sections";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { SECTION_ICONS, SECTION_LABELS, ALL_SECTIONS } from "@/constants/sections";
 import { Resume, ResumeConfig, SectionType, SectionTypeValue, Skills, contactIcons } from "@/types/resumeTypes";
 import { getSectionItemDisplay, SectionItem } from "@/utils/sectionDisplay";
+
+import SectionEditorPanel, { type EditableSection } from "./SectionEditorPanel";
 
 interface EditorPaneProps {
   masterData: Resume;
@@ -48,6 +49,18 @@ function groupAndSortItems<T extends { id: number }>(items: T[], selectedIds: nu
 }
 
 function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSection, moveItem }: EditorPaneProps) {
+  const [activeSection, setActiveSection] = useState<EditableSection | null>(null);
+  const [visited, setVisited] = useState<EditableSection[]>([]);
+  const trigger = useRef<HTMLElement | null>(null);
+  const openSection = (section: EditableSection) => {
+    trigger.current = document.activeElement as HTMLElement;
+    setVisited(previous => previous.includes(section) ? previous : [...previous, section]);
+    setActiveSection(section);
+  };
+  const closeSection = useCallback(() => {
+    setActiveSection(null);
+    requestAnimationFrame(() => trigger.current?.focus());
+  }, []);
   const sectionOrder = useMemo(() => {
     const order = [...activeConfig.sectionOrder];
     ALL_SECTIONS.forEach(id => {
@@ -61,7 +74,8 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
   const UserIcon = SECTION_ICONS.personalInfo;
 
   return (
-    <div className="flex-1 overflow-y-auto bg-gray-50/50 p-6 space-y-6 custom-scrollbar">
+    <div className="relative flex min-h-0 flex-1 flex-col">
+    <div hidden={!!activeSection} className="flex-1 overflow-y-auto bg-gray-50/50 p-6 space-y-6 custom-scrollbar">
       {/* Personal Info - Fixed at top */}
       <section className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
@@ -81,12 +95,13 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
               )}
             </div>
           </div>
-          <Link
-            href="/sections/personal-info"
+          <button
+            onClick={() => openSection("personalInfo")}
+            aria-label="Edit personal information"
             className="p-1.5 hover:bg-gray-200 rounded-md transition-colors text-gray-400 hover:text-primary-600"
           >
             <Pencil size={18} />
-          </Link>
+          </button>
         </div>
         <div className="p-5 space-y-4">
           <div className="space-y-1">
@@ -159,7 +174,6 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
 
         const Icon = SECTION_ICONS[sectionType] || FolderKanban;
         const label = SECTION_LABELS[sectionType] || sectionType;
-        const path = SECTION_PATHS[sectionType] || sectionType;
 
         const allIds = sectionType === SectionType.Skills
           ? []
@@ -196,12 +210,13 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                <Link
-                  href={`/sections/${path}`}
+                <button
+                  onClick={() => openSection(sectionType)}
+                  aria-label={`Edit ${label.toLowerCase()}`}
                   className="p-1.5 hover:bg-gray-200 rounded-md transition-colors text-gray-400 hover:text-primary-600 mr-2"
                 >
                   <Pencil size={18} />
-                </Link>
+                </button>
                 <div className="h-6 w-px bg-gray-200 mx-1" />
                 <button
                   onClick={() => moveSection(index, "up")}
@@ -223,13 +238,14 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
             <div className="p-4 space-y-3">
               {sectionType === SectionType.Skills ? (
                 isEmpty ? (
-                  <Link
-                    href={`/sections/${path}`}
+                  <button
+                    onClick={() => openSection(sectionType)}
+                  aria-label={`Edit ${label.toLowerCase()}`}
                     className="flex flex-col items-center justify-center py-6 px-4 border-2 border-dashed border-gray-100 rounded-xl hover:bg-gray-50 hover:border-primary-200 transition-all group/empty"
                   >
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 group-hover/empty:text-primary-400">No skills added</p>
                     <p className="text-[10px] text-gray-300">Click to add skills to your profile</p>
-                  </Link>
+                  </button>
                 ) : (
                   <div className="space-y-6">
                     {(['languages', 'technologies', 'softSkills'] as const).map(subType => {
@@ -302,13 +318,14 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
                 )
               ) : Array.isArray(section.body) ? (
                 section.body.length === 0 ? (
-                  <Link
-                    href={`/sections/${path}`}
+                  <button
+                    onClick={() => openSection(sectionType)}
+                  aria-label={`Edit ${label.toLowerCase()}`}
                     className="flex flex-col items-center justify-center py-8 px-4 border-2 border-dashed border-gray-100 rounded-xl hover:bg-gray-50 hover:border-primary-200 transition-all group/empty"
                   >
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 group-hover/empty:text-primary-400">Section Empty</p>
                     <p className="text-[10px] text-gray-300">Click to add {label.toLowerCase()} entries</p>
-                  </Link>
+                  </button>
                 ) : (
                   <div className="space-y-2">
                     {groupAndSortItems(
@@ -378,6 +395,8 @@ function EditorPane({ masterData, activeConfig, toggleItem, toggleAll, moveSecti
           </section>
         );
       })}
+    </div>
+    <SectionEditorPanel active={activeSection} visited={visited} onClose={closeSection} />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { Skills, SectionType } from "@/types/resumeTypes";
 import useResumeSectionData from "@hooks/useResumeSectionData";
-import { useRouter } from "next/navigation";
+import { useReturnToEditor } from "@/context/SectionEditorContext";
 
 export function useSkills(onConfirmRemove?: (type: keyof Skills, id: number, doRemove: () => void) => void) {
   const { resumeSectionData, updateSection, loading } = useResumeSectionData();
@@ -13,7 +13,7 @@ export function useSkills(onConfirmRemove?: (type: keyof Skills, id: number, doR
   const [initialSkills, setInitialSkills] = useState<Skills | null>(null);
   const isInitialized = useRef(false);
 
-  const router = useRouter();
+  const returnToEditor = useReturnToEditor();
 
   useEffect(() => {
     if (!loading && resumeSectionData && !isInitialized.current) {
@@ -84,7 +84,8 @@ export function useSkills(onConfirmRemove?: (type: keyof Skills, id: number, doR
 
   const handleSave = () => {
     updateSection(SectionType.Skills, skills);
-    router.push("/main");
+    setInitialSkills(structuredClone(skills));
+    returnToEditor();
   };
 
   return {
