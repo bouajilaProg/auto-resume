@@ -1,10 +1,10 @@
 "use client";
 
-import { readCompileError } from "@/utils/compileErrors";
+import useResumePdf from "@/hooks/useResumePdf";
 
 import React from "react";
 import { Resume } from "@/types/resumeTypes";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useEffect } from "react";
 import { Save, X, Download, Loader2, FileText, Eye, Info, RefreshCw } from "lucide-react";
 
 interface PreviewPaneProps {
@@ -20,72 +20,19 @@ function PreviewPane({
   onSave,
   onCancel,
 }: PreviewPaneProps) {
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
-  const pdfUrlRef = useRef<string | null>(null);
-
-  // Fix #9: Use refs for isDirty/onSave so the listener only mounts once
-  const isDirtyRef = useRef(isDirty);
-  const onSaveRef = useRef(onSave);
-  isDirtyRef.current = isDirty;
-  onSaveRef.current = onSave;
+  const { pdfUrl, loading, error, retry: compilePdf } = useResumePdf(resume, true, 800);
 
   // Shortcut for Save (Ctrl/Cmd + S)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "s") {
         e.preventDefault();
-        if (isDirtyRef.current) onSaveRef.current();
+        if (isDirty) onSave();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []); // runs once
-
-  // Fix #1: Use ref for pdfUrl so compilePdf identity stays stable
-  const compilePdf = useCallback(async () => {
-    if (!resume) {
-      console.warn("No resume data available for PDF compilation");
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch("/api/compile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(resume),
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        if (pdfUrlRef.current) URL.revokeObjectURL(pdfUrlRef.current);
-        const url = URL.createObjectURL(blob);
-        pdfUrlRef.current = url;
-        setPdfUrl(url);
-      } else {
-        setError(await readCompileError(response));
-      }
-    } catch (error) {
-      console.error("Error compiling PDF:", error);
-      setError("An unexpected error occurred during PDF compilation");
-    } finally {
-      setLoading(false);
-    }
-  }, [resume]); // pdfUrl removed -- use ref instead
-
-  useEffect(() => {
-    if (debounceTimer.current) clearTimeout(debounceTimer.current);
-    debounceTimer.current = setTimeout(() => {
-      compilePdf();
-    }, 800);
-
-    return () => {
-      if (debounceTimer.current) clearTimeout(debounceTimer.current);
-    };
-  }, [compilePdf]); // only compilePdf (stable unless resume changes)
+  }, [isDirty, onSave]);
 
   const handleDownload = () => {
     if (pdfUrl) {
