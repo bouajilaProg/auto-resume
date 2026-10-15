@@ -27,7 +27,7 @@ export default function SectionEditorPanel({ active, visited, onClose }: {
   const panel = useRef<HTMLElement>(null);
   useEffect(() => {
     if (active) {
-      panel.current?.querySelector<HTMLButtonElement>("[data-active-editor] button[aria-label='Close section editor']")?.focus();
+      panel.current?.querySelector<HTMLButtonElement>("[data-active-editor] [data-section-back]")?.focus();
     }
   }, [active]);
 

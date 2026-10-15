@@ -19,7 +19,7 @@ export function useReturnToEditor() {
 export function SectionBackLink({ children, className }: { children: ReactNode; className?: string }) {
   const closePanel = useContext(SectionEditorContext);
   return closePanel ? (
-    <button type="button" onClick={closePanel} className={className}>Back to items</button>
+    <button type="button" data-section-back onClick={closePanel} className={className}>{children}</button>
   ) : (
     <Link href="/main" className={className}>{children}</Link>
   );
