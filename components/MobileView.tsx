@@ -1,5 +1,7 @@
 "use client";
 
+import { readCompileError } from "@/utils/compileErrors";
+
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Download, ChevronLeft, Loader2, FileText, RefreshCw, Info } from "lucide-react";
 import useResumeSectionData from "@/hooks/useResumeSectionData";
@@ -120,13 +122,7 @@ export default function MobileView() {
         pdfUrlRef.current = url;
         setPdfUrl(url);
       } else {
-        const errorText = await response.text();
-        try {
-          const parsed = JSON.parse(errorText);
-          setError(parsed.error || "Failed to compile PDF");
-        } catch {
-          setError(errorText || "Failed to compile PDF");
-        }
+        setError(await readCompileError(response));
       }
     } catch {
       setError("An unexpected error occurred during PDF compilation");
@@ -231,7 +227,7 @@ export default function MobileView() {
 
             <button
               onClick={handleDownload}
-              disabled={!pdfUrl || pdfLoading}
+              disabled={!pdfUrl || pdfLoading || !!error}
               className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-primary-700 disabled:opacity-30"
             >
               <Download size={14} />
@@ -245,9 +241,8 @@ export default function MobileView() {
                 <div className="p-3 bg-red-500/10 rounded-full text-red-400">
                   <Info size={32} />
                 </div>
-                <p className="text-sm text-gray-600 leading-relaxed max-w-xs">
-                  Could not generate preview. Make sure your resume has content in at least one
-                  section.
+                <p className="text-sm text-gray-600 leading-relaxed max-w-xs whitespace-pre-wrap">
+                  {error}
                 </p>
                 <button
                   onClick={compilePdf}

@@ -1,5 +1,7 @@
 "use client";
 
+import { readCompileError } from "@/utils/compileErrors";
+
 import React from "react";
 import { Resume } from "@/types/resumeTypes";
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -64,14 +66,7 @@ function PreviewPane({
         pdfUrlRef.current = url;
         setPdfUrl(url);
       } else {
-        const errorText = await response.text();
-        console.error("Returned error from compile API:", errorText);
-        try {
-          const parsed = JSON.parse(errorText);
-          setError(parsed.error || "Failed to compile PDF");
-        } catch {
-          setError(errorText || "Failed to compile PDF");
-        }
+        setError(await readCompileError(response));
       }
     } catch (error) {
       console.error("Error compiling PDF:", error);
@@ -141,7 +136,7 @@ function PreviewPane({
 
           <button
             onClick={handleDownload}
-            disabled={!pdfUrl}
+            disabled={!pdfUrl || loading || !!error}
             className="flex items-center gap-2 px-4 py-2 bg-white text-primary-600 border border-primary-200 hover:bg-primary-50 rounded-lg font-bold text-sm transition-all shadow-sm"
           >
             <Download size={16} />
@@ -157,9 +152,9 @@ function PreviewPane({
             <div className="p-4 bg-primary-100 text-primary-600 rounded-full mb-6">
               <Info size={48} />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2 uppercase tracking-tight">Almost there!</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2 uppercase tracking-tight">Unable to generate preview</h3>
             <p className="text-gray-600 font-medium max-w-md mb-8 whitespace-pre-wrap leading-relaxed bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-              We just need a little more info before we can generate your PDF preview. Please check your data sections for any missing details or small errors.
+              {error}
             </p>
             <button 
               onClick={() => compilePdf()}

@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { compile, type Resume } from "bouajila-resume-generator";
+import { compile, ResumeSchema, type Resume } from "bouajila-resume-generator";
 
 export async function POST(req: NextRequest) {
   try {
     const assembledResume: Resume = await req.json();
+    if (!assembledResume || typeof assembledResume !== "object" || Array.isArray(assembledResume)) {
+      return NextResponse.json({ error: "Send a resume object." }, { status: 400 });
+    }
 
     const normalizeUrlValue = (value?: string | null) => {
-      const trimmedValue = value?.trim();
+      const trimmedValue = typeof value === "string" ? value.trim() : undefined;
       if (!trimmedValue) return undefined;
       if (/^https?:\/\//i.test(trimmedValue)) return trimmedValue;
       return `https://${trimmedValue}`;
@@ -16,8 +19,8 @@ export async function POST(req: NextRequest) {
       ...assembledResume,
       personalInfo: assembledResume.personalInfo ? {
         ...assembledResume.personalInfo,
-        contact: (assembledResume.personalInfo.contact || []).map((contact) => {
-          if (contact.type !== "Website") return contact;
+        contact: (Array.isArray(assembledResume.personalInfo.contact) ? assembledResume.personalInfo.contact : []).map((contact) => {
+          if (!contact || contact.type !== "Website") return contact;
 
           const normalizedValue = normalizeUrlValue(contact.value);
           if (!normalizedValue) return contact;
@@ -25,8 +28,8 @@ export async function POST(req: NextRequest) {
           return { ...contact, value: normalizedValue };
         }),
       } : assembledResume.personalInfo,
-      sections: (assembledResume.sections || []).map((section) => {
-        if (section.type !== "project" || !Array.isArray(section.body)) {
+      sections: (Array.isArray(assembledResume.sections) ? assembledResume.sections : []).map((section) => {
+        if (!section || section.type !== "project" || !Array.isArray(section.body)) {
           return section;
         }
 
@@ -44,12 +47,31 @@ export async function POST(req: NextRequest) {
       }),
     };
 
+    const validation = ResumeSchema.safeParse(normalizedResume);
+    if (!validation.success) {
+      const details = validation.error.issues.map((issue) => {
+        const path = issue.path.map((part, index) => {
+          if (typeof part === "number") {
+            if (issue.path[index - 1] === "sections") {
+              return normalizedResume.sections?.[part]?.type?.replaceAll("_", " ") || `section ${part + 1}`;
+            }
+            return `entry ${part + 1}`;
+          }
+          if (part === "sections" || part === "body") return "";
+          return String(part).replace(/([a-z])([A-Z])/g, "$1 $2");
+        }).filter(Boolean).join(" → ");
+        return { field: path, message: issue.message };
+      });
+      return NextResponse.json({ error: "Please complete or correct these resume details.", details }, { status: 422 });
+    }
+
     const result = await compile(normalizedResume);
 
     if (!result.success) {
+      console.error("PDF generation failed:", result.error);
       return NextResponse.json(
-        { error: result.error.message },
-        { status: 422 }
+        { error: "The PDF could not be generated. Please retry or check the PDF service configuration." },
+        { status: 500 }
       );
     }
 
@@ -69,7 +91,9 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: unknown) {
     console.error("Compilation error:", error);
-    const message = error instanceof Error ? error.message : String(error);
-    return NextResponse.json({ error: message }, { status: 500 });
+    if (error instanceof SyntaxError) {
+      return NextResponse.json({ error: "The request must contain valid JSON." }, { status: 400 });
+    }
+    return NextResponse.json({ error: "The PDF service encountered an unexpected error. Please try again." }, { status: 500 });
   }
 }
