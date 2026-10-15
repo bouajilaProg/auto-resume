@@ -48,10 +48,10 @@ function ContactForm({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-primary-50 overflow-hidden">
         {/* Header */}
-        <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30">
+        <div className="p-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/30">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-lg bg-primary-600 text-white shadow-sm">
               <ContactIcon size={16} />
@@ -60,14 +60,14 @@ function ContactForm({
           </div>
         </div>
 
-        <div className="p-6">
+        <div className="p-3">
           {!contacts || contacts.length === 0 ? (
             <div className="border-2 border-dashed border-gray-200 rounded-xl p-12 text-center hover:border-primary-300 transition-colors group">
               <div className="w-16 h-16 bg-primary-50 text-primary-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <Mail size={32} />
               </div>
 
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-sm font-semibold text-gray-900">
                 No contact methods added yet
               </h3>
 
@@ -85,7 +85,7 @@ function ContactForm({
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="grid gap-4">
+              <div className="grid gap-3">
                 {contacts.map((contact) => {
                   const ContactTypeIcon = contactIcons[contact.type];
 

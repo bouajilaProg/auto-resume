@@ -44,16 +44,16 @@ function LanguageForm({
   if (!isOpen) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all hover:shadow-md">
-        <div className="p-5 flex items-center justify-between">
+        <div className="p-3 flex items-center justify-between">
           <div
-            className="flex items-center gap-4 flex-1 cursor-pointer"
+            className="flex items-center gap-3 flex-1 cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
             <div className="p-3 rounded-lg bg-primary-600 text-white shadow-sm">
               <Globe size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-800">
+              <h3 className="text-sm font-bold text-gray-800">
                 {language.name || "(No Language Name)"}
               </h3>
               <p className="text-sm text-gray-500 flex items-center gap-2">
@@ -85,7 +85,7 @@ function LanguageForm({
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-primary-50">
-      <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
+      <div className="p-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-lg bg-primary-600 text-white shadow-sm">
             <LanguagesIcon size={16} />
@@ -100,7 +100,7 @@ function LanguageForm({
             className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium flex items-center gap-1"
           >
             <Trash2 size={12} />
-            <span className="hidden sm:inline">Delete</span>
+            <span className="hidden @min-[20rem]:inline">Delete</span>
           </button>
           <button
             onClick={() => setIsOpen(false)}
@@ -111,8 +111,8 @@ function LanguageForm({
         </div>
       </div>
 
-      <div className="p-6 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="p-3 space-y-4">
+        <div className="grid grid-cols-1 @min-[28rem]:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5 tracking-wider">
               Language

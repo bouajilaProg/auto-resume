@@ -1,7 +1,7 @@
 "use client";
 
-import { Code, Layers, Users, Save, X } from "lucide-react";
-import { SectionBackLink } from "@/context/SectionEditorContext";
+import { Code, Layers, Users } from "lucide-react";
+import SectionEditorLayout from "@/components/SectionEditorLayout";
 import SkillSection from "./components/SkillsSection";
 import { skillType } from "@/types/resumeTypes";
 import { useSkills } from "@hooks/ResumeSections/useSkills";
@@ -64,81 +64,49 @@ export default function SkillsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/50 py-10 px-4 sm:px-6">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <SectionEditorLayout
+      title="Skills & Expertise"
+      description="Showcase your technical proficiency and soft skills."
+      onSave={() => {
+        if (hasChanges) openModal(ConfirmSaveModal);
+        else handleSave();
+      }}
+    >
+      {/* Content Sections */}
+      <div className="grid gap-4">
+        <SkillSection
+          title="Programming Languages"
+          description="Languages you speak fluently (e.g., Python, JavaScript, C++)"
+          icon={<Code className="text-white" />}
+          skills={skills.languages || []}
+          onAdd={langActions.add}
+          onRemove={langActions.remove}
+          onUpdate={langActions.update}
+          colorTheme="blue"
+        />
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-              Skills & Expertise
-            </h1>
-            <p className="text-gray-500 mt-1">
-              Showcase your technical proficiency and soft skills.
-            </p>
-          </div>
+        <SkillSection
+          title="Technologies & Tools"
+          description="Frameworks, libraries, and dev tools (e.g., React, AWS, Docker)"
+          icon={<Layers className="text-white" />}
+          skills={skills.technologies || []}
+          onAdd={techActions.add}
+          onRemove={techActions.remove}
+          onUpdate={techActions.update}
+          colorTheme="emerald"
+        />
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <SectionBackLink
-              className="flex-1 sm:flex-none justify-center px-4 py-2.5 border border-gray-200 text-gray-600 bg-white rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all flex items-center gap-2 font-medium shadow-sm"
-            >
-              <X size={14} />
-              <span>Cancel</span>
-            </SectionBackLink>
-
-            <button
-              onClick={() => {
-                if (hasChanges) {
-                  openModal(ConfirmSaveModal);
-                } else {
-                  handleSave();
-                }
-              }}
-              className="flex-1 sm:flex-none justify-center px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:shadow-lg transition-all flex items-center gap-2 font-medium shadow-md"
-            >
-              <Save size={14} />
-              <span>Save Changes</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Content Sections */}
-        <div className="grid gap-6">
-          <SkillSection
-            title="Programming Languages"
-            description="Languages you speak fluently (e.g., Python, JavaScript, C++)"
-            icon={<Code className="text-white" />}
-            skills={skills.languages || []}
-            onAdd={langActions.add}
-            onRemove={langActions.remove}
-            onUpdate={langActions.update}
-            colorTheme="blue"
-          />
-
-          <SkillSection
-            title="Technologies & Tools"
-            description="Frameworks, libraries, and dev tools (e.g., React, AWS, Docker)"
-            icon={<Layers className="text-white" />}
-            skills={skills.technologies || []}
-            onAdd={techActions.add}
-            onRemove={techActions.remove}
-            onUpdate={techActions.update}
-            colorTheme="emerald"
-          />
-
-          <SkillSection
-            title="Soft Skills"
-            description="Interpersonal abilities and leadership (e.g., Communication, Agile)"
-            icon={<Users className="text-white" />}
-            skills={skills.softSkills || []}
-            onAdd={softActions.add}
-            onRemove={softActions.remove}
-            onUpdate={softActions.update}
-            colorTheme="purple"
-          />
-        </div>
+        <SkillSection
+          title="Soft Skills"
+          description="Interpersonal abilities and leadership (e.g., Communication, Agile)"
+          icon={<Users className="text-white" />}
+          skills={skills.softSkills || []}
+          onAdd={softActions.add}
+          onRemove={softActions.remove}
+          onUpdate={softActions.update}
+          colorTheme="purple"
+        />
       </div>
-    </div>
+    </SectionEditorLayout>
   );
 }

@@ -37,16 +37,16 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
   if (!isOpen) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all hover:shadow-md">
-        <div className="p-5 flex items-center justify-between">
+        <div className="p-3 flex items-center justify-between">
           <div
-            className="flex items-center gap-4 flex-1 cursor-pointer"
+            className="flex items-center gap-3 flex-1 cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
           <div className="p-3 rounded-lg bg-primary-600 text-white shadow-sm">
             <GraduationCap size={20} />
           </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-800">
+              <h3 className="text-sm font-bold text-gray-800">
                 {edu.degreeName || "(No Degree Specified)"}
               </h3>
               <p className="text-sm text-gray-500 flex items-center gap-2">
@@ -84,7 +84,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-primary-50">
       {/* Header */}
-      <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
+      <div className="p-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-lg bg-primary-600 text-white shadow-sm">
             <GraduationCap size={16} />
@@ -111,7 +111,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
       </div>
 
       {/* Form Fields */}
-      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="p-3 grid grid-cols-1 @min-[28rem]:grid-cols-2 gap-3">
 
         {/* Degree Type */}
         <div className="col-span-1">
@@ -162,7 +162,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
         </div>
 
         {/* Institution */}
-        <div className="col-span-1 md:col-span-2">
+        <div className="col-span-1 @min-[28rem]:col-span-2">
           <label htmlFor={`institution-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
             Institution
           </label>
@@ -226,7 +226,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
         </div>
 
         {/* Summary */}
-        <div className="col-span-1 md:col-span-2">
+        <div className="col-span-1 @min-[28rem]:col-span-2">
           <label htmlFor={`summary-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
             Summary
           </label>
@@ -248,7 +248,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
         </div>
 
         {/* Highlights */}
-        <div className="col-span-1 md:col-span-2">
+        <div className="col-span-1 @min-[28rem]:col-span-2">
           <label htmlFor={`highlights-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
             Highlights / Achievements
           </label>
@@ -270,7 +270,7 @@ function EducationForm({ edu, index, updateEducation, removeEducation, errors }:
         </div>
 
         {/* Key Skills */}
-        <div className="col-span-1 md:col-span-2">
+        <div className="col-span-1 @min-[28rem]:col-span-2">
           <label htmlFor={`keySkills-${edu.id}`} className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
             Key Skills / Core Modules
           </label>

@@ -28,16 +28,16 @@ function ExtraCurricularForm({
   if (!isOpen) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all hover:shadow-md">
-        <div className="p-5 flex items-center justify-between">
+        <div className="p-3 flex items-center justify-between">
           <div
-            className="flex items-center gap-4 flex-1 cursor-pointer"
+            className="flex items-center gap-3 flex-1 cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
             <div className="p-3 rounded-lg bg-primary-600 text-white shadow-sm">
               <Trophy size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-800">
+              <h3 className="text-sm font-bold text-gray-800">
                 {activity.activityName || "(No Activity Name)"}
               </h3>
               <p className="text-sm text-gray-500 flex items-center gap-2">
@@ -75,7 +75,7 @@ function ExtraCurricularForm({
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all ring-1 ring-primary-50">
-      <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
+      <div className="p-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/30 rounded-t-xl">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-lg bg-primary-600 text-white shadow-sm">
             <Trophy size={16} />
@@ -89,7 +89,7 @@ function ExtraCurricularForm({
             aria-label="Delete activity entry"
           >
             <Trash2 size={12} />
-            <span className="hidden sm:inline">Delete</span>
+            <span className="hidden @min-[20rem]:inline">Delete</span>
           </button>
           <button
             onClick={() => setIsOpen(false)}
@@ -101,7 +101,7 @@ function ExtraCurricularForm({
         </div>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="p-3 space-y-4">
         <div>
           <label
             htmlFor={`activityName-${activity.id}`}
@@ -126,7 +126,7 @@ function ExtraCurricularForm({
           {errors?.activityName && <p className="text-xs text-red-500 mt-1">{errors.activityName}</p>}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 @min-[28rem]:grid-cols-2 gap-3">
           <div className="col-span-1">
             <label
               htmlFor={`startDate-${activity.id}`}

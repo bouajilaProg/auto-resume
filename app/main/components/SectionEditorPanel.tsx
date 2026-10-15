@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
-import { ArrowLeft } from "lucide-react";
 import { SectionEditorContext } from "@/context/SectionEditorContext";
 import { SECTION_LABELS } from "@/constants/sections";
 
@@ -25,28 +24,30 @@ export default function SectionEditorPanel({ active, visited, onClose }: {
   visited: EditableSection[];
   onClose: () => void;
 }) {
-  const backButton = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLElement>(null);
   useEffect(() => {
-    if (active) backButton.current?.focus();
+    if (active) {
+      panel.current?.querySelector<HTMLButtonElement>("[data-active-editor] button[aria-label='Close section editor']")?.focus();
+    }
   }, [active]);
 
   return (
     <SectionEditorContext.Provider value={onClose}>
       <section
+        ref={panel}
         hidden={!active}
         aria-label={`${active ? SECTION_LABELS[active] : "Section"} editor`}
         className="absolute inset-0 z-20 flex flex-col bg-gray-50"
       >
-        <div className="shrink-0 border-b border-gray-200 bg-white p-4">
-          <button ref={backButton} onClick={onClose} className="flex items-center gap-2 font-semibold text-primary-600">
-            <ArrowLeft size={18} /> Back to items
-          </button>
-          <p className="mt-2 text-xs text-gray-500">Your selections and unsaved form drafts stay here while you edit. Save Changes applies details to all versions of this resume.</p>
-        </div>
         {visited.map(type => {
           const Editor = EDITORS[type];
           return (
-            <div key={type} hidden={active !== type} className="min-h-0 flex-1 overflow-y-auto">
+            <div
+              key={type}
+              hidden={active !== type}
+              data-active-editor={active === type ? "" : undefined}
+              className="min-h-0 min-w-0 flex-1"
+            >
               <Editor />
             </div>
           );

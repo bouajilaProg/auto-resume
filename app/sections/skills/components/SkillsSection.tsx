@@ -68,17 +68,17 @@ function SkillSection({
   /* Collapsed */
   if (!isOpen) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 transition-all hover:shadow-md overflow-hidden group">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 transition-all hover:shadow-md overflow-hidden group">
         <div
           onClick={() => setIsOpen(true)}
-          className="p-5 flex items-center justify-between cursor-pointer"
+          className="p-3 flex items-center justify-between cursor-pointer"
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <div className={`p-3 rounded-xl ${theme.icon} text-white shadow-sm group-hover:scale-110 transition-transform`}>
               {icon}
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-800 tracking-tight">{title}</h3>
+              <h3 className="text-sm font-bold text-gray-800 tracking-tight">{title}</h3>
               <p className="text-sm text-gray-400 truncate max-w-md">
                 {skills.length
                   ? skills.map(s => s.name).join(" • ")
@@ -96,14 +96,14 @@ function SkillSection({
 
   /* Expanded */
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden ring-1 ring-gray-50">
-      <div className="p-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
-        <div className="flex gap-4 items-center">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden ring-1 ring-gray-50">
+      <div className="p-3 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
+        <div className="flex gap-3 items-center">
           <div className={`p-3 rounded-xl ${theme.icon} text-white shadow-md`}>
             {icon}
           </div>
           <div>
-            <h3 className="font-bold text-gray-800 text-lg tracking-tight flex items-center gap-2">
+            <h3 className="font-bold text-gray-800 text-sm tracking-tight flex items-center gap-2">
               {title}
               <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${theme.badge}`}>
                 {skills.length}
@@ -122,7 +122,7 @@ function SkillSection({
         </button>
       </div>
 
-      <div className="p-6 space-y-8">
+      <div className="p-3 space-y-4">
         {/* Add Input */}
         <div className="relative group">
           <input
@@ -130,22 +130,22 @@ function SkillSection({
             onChange={e => setNewSkillName(e.target.value)}
             onKeyDown={e => e.key === "Enter" && handleAdd()}
             placeholder={`Add a new ${title.toLowerCase().split(" ").pop()}...`}
-            className="w-full pl-5 pr-32 py-4 bg-gray-50/50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 font-medium"
+            className="w-full pl-3 pr-20 py-2 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all placeholder:text-gray-400 font-medium"
           />
           <button
             onClick={handleAdd}
             disabled={!newSkillName.trim()}
-            className={`absolute right-2 top-2 bottom-2 px-6 rounded-xl flex items-center gap-2 text-white font-bold transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100 ${theme.button} shadow-sm`}
+            className={`absolute right-1 top-1 bottom-1 px-3 rounded-xl flex items-center gap-2 text-white font-bold transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100 ${theme.button} shadow-sm`}
           >
             <Plus size={18} />
-            <span className="hidden sm:inline">Add</span>
+            <span className="hidden @min-[20rem]:inline">Add</span>
           </button>
         </div>
 
         {/* Chips Grid */}
         <div className="flex flex-wrap gap-3">
           {skills.length === 0 ? (
-            <div className="w-full py-8 text-center bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
+            <div className="w-full py-8 text-center bg-gray-50/50 rounded-xl border border-dashed border-gray-200">
               <p className="text-gray-400 text-sm font-medium italic">Empty. Add your first skill above!</p>
             </div>
           ) : (
