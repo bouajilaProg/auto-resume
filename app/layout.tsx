@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
+  appleWebApp: { capable: true, title: "AutoResume", statusBarStyle: "default" },
 };
 export default function RootLayout({
   children,

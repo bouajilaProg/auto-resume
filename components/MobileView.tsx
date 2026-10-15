@@ -1,75 +1,41 @@
 "use client";
 
-import { readCompileError } from "@/utils/compileErrors";
+import useIsDesktop from "@/hooks/useIsDesktop";
+import useResumePdf from "@/hooks/useResumePdf";
+import { assembleResume, normalizeConfig } from "@/utils/assembleResume";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Download, ChevronLeft, Loader2, FileText, RefreshCw, Info } from "lucide-react";
 import useResumeSectionData from "@/hooks/useResumeSectionData";
-import { DEFAULT_CONFIG, SectionType, PROFICIENCY_LEVELS } from "@/types/resumeTypes";
-import type { Resume, ResumeConfig } from "@/types/resumeTypes";
+import { DEFAULT_CONFIG } from "@/types/resumeTypes";
+import type { ResumeConfig } from "@/types/resumeTypes";
 
 const CONFIGS_BY_RESUME_KEY = "resumeConfigsById";
 const ACTIVE_CONFIG_BY_RESUME_KEY = "activeConfigByResumeId";
 
-function readVersionNames(): Record<string, string> {
+function readActiveVersions(): Record<string, ResumeConfig> {
   try {
-    const configsByResume = JSON.parse(
-      localStorage.getItem(CONFIGS_BY_RESUME_KEY) || "{}",
-    ) as Record<string, ResumeConfig[]>;
-    const activeConfigByResume = JSON.parse(
-      localStorage.getItem(ACTIVE_CONFIG_BY_RESUME_KEY) || "{}",
-    ) as Record<string, string>;
-
-    return Object.fromEntries(
-      Object.entries(configsByResume).map(([resumeId, configs]) => {
-        const activeConfig = configs.find(
-          (config) => config.id === activeConfigByResume[resumeId],
-        ) || configs[0];
-        return [resumeId, activeConfig?.name];
-      }).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
-    );
+    const configs = JSON.parse(localStorage.getItem(CONFIGS_BY_RESUME_KEY) || "{}") as Record<string, ResumeConfig[]>;
+    const active = JSON.parse(localStorage.getItem(ACTIVE_CONFIG_BY_RESUME_KEY) || "{}") as Record<string, string>;
+    return Object.fromEntries(Object.entries(configs).filter(([, versions]) => Array.isArray(versions) && versions.length).map(([id, versions]) => [
+      id, normalizeConfig(versions.find(version => version.id === active[id]) || versions[0]),
+    ]));
   } catch {
     return {};
   }
 }
 
-function assembleFullResume(data: Resume): Resume {
-  const sections = (data.sections || []).map((section) => {
-    if (section.type === SectionType.Languages && Array.isArray(section.body)) {
-      return {
-        ...section,
-        body: (section.body as Array<{ id: number; name: string; proficiency?: string }>).map((lang) => ({
-          ...lang,
-          proficiency:
-            lang.proficiency && (PROFICIENCY_LEVELS as readonly string[]).includes(lang.proficiency)
-              ? lang.proficiency
-              : "Intermediate",
-        })),
-      };
-    }
-    return section;
-  });
-
-  return {
-    name: data.name,
-    description: data.description,
-    lastUpdate: data.lastUpdate,
-    personalInfo: data.personalInfo,
-    sections,
-  } as Resume;
-}
-
 export default function MobileView() {
   const { resumes, resumeSectionData, activeResumeId, setActiveResumeId, loading } = useResumeSectionData();
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [versionNames, setVersionNames] = useState<Record<string, string>>({});
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [pdfLoading, setPdfLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const pdfUrlRef = useRef<string | null>(null);
+  const [versions, setVersions] = useState<Record<string, ResumeConfig>>({});
+  const activeVersion = (activeResumeId && versions[activeResumeId]) || DEFAULT_CONFIG;
+  const isDesktop = useIsDesktop();
+  const assembledResume = useMemo(() => resumeSectionData ? assembleResume(resumeSectionData, activeVersion) : null, [resumeSectionData, activeVersion]);
+  const { pdfUrl, pdfBlob, loading: pdfLoading, error, retry: compilePdf } = useResumePdf(assembledResume, isPreviewOpen && !isDesktop);
 
   useEffect(() => {
-    const syncVersionNames = () => setVersionNames(readVersionNames());
+    const syncVersionNames = () => setVersions(readActiveVersions());
     const mobileBreakpoint = window.matchMedia("(max-width: 767px)");
     syncVersionNames();
     window.addEventListener("storage", syncVersionNames);
@@ -84,7 +50,7 @@ export default function MobileView() {
 
   const handleSelectResume = useCallback(
     (id: string) => {
-      setError(null);
+      setDownloadError("");
       setActiveResumeId(id);
       setIsPreviewOpen(true);
     },
@@ -93,68 +59,36 @@ export default function MobileView() {
 
   const handleClosePreview = useCallback(() => {
     setIsPreviewOpen(false);
-    if (pdfUrlRef.current) {
-      URL.revokeObjectURL(pdfUrlRef.current);
-      pdfUrlRef.current = null;
-    }
-    setPdfUrl(null);
-    setError(null);
   }, []);
 
-  const compilePdf = useCallback(async () => {
-    if (!resumeSectionData) return;
-    const assembled = assembleFullResume(resumeSectionData);
-
-    setPdfLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/compile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(assembled),
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        if (pdfUrlRef.current) URL.revokeObjectURL(pdfUrlRef.current);
-        const url = URL.createObjectURL(blob);
-        pdfUrlRef.current = url;
-        setPdfUrl(url);
-      } else {
-        setError(await readCompileError(response));
+  const [downloadError, setDownloadError] = useState("");
+  const [sharing, setSharing] = useState(false);
+  const handleDownload = async () => {
+    if (!pdfBlob || !pdfUrl) return;
+    setDownloadError("");
+    const filename = `${activeVersion.name || resumeSectionData?.name || "resume"}.pdf`.replace(/[\\/:*?"<>|]/g, "_");
+    const file = new File([pdfBlob], filename, { type: "application/pdf" });
+    if (navigator.canShare?.({ files: [file] })) {
+      setSharing(true);
+      try {
+        await navigator.share({ files: [file], title: activeVersion.name });
+        return;
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") return;
+        setDownloadError("Sharing was unavailable. Use Open PDF to save the document from your browser.");
+      } finally {
+        setSharing(false);
       }
-    } catch {
-      setError("An unexpected error occurred during PDF compilation");
-    } finally {
-      setPdfLoading(false);
     }
-  }, [resumeSectionData]);
-
-  useEffect(() => {
-    if (isPreviewOpen && resumeSectionData) {
-      compilePdf();
-    }
-  }, [isPreviewOpen, compilePdf, resumeSectionData]);
-
-  useEffect(() => {
-    return () => {
-      if (pdfUrlRef.current) {
-        URL.revokeObjectURL(pdfUrlRef.current);
-      }
-    };
-  }, []);
-
-  const handleDownload = useCallback(() => {
-    if (pdfUrl && resumeSectionData) {
-      const link = document.createElement("a");
-      link.href = pdfUrl;
-      link.download = `${resumeSectionData.name || "resume"}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  }, [pdfUrl, resumeSectionData]);
+    const link = document.createElement("a");
+    link.href = pdfUrl;
+    link.download = filename;
+    link.target = "_blank";
+    link.rel = "noopener";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
 
   if (loading) {
     return (
@@ -199,7 +133,7 @@ export default function MobileView() {
             className="flex w-full min-w-0 flex-col gap-1 rounded-xl border border-gray-200 bg-white p-4 text-left transition-colors hover:border-primary-300 hover:bg-gray-50"
           >
             <span className="break-words text-sm font-bold text-gray-900">
-              {versionNames[resume.id] || DEFAULT_CONFIG.name}
+              {versions[resume.id]?.name || DEFAULT_CONFIG.name}
             </span>
             {resume.lastUpdate && (
               <span className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
@@ -222,12 +156,12 @@ export default function MobileView() {
             </button>
 
             <span className="min-w-0 flex-1 break-words text-center text-sm font-bold text-gray-900">
-              {(activeResumeId && versionNames[activeResumeId]) || DEFAULT_CONFIG.name}
+              {activeVersion.name || DEFAULT_CONFIG.name}
             </span>
 
             <button
               onClick={handleDownload}
-              disabled={!pdfUrl || pdfLoading || !!error}
+              disabled={!pdfUrl || pdfLoading || !!error || sharing}
               className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-primary-700 disabled:opacity-30"
             >
               <Download size={14} />
@@ -235,6 +169,13 @@ export default function MobileView() {
             </button>
           </div>
 
+          {pdfUrl && !error && (
+            <div className="px-4 py-3 text-center text-sm text-gray-600">
+              <a href={pdfUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary-600 underline">Open PDF</a>
+              <span> to view or save it in your browser.</span>
+              {downloadError && <p role="alert" className="mt-2 text-red-600">{downloadError}</p>}
+            </div>
+          )}
           <div className="flex-1 overflow-hidden flex flex-col items-center justify-center p-4">
             {error ? (
               <div className="w-full flex flex-col items-center gap-4 text-center">

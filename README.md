@@ -92,3 +92,12 @@ Next steps / tips
 License
 
 MIT
+
+Mobile installation and downloads
+
+- Open the app over HTTPS, then use your browser's Install app / Add to Home Screen option. In Safari on iPhone, use Share → Add to Home Screen.
+- Tap a resume to generate its saved active version. Download opens native file sharing when available (including Save to Files on iPhone); Open PDF provides a browser fallback.
+- Resume data stays in this browser's local storage. Installing the app does not transfer resumes from another phone or computer; use JSON export/import on desktop to transfer data.
+- Successful PDFs are cached locally using a SHA-256 hash of their content (up to 20 PDFs / 20 MB). Changed content generates a new PDF. Browser storage restrictions fall back to an in-memory cache; generating a new PDF still requires the server.
+
+Browser behavior follows the [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share) and [web app installation requirements](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable).

@@ -1,5 +1,6 @@
 "use client";
 
+import useIsDesktop from "@/hooks/useIsDesktop";
 import useResumePdf from "@/hooks/useResumePdf";
 
 import React from "react";
@@ -20,7 +21,8 @@ function PreviewPane({
   onSave,
   onCancel,
 }: PreviewPaneProps) {
-  const { pdfUrl, loading, error, retry: compilePdf } = useResumePdf(resume, true, 800);
+  const isDesktop = useIsDesktop();
+  const { pdfUrl, loading, error, retry: compilePdf } = useResumePdf(resume, isDesktop, 800);
 
   // Shortcut for Save (Ctrl/Cmd + S)
   useEffect(() => {
