@@ -47,13 +47,18 @@ async function compilePdf(payload: string): Promise<Blob> {
     try {
       await cache.put(cacheKey, new Response(blob, { headers: { "Content-Type": "application/pdf" } }));
       const keys = await cache.keys();
+      const entries = await Promise.all(keys.map(async key => {
+        const entry = await cache!.match(key);
+        return { key, size: entry ? (await entry.blob()).size : 0 };
+      }));
       let bytes = 0;
+      const obsolete: Request[] = [];
       // Retain the newest documents within both entry and storage limits.
-      for (let index = keys.length - 1; index >= 0; index--) {
-        const entry = await cache.match(keys[index]);
-        bytes += entry ? (await entry.blob()).size : 0;
-        if (keys.length - index > MAX_ENTRIES || bytes > MAX_BYTES) await cache.delete(keys[index]);
-      }
+      entries.reverse().forEach((entry, index) => {
+        bytes += entry.size;
+        if (index >= MAX_ENTRIES || bytes > MAX_BYTES) obsolete.push(entry.key);
+      });
+      await Promise.all(obsolete.map(key => cache!.delete(key)));
     } catch {
       // The downloaded blob remains usable even when persistent caching fails.
     }

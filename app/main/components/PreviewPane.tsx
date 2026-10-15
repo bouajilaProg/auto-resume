@@ -5,7 +5,7 @@ import useResumePdf from "@/hooks/useResumePdf";
 
 import React from "react";
 import { Resume } from "@/types/resumeTypes";
-import { useEffect } from "react";
+import { useEffect, useEffectEvent } from "react";
 import { Save, X, Download, Loader2, FileText, Eye, Info, RefreshCw } from "lucide-react";
 
 interface PreviewPaneProps {
@@ -24,17 +24,21 @@ function PreviewPane({
   const isDesktop = useIsDesktop();
   const { pdfUrl, loading, error, retry: compilePdf } = useResumePdf(resume, isDesktop, 800);
 
+  const saveIfDirty = useEffectEvent(() => {
+    if (isDirty) onSave();
+  });
+
   // Shortcut for Save (Ctrl/Cmd + S)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "s") {
         e.preventDefault();
-        if (isDirty) onSave();
+        saveIfDirty();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isDirty, onSave]);
+  }, []);
 
   const handleDownload = () => {
     if (pdfUrl) {

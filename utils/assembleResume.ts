@@ -3,9 +3,11 @@ import type { Resume, ResumeSection, ResumeConfig, Skills } from "@/types/resume
 
 export const normalizeConfig = (config: ResumeConfig) => {
   const updatedOrder = Array.isArray(config.sectionOrder) ? [...config.sectionOrder] : [];
+  const ordered = new Set(updatedOrder);
   DEFAULT_CONFIG.sectionOrder.forEach(type => {
-    if (!updatedOrder.includes(type)) {
+    if (!ordered.has(type)) {
       updatedOrder.push(type);
+      ordered.add(type);
     }
   });
 
@@ -48,112 +50,49 @@ export const normalizeConfig = (config: ResumeConfig) => {
 };
 
 
-export function assembleResume(resumeSectionData: Resume, activeConfig: ResumeConfig): Resume {
-    const filteredSections = activeConfig.sectionOrder.map(type => {
-      const section = (resumeSectionData.sections || []).find(s => s.type === type);
-      if (!section) return null;
+function selectAndSort<T extends { id: number }>(items: T[] | undefined, selectedIds: number[], order: number[]) {
+  const selected = new Set(selectedIds);
+  const positions = new Map(order.map((id, index) => [id, index]));
+  return (items || []).filter(item => selected.has(item.id)).sort((a, b) =>
+    (positions.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (positions.get(b.id) ?? Number.MAX_SAFE_INTEGER)
+  );
+}
 
-      // handle Skills section with subcategories
-      if (type === SectionType.Skills && !Array.isArray(section.body)) {
-        const body = section.body as Skills;
-        const selected = activeConfig.selectedItems.skills || { languages: [], technologies: [], softSkills: [] };
-        const order = activeConfig.itemOrder?.skills || { languages: [], technologies: [], softSkills: [] };
-
-        const sortItems = <T extends { id: number }>(items: T[], itemOrder: number[]) => {
-          return [...items].sort((a, b) => {
-            const indexA = itemOrder.indexOf(a.id);
-            const indexB = itemOrder.indexOf(b.id);
-            if (indexA === -1 && indexB === -1) return 0;
-            if (indexA === -1) return 1;
-            if (indexB === -1) return -1;
-            return indexA - indexB;
-          });
-        };
-
-        return {
-          ...section,
-          body: {
-            languages: sortItems(body.languages?.filter(i => selected.languages?.includes(i.id)) || [], order.languages),
-            technologies: sortItems(body.technologies?.filter(i => selected.technologies?.includes(i.id)) || [], order.technologies),
-            softSkills: sortItems(body.softSkills?.filter(i => selected.softSkills?.includes(i.id)) || [], order.softSkills),
-          }
-        };
-      }
-
-      // handle array-based sections
-      if (Array.isArray(section.body)) {
-        const key = type as keyof Omit<ResumeConfig['selectedItems'], 'skills'>;
-        const selectedIds = (activeConfig.selectedItems[key] as number[]) || [];
-        const itemOrder = (activeConfig.itemOrder?.[key] as number[]) || [];
-
-        // early return if no items selected
-        if (selectedIds.length === 0) {
-          return { ...section, body: [] };
-        }
-
-        const selectedSet = new Set(selectedIds);
-        const filtered = section.body.filter((item: { id: number }) => selectedSet.has(item.id));
-
-        // sort based on itemOrder
-        const sorted = [...filtered].sort((a, b) => {
-          const indexA = itemOrder.indexOf(a.id);
-          const indexB = itemOrder.indexOf(b.id);
-          if (indexA === -1 && indexB === -1) return 0;
-          if (indexA === -1) return 1;
-          if (indexB === -1) return -1;
-          return indexA - indexB;
-        });
-
-        return {
-          ...section,
-          body: sorted,
-        };
-      }
-
-      return section;
-    }).filter((s): s is Exclude<typeof s, null> => s !== null);
-
-    const sortItems = <T extends { id: number }>(items: T[], itemOrder: number[]) => {
-      return [...items].sort((a, b) => {
-        const indexA = itemOrder.indexOf(a.id);
-        const indexB = itemOrder.indexOf(b.id);
-        if (indexA === -1 && indexB === -1) return 0;
-        if (indexA === -1) return 1;
-        if (indexB === -1) return -1;
-        return indexA - indexB;
-      });
-    };
-
-    const assembledPersonalInfo = resumeSectionData.personalInfo ? {
-      ...resumeSectionData.personalInfo,
-      contact: sortItems(
-        (resumeSectionData.personalInfo.contact || []).filter(c => activeConfig.selectedItems.personalInfo.includes(c.id)),
-        activeConfig.itemOrder?.personalInfo || []
-      )
-    } : undefined;
-
-    // Sanitize language proficiency values before sending to the API.
-    // The generator requires proficiency to be one of the PROFICIENCY_LEVELS enum values.
-    const sanitizedSections = filteredSections.map(section => {
-      if (section.type === SectionType.Languages && Array.isArray(section.body)) {
-        return {
-          ...section,
-          body: (section.body as Array<{ id: number; name: string; proficiency?: string }>).map(lang => ({
-            ...lang,
-            proficiency: lang.proficiency && (PROFICIENCY_LEVELS as readonly string[]).includes(lang.proficiency)
-              ? lang.proficiency
-              : "Intermediate",
-          })),
-        };
-      }
-      return section;
-    });
-
-    return {
-      name: resumeSectionData.name,
-      description: resumeSectionData.description,
-      lastUpdate: resumeSectionData.lastUpdate,
-      personalInfo: assembledPersonalInfo,
-      sections: sanitizedSections as ResumeSection[],
-    };
+export function assembleResume(data: Resume, config: ResumeConfig): Resume {
+  const sectionsByType = new Map((data.sections || []).map(section => [section.type, section]));
+  const sections = config.sectionOrder.flatMap(type => {
+    const section = sectionsByType.get(type);
+    if (!section) return [];
+    if (type === SectionType.Skills && !Array.isArray(section.body)) {
+      const body = section.body as Skills;
+      const selected = config.selectedItems.skills;
+      const order = config.itemOrder?.skills;
+      return [{ ...section, body: {
+        languages: selectAndSort(body.languages, selected.languages, order?.languages || []),
+        technologies: selectAndSort(body.technologies, selected.technologies, order?.technologies || []),
+        softSkills: selectAndSort(body.softSkills, selected.softSkills, order?.softSkills || []),
+      } } as ResumeSection];
+    }
+    if (!Array.isArray(section.body)) return [section];
+    const key = type as keyof Omit<ResumeConfig["selectedItems"], "skills">;
+    const body = selectAndSort<{ id: number }>(section.body, config.selectedItems[key] || [], config.itemOrder?.[key] || []);
+    if (type === SectionType.Languages) {
+      return [{ ...section, body: (body as Array<{ id: number; name: string; proficiency?: string }>).map(language => ({
+        ...language,
+        proficiency: language.proficiency && (PROFICIENCY_LEVELS as readonly string[]).includes(language.proficiency)
+          ? language.proficiency : "Intermediate",
+      })) } as ResumeSection];
+    }
+    return [{ ...section, body } as ResumeSection];
+  });
+  return {
+    name: data.name,
+    description: data.description,
+    lastUpdate: data.lastUpdate,
+    personalInfo: data.personalInfo ? {
+      ...data.personalInfo,
+      contact: selectAndSort(data.personalInfo.contact, config.selectedItems.personalInfo, config.itemOrder?.personalInfo || []),
+    } : undefined,
+    sections,
+  };
 }
