@@ -1,7 +1,7 @@
 import type { Resume } from "@/types/resumeTypes";
 import { readCompileError } from "@/utils/compileErrors";
 
-const CACHE_NAME = "resume-pdfs-generator-1.3.2-v1";
+const CACHE_NAME = "resume-pdfs-generator-1.3.4-v1";
 const MAX_ENTRIES = 20;
 const MAX_BYTES = 20 * 1024 * 1024;
 const memory = new Map<string, Blob>();
